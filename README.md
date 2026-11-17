@@ -1,6 +1,6 @@
 # SonoBridge
 
-A visibility-aware Schrödinger bridge for CT-based ultrasound synthesis.
+An anatomy-conditioned Schrödinger bridge for CT-based ultrasound synthesis.
 
 **[Explore the live demo](https://noseefood.github.io/us-sonobridge/)**
 

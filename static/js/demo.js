@@ -288,7 +288,7 @@ function configureDataset(){
  for(const [id,values,unit] of [['position',manifest.positions,' mm'],['rotation',manifest.rotations,'°']]){$(id+'-min').textContent=signed(values[0],unit);$(id+'-max').textContent=signed(values.at(-1),unit);}
  $('scan-specs').textContent=`${manifest.frequency_mhz.toFixed(1)} MHz · ${manifest.depth_mm} mm depth`;
  $('scene').setAttribute('aria-label',`Interactive ${datasets[activeOrgan].label.toLowerCase()} anatomy and robotic probe, patient ${datasets[activeOrgan].posture}${activeOrgan==='kidney'?' with back facing up':''}`);
- $('scene-context').textContent=activeOrgan==='liver'?'Liver · Supine acquisition':'Kidney · Prone · Back facing up';
+ $('scene-context').textContent=activeOrgan==='liver'?'Liver · Supine':'Kidney · Prone · Back facing up';
  imageStage.style.aspectRatio=String(manifest.aspect);resizeImage();paintValues();
  $('explorer').dataset.organ=activeOrgan;$('explorer').dataset.case=manifest.case_id;
  document.querySelectorAll('[data-organ]').forEach(b=>{b.setAttribute('aria-selected',String(b.dataset.organ===activeOrgan));b.classList.remove('is-loading');});
@@ -303,7 +303,7 @@ async function switchOrgan(organ){
  const token=++datasetGeneration;stopScan();clearTimeout(prefetchTimer);generation++;switching=true;
  inputs.forEach(i=>i.disabled=true);document.querySelectorAll('[data-view]').forEach(b=>b.disabled=true);$('guidance-toggle').disabled=true;$('reset-demo').disabled=true;$('auto-scan').disabled=true;
  document.querySelectorAll('[data-organ]').forEach(b=>b.classList.toggle('is-loading',b.dataset.organ===organ));
- setStatus(`Loading ${datasets[organ].label.toLowerCase()} acquisition…`);
+ setStatus(`Loading the ${datasets[organ].label.toLowerCase()} demo…`);
  try{
   const next=await getManifest(organ);const index=next.defaults.position*next.rotations.length+next.defaults.rotation;
   const keys=[keyFor(index,`us-${next.defaults.shadow}-${next.defaults.detail}`,organ)];
@@ -313,7 +313,7 @@ async function switchOrgan(organ){
   activeOrgan=organ;manifest=next;previous=null;current=null;transition=null;probeMotion=null;liveQ=null;wideView=false;
   configureDataset();if(sceneReady){baseMatrix=matrix(next.kinematics.base);joints=next.kinematics.joints.map(j=>({...j,T:matrix(j.origin),axis:new THREE.Vector3(...j.axis)}));attachAnatomy(model);}
   await requestState(next.defaults,false);$('explorer').dataset.switchReadyMs=String(Math.round(performance.now()));
- }catch(error){if(token!==datasetGeneration)return;console.error('[SonoBridge] organ switch',error);setStatus('This acquisition could not be loaded. Select the organ again to retry.');}
+ }catch(error){if(token!==datasetGeneration)return;console.error('[SonoBridge] organ switch',error);setStatus('This view could not be loaded. Select the organ again to retry.');}
  finally{if(token===datasetGeneration){switching=false;inputs.forEach(i=>i.disabled=false);paintValues();document.querySelectorAll('[data-view]').forEach(b=>b.disabled=false);$('guidance-toggle').disabled=false;$('reset-demo').disabled=false;$('auto-scan').disabled=false;document.querySelectorAll('[data-organ]').forEach(b=>b.classList.remove('is-loading'));}}
 }
 function tick(now){
@@ -406,6 +406,7 @@ $('auto-scan').addEventListener('click',async()=>{
 });
 new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)dirty=true;else stopScan();},{rootMargin:'100px'}).observe($('explorer'));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopScan();else dirty=true;});
+document.addEventListener('sonobridge:pause',()=>stopScan());
 requestAnimationFrame(tick);
 
 async function init(){
