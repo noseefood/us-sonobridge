@@ -18,8 +18,8 @@ for(let i=0;i<=8;i++)assert(robot.nodes.some(n=>n.name===`web_fr3_link${i}`));
 assert(robot.nodes.some(n=>n.name==='web_base'));
 const reports=[];
 for(const [organ,expectedCase] of [['liver','00098'],['kidney','00092']]){
- const prefix=`${organ}/`,m=read(`static/demo/${prefix}manifest-v3.json`),anatomy=prefix+m.anatomy;
- assert.equal(m.format_version,3);assert.equal(m.image_layout,'lossless-position-tracks');
+ const prefix=`${organ}/`,m=read(`static/demo/${prefix}manifest-v4.json`),anatomy=prefix+m.anatomy;
+ assert.equal(m.format_version,4);assert.equal(m.image_layout,'lossless-position-tracks');assert.equal(m.positions.length,33);
  assert.equal(m.case_id,expectedCase);assert.equal(m.poses.length,m.positions.length*m.rotations.length);
  let maxPositionError=0,maxRotationError=0,maxAdjacentJointChange=0,totalFrameBytes=0;
  for(const [index,pose] of m.poses.entries()){
@@ -33,7 +33,7 @@ for(const [organ,expectedCase] of [['liver','00098'],['kidney','00092']]){
   maxPositionError=Math.max(maxPositionError,error);maxRotationError=Math.max(maxRotationError,angle);assert(error<.00001);assert(angle<.001);
   for(const next of [pose.i+1<m.positions.length?index+m.rotations.length:null,pose.j+1<m.rotations.length?index+1:null])if(next!==null)maxAdjacentJointChange=Math.max(maxAdjacentJointChange,...pose.q.map((q,j)=>Math.abs(q-m.poses[next].q[j])));
  }
- const folder=path.join(root,`static/demo/${prefix}tracks`);
+ const folder=path.join(root,`static/demo/${prefix}${m.tracks}`);
  for(let j=0;j<m.rotations.length;j++){
   const suffix=`-r${String(j).padStart(2,'0')}.webp`;
   const files=[...m.shadows.flatMap((_,s)=>m.details.map((_,d)=>`us-${s}-${d}${suffix}`)),`label${suffix}`,`ct${suffix}`,...m.shadows.map((_,s)=>`guidance-${s}${suffix}`)];
@@ -47,5 +47,6 @@ for(const [organ,expectedCase] of [['liver','00098'],['kidney','00092']]){
  assert(Math.abs(m.aspect-2*far*Math.sin(half)/(far-m.probe.radius_mm*Math.cos(half)))<1e-10);
  reports.push({organ,case:m.case_id,poses:m.poses.length,outputs:m.poses.length*m.shadows.length*m.details.length,max_position_error_mm:maxPositionError*1000,max_rotation_error_deg:maxRotationError*180/Math.PI,max_adjacent_joint_change_deg:maxAdjacentJointChange*180/Math.PI,minimum_central_contact:Math.min(...m.poses.map(p=>p.central_contact)),minimum_whole_contact:Math.min(...m.poses.map(p=>p.whole_contact)),aspect:m.aspect,frames_mb:totalFrameBytes/1e6,anatomy_mb:mesh.bytes/1e6});
 }
-fs.writeFileSync(path.join(root,'refs/demo-build/validation_v7.json'),JSON.stringify({shared_robot_mb:robot.bytes/1e6,reports,checks:['Complete 442-pose acquisition grids','Contact validity','Native FK registration','Shared robot visual links','Every present anatomical label exported','832 lossless sweep tracks / 14,144 source images','Physical image aspect','Gzip byte identity']},null,2));
+const patient=packed('static/demo/patient-v2.compact.glb');for(const name of ['patient_supine','patient_prone'])assert(patient.nodes.some(n=>n.name===name));
+fs.writeFileSync(path.join(root,'refs/demo-build/validation_v8.json'),JSON.stringify({shared_robot_mb:robot.bytes/1e6,patient_mb:patient.bytes/1e6,reports,checks:['Complete 858-pose acquisition grids','Contact validity','Native FK registration','Shared robot visual links','Every present anatomical label exported','832 lossless sweep tracks / 27,456 source images','Physical image aspect','Gzip byte identity','Connected supine and prone patient surfaces']},null,2));
 console.log(JSON.stringify(reports,null,2));

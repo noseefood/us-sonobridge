@@ -13,11 +13,11 @@ for(const organ of ['liver','kidney']){
  doc.createExtension(EXTMeshoptCompression).setRequired(true).setEncoderOptions({method:EXTMeshoptCompression.EncoderMethod.QUANTIZE});
  const bytes=await io.writeBinary(doc),out=`static/demo/${organ}/anatomy-${meta.case_id}.compact.glb`;
  fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,bytes);fs.writeFileSync(out+'.gz',gzipSync(bytes,{level:9}));
- const manifestPath=`static/demo/${organ}/manifest-v3.json`;
+ const manifestPath=`static/demo/${organ}/manifest-v4.json`;
  if(fs.existsSync(manifestPath)){
   const m=JSON.parse(fs.readFileSync(manifestPath)),surfaces=JSON.parse(fs.readFileSync(`${folder}/surfaces/surfaces.json`));
   m.anatomy_labels=surfaces.map(s=>({id:s.label,name:s.name}));fs.writeFileSync(manifestPath,JSON.stringify(m));
  }
  console.log(organ,bytes.length,'bytes',doc.getRoot().listMeshes().map(m=>m.getName()));
 }
-for(const file of ['static/js/demo.js','static/js/environment.js','static/css/demo.css','static/demo/liver/manifest-v3.json','static/demo/kidney/manifest-v3.json'])if(fs.existsSync(file))fs.writeFileSync(file+'.gz',gzipSync(fs.readFileSync(file),{level:9}));
+for(const file of ['static/js/demo.js','static/js/environment.js','static/js/motion.js','static/css/demo.css','static/demo/liver/manifest-v4.json','static/demo/kidney/manifest-v4.json'])if(fs.existsSync(file))fs.writeFileSync(file+'.gz',gzipSync(fs.readFileSync(file),{level:9}));

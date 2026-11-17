@@ -1,15 +1,16 @@
-import {createEnvironment} from './environment.js?v=6';
+import {createEnvironment} from './environment.js?v=7';
+import {createJointCurve,sweepPhase,sweepPosition} from './motion.js?v=1';
 let THREE, OrbitControls, GLTFLoader, RoomEnvironment, MeshoptDecoder;
 const $ = id => document.getElementById(id);
 const root = new URL('../demo/', import.meta.url);
-const datasets={liver:{manifest:'liver/manifest-v3.json',imageRoot:'liver/',label:'Liver',posture:'supine'},kidney:{manifest:'kidney/manifest-v3.json',imageRoot:'kidney/',label:'Kidney',posture:'prone'}};
+const datasets={liver:{manifest:'liver/manifest-v4.json',imageRoot:'liver/',label:'Liver',posture:'supine'},kidney:{manifest:'kidney/manifest-v4.json',imageRoot:'kidney/',label:'Kidney',posture:'prone'}};
 let activeOrgan='liver',datasetGeneration=0,switching=false,wideView=false,environment,anatomyAsset;
 const manifests=new Map(),anatomies=new Map();
 const inputs = ['position','rotation','shadow','detail'].map($);
 const canvas = $('us-canvas'), ctx = canvas.getContext('2d');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let manifest, current, previous, transition, desired, generation = 0;
-let displayMode='output', split=.5, showGuidance=false, scanning=false, scanDirection=1, scanTimer;
+let displayMode='output', split=.5, showGuidance=false, scanning=false, scanDirection=1, sweep=null, scanEpoch=0;
 let renderer, scene, camera, orbit, asset, fan, fanGroup, robotNodes={}, joints, baseMatrix, initialTarget;
 let liveQ, dirty=true, sceneReady=false, inView=true, lastPaint=0, lastTick=0, measurements=[], anatomyCenter, cameraTransition;
 let probeMotion,wheelZoom,lastFrame=0,lastShadowUpdate=0,shadowDirty=true;
@@ -20,11 +21,11 @@ const imageStage=$('image-wrap');
 const setStatus = text => { $('demo-status').textContent=text; };
 const signed = (v,unit) => `${v>0?'+':v<0?'−':''}${Math.abs(v)}${unit}`;
 const same = (a,b) => ['position','rotation','shadow','detail'].every(k=>a[k]===b[k]);
-function readState(){ return Object.fromEntries(inputs.map(i=>[i.id,Number(i.value)])); }
+function readState(){ return Object.fromEntries(inputs.map(i=>[i.id,Math.round(Number(i.value))])); }
 function paintValues(){
  const s=readState();
  if(manifest){
-  $('position-value').textContent=signed(manifest.positions[s.position],' mm');
+  $('position-value').textContent=signed(Math.round(manifest.positions[s.position]*10)/10,' mm');
   $('rotation-value').textContent=signed(manifest.rotations[s.rotation],'°');
   const sh=manifest.shadows[s.shadow];$('shadow-value').textContent=sh===0?'Default':signed(sh,'%');
   const shadowAvailable=poseOf(s).shadow_control!==false;
@@ -50,7 +51,7 @@ function trimCache(){
 }
 async function loadImage(key,priority='high',forceTrack=false,pinToken){
  const [organ,index,name]=key.split('/'),m=await getManifest(organ),pose=m.poses[Number(index)];
- const path=`${datasets[organ].imageRoot}tracks/${name}-r${String(pose.j).padStart(2,'0')}.webp`;
+ const path=`${datasets[organ].imageRoot}${m.tracks||'tracks'}/${name}-r${String(pose.j).padStart(2,'0')}.webp`;
  const preview=name===`us-${m.defaults.shadow}-${m.defaults.detail}`&&pose.i===m.defaults.position&&pose.j===m.defaults.rotation&&!forceTrack&&!cache.has(path);
  const cacheKey=preview?`${datasets[organ].imageRoot}${m.preview}`:path;
  if(pinToken!==undefined)requestPins.get(pinToken)?.add(cacheKey);
@@ -65,14 +66,14 @@ async function loadImage(key,priority='high',forceTrack=false,pinToken){
 }
 function prefetch(state){
  clearTimeout(prefetchTimer);
- if(!sceneSettled||navigator.connection?.saveData||document.hidden||!inView)return;
+ if(!sceneSettled||scanning||navigator.connection?.saveData||document.hidden||!inView)return;
  const token=generation;
  prefetchTimer=setTimeout(async()=>{
   const candidates=[imageKey(state)];
   if(displayMode!=='output')candidates.push(keyFor(poseOf(state).index,displayMode));
   if(showGuidance)candidates.push(keyFor(poseOf(state).index,`guidance-${state.shadow}`));
   // Each track contains the entire position sweep. Nearby rotations warm first.
-  for(const offset of [1,-1,2,-2,3,-3,4,-4,5,-5,6,-6,7,-7,8,-8,9,-9,10,-10,11,-11,12,-12]){
+  for(const offset of [1,-1,2,-2]){
    const next={...state,rotation:state.rotation+offset};
    if(next.rotation<0||next.rotation>=manifest.rotations.length)continue;
    candidates.push(imageKey(next));
@@ -82,13 +83,13 @@ function prefetch(state){
    if(token!==generation||document.hidden||!inView)return;
    try{await loadImage(key,'low',true);trimCache();}catch{}
   }
- },scanning?0:120);
+ },120);
 }
 function moveProbe(state,animate=true){
  const q=poseOf(state).q;
  if(!liveQ||!animate||reducedMotion){probeMotion=null;liveQ=[...q];applyPose(liveQ);return;}
  if(q.every((value,i)=>Math.abs(value-(probeMotion?.to[i]??liveQ[i]))<1e-7))return;
- probeMotion={from:[...liveQ],to:q,start:performance.now(),duration:scanning?280:180};
+ probeMotion={from:[...liveQ],to:q,start:performance.now(),duration:180};
  $('scene').dataset.motionActive='true';
 }
 async function warmControl(id){
@@ -118,7 +119,7 @@ async function requestState(state,animate=true){
   if(changed){blendCtx.clearRect(0,0,blendFrom.width,blendFrom.height);blendCtx.drawImage(canvas,0,0);previous=true;}else previous=null;
   current={organ:activeOrgan,state:{...state},pose,bitmap:images[0],reference:displayMode==='output'?null:images[1],referenceMode:displayMode,
    guidanceBitmap:showGuidance?images.at(-1):null,keys,cacheKeys:images.map(x=>x.cacheKey)};
-  transition=previous&&animate&&!reducedMotion?{start:performance.now(),duration:scanning?280:180}:null;
+  transition=previous&&animate&&!reducedMotion?{start:performance.now(),duration:180}:null;
   if(!transition)previous=null;
   $('image-loading').hidden=true;
   $('explorer').dataset.pose=String(pose.index);$('explorer').dataset.state=JSON.stringify(state);
@@ -151,10 +152,11 @@ function guidance(record){
  const t=record.guidanceBitmap;x.drawImage(t.image,t.sx,t.sy,t.sw,t.sh,0,0,256,256);
  const pixels=x.getImageData(0,0,256,256);
  for(let i=0;i<pixels.data.length;i+=4){const support=pixels.data[i],edge=pixels.data[i+1];pixels.data[i]=edge?91:245;pixels.data[i+1]=edge?180:189;pixels.data[i+2]=edge?218:76;pixels.data[i+3]=edge?225:Math.round(support*.7);}
- x.putImageData(pixels,0,0);overlays.set(key,c);return c;
+ x.putImageData(pixels,0,0);overlays.set(key,c);while(overlays.size>16)overlays.delete(overlays.keys().next().value);return c;
 }
 function drawRecord(record,alpha=1){
  if(!record)return;
+ if(record.blend){drawRecord(record.blend.a,alpha);drawRecord(record.blend.b,alpha*record.blend.u);return;}
  const comparing=displayMode!=='output'&&record.reference&&record.referenceMode===displayMode;
  if(comparing){
   ctx.save();ctx.beginPath();ctx.rect(0,0,canvas.width*split,canvas.height);ctx.clip();tile(record.reference,alpha);ctx.restore();
@@ -216,9 +218,10 @@ function resetCamera(animate=false){
  else{cameraTransition=null;orbit.target.copy(target);camera.position.copy(position);orbit.update();}
  $('camera-overview').textContent=wideView?'Focus scan':'Full setup';$('camera-overview').setAttribute('aria-pressed',String(wideView));dirty=true;
 }
-async function geometryBytes(path){
+async function geometryBytes(path,revision){
  const compressed=typeof DecompressionStream!=='undefined';
- const response=await fetch(new URL(path+(compressed?'.gz':''),root));
+ const url=new URL(path+(compressed?'.gz':''),root);if(revision)url.searchParams.set('v',revision);
+ const response=await fetch(url);
  if(!response.ok)throw Error('3D asset unavailable');
  return compressed?new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer():response.arrayBuffer();
 }
@@ -244,7 +247,7 @@ function attachAnatomy(model){
 async function setupScene(){
  const runtimePromise=import('../vendor/scene-runtime.js?v=4');
  const robotPromise=geometryBytes('robot.compact.glb');
- const [runtime,robotBytes]=await Promise.all([runtimePromise,robotPromise]);
+ const [runtime,robotBytes,patientBytes]=await Promise.all([runtimePromise,robotPromise,geometryBytes('patient-v2.compact.glb','2')]);
  THREE=runtime;({OrbitControls,GLTFLoader,RoomEnvironment,MeshoptDecoder}=runtime);
  const container=$('scene');renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.94;
@@ -266,7 +269,8 @@ async function setupScene(){
  const fill=new THREE.DirectionalLight(0xdce9ef,.8);fill.position.set(1,1,2);scene.add(fill);
  asset=new THREE.Group();scene.add(asset);const gltf=await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(robotBytes,root.href);asset.add(gltf.scene);
  gltf.scene.traverse(o=>{if(o.name==='web_base'||/^web_fr3_link[0-8]$/.test(o.name))robotNodes[o.name.slice(4)]=o;if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
- environment=createEnvironment(THREE,scene);
+ const patient=await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(patientBytes,root.href);
+ environment=createEnvironment(THREE,scene,patient.scene);
  baseMatrix=matrix(manifest.kinematics.base);joints=manifest.kinematics.joints.map(j=>({...j,T:matrix(j.origin),axis:new THREE.Vector3(...j.axis)}));makeFan();
  sceneReady=true;applyPose(liveQ||poseOf(manifest.defaults).q);resetCamera();
  new ResizeObserver(()=>{const w=container.clientWidth,h=container.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();resetCamera();dirty=true;}).observe(container);
@@ -314,9 +318,10 @@ async function switchOrgan(organ){
 }
 function tick(now){
  requestAnimationFrame(tick);const dt=Math.min(.05,Math.max(.001,(now-lastFrame)/1000));lastFrame=now;if(!inView)return;
+ if(scanning&&sweep)paintSweep(now);
  if(cameraTransition){const t=cameraTransition,u=Math.min(1,(now-t.start)/450),s=u*u*(3-2*u);camera.position.lerpVectors(t.from,t.to,s);orbit.target.lerpVectors(t.targetFrom,t.targetTo,s);dirty=true;if(u===1)cameraTransition=null;}
  if(wheelZoom&&camera){const radius=camera.position.distanceTo(orbit.target),next=radius+(wheelZoom.target-radius)*(1-Math.exp(-dt/.13));camera.position.sub(orbit.target).multiplyScalar(next/radius).add(orbit.target);dirty=true;if(Math.abs(next-wheelZoom.target)<.0001)wheelZoom=null;$('scene').dataset.cameraDistance=next.toFixed(5);}
- if(probeMotion){const t=probeMotion,u=Math.min(1,(now-t.start)/t.duration),s=scanning?u:u*u*(3-2*u);if(!t.painted){$('scene').dataset.motionLatencyMs=String(Math.round(now-t.start));t.painted=true;}liveQ=t.to.map((q,i)=>t.from[i]+(q-t.from[i])*s);applyPose(liveQ);if(u===1){probeMotion=null;$('scene').dataset.motionActive='false';}}
+ if(probeMotion){const t=probeMotion,u=Math.min(1,(now-t.start)/t.duration),s=u*u*(3-2*u);if(!t.painted){$('scene').dataset.motionLatencyMs=String(Math.round(now-t.start));t.painted=true;}liveQ=t.to.map((q,i)=>t.from[i]+(q-t.from[i])*s);applyPose(liveQ);if(u===1){probeMotion=null;$('scene').dataset.motionActive='false';}}
  let u=1;
  if(transition&&current){u=Math.min(1,(now-transition.start)/transition.duration);drawUltrasound(u);if(u===1){transition=null;previous=null;trimCache();}}
  orbit?.update();
@@ -325,16 +330,34 @@ function tick(now){
   lastPaint=now;if(now-lastTick>1000){lastTick=now;$('scene').dataset.renderStats=JSON.stringify({fps:measurements.length?Math.round(1000/(measurements.reduce((a,b)=>a+b)/measurements.length)):0,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,cachedImages:cache.size});}
  }
 }
-function stopScan(){scanning=false;clearTimeout(scanTimer);$('auto-scan').innerHTML='<span class="play-icon">▷</span> Auto scan';$('auto-scan').setAttribute('aria-pressed','false');}
-async function scanStep(){
- if(!scanning||document.hidden)return stopScan();
- const state=readState();let next=state.position+scanDirection;
- if(next<0||next>=manifest.positions.length){scanDirection*=-1;next=state.position+scanDirection;}
- $('position').value=next;const started=performance.now();await requestState(readState());if(scanning)scanTimer=setTimeout(scanStep,Math.max(0,280-(performance.now()-started)));
+function stopScan(keepInput=false){
+ if(scanning&&!keepInput&&current?.playbackPosition!==undefined)$('position').value=current.playbackPosition;
+ scanning=false;sweep=null;scanEpoch++;$('position').step='1';$('position').value=Math.round(Number($('position').value));
+ $('image-loading').hidden=true;
+ $('auto-scan').innerHTML='<span class="play-icon">▷</span> Auto scan';$('auto-scan').setAttribute('aria-pressed','false');
+ $('scene').dataset.playbackActive='false';
 }
-inputs.forEach(input=>{input.addEventListener('input',()=>{stopScan();requestState(readState());});input.addEventListener('pointerdown',()=>warmControl(input.id));input.addEventListener('focus',()=>warmControl(input.id));});
-$('guidance-toggle').addEventListener('change',e=>{showGuidance=e.target.checked;requestState(readState(),false);});
+function paintSweep(now){
+ const s=sweep,last=s.records.length-1,p=sweepPosition(now-s.start,s.phase,last),i=Math.min(last-1,Math.floor(p)),u=p-i;
+ const a=s.records[i],b=s.records[i+1],near=u<.5?a:b;
+ liveQ=s.curve(p);applyPose(liveQ);
+ current={...near,blend:{a,b,u},playbackPosition:p};previous=null;transition=null;drawUltrasound();
+ const angle=s.phase+(now-s.start)*2*Math.PI/16000;scanDirection=Math.sin(angle)>=0?1:-1;
+ if(s.lastFrame)s.gaps.push(now-s.lastFrame);s.lastFrame=now;if(s.gaps.length>240)s.gaps.shift();
+ if(now-s.lastUI>45){
+  s.lastUI=now;$('position').value=p;const mm=manifest.positions[i]*(1-u)+manifest.positions[i+1]*u;
+  $('position-value').textContent=signed(Math.round(mm*10)/10,' mm');$('position').style.setProperty('--fill',`${100*p/last}%`);$('position').setAttribute('aria-valuetext',$('position-value').textContent);
+  $('explorer').dataset.pose=String(near.pose.index);$('explorer').dataset.state=JSON.stringify(near.state);
+ }
+ if(now-s.lastReport>1000){
+  s.lastReport=now;const gaps=[...s.gaps].sort((a,b)=>a-b);
+  $('scene').dataset.playbackStats=JSON.stringify({clock:'continuous',nativeViews:s.records.length,position:p,blend:u,p95FrameMs:Math.round(gaps[Math.floor(gaps.length*.95)]||0),maxFrameMs:Math.round(gaps.at(-1)||0)});
+ }
+}
+inputs.forEach(input=>{input.addEventListener('input',()=>{stopScan(input.id==='position');requestState(readState());});input.addEventListener('pointerdown',()=>warmControl(input.id));input.addEventListener('focus',()=>warmControl(input.id));});
+$('guidance-toggle').addEventListener('change',e=>{stopScan();showGuidance=e.target.checked;requestState(readState(),false);});
 document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>{
+ stopScan();
  displayMode=button.dataset.view;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-selected',String(b===button)));
  const comparing=displayMode!=='output';
  for(const id of ['compare-range','compare-divider','compare-labels'])$(id).hidden=!comparing;
@@ -362,10 +385,24 @@ $('reset-demo').addEventListener('click',async()=>{
  for(const input of inputs)input.value=manifest.defaults[input.id];await requestState(readState(),false);resetCamera();
 });
 $('auto-scan').addEventListener('click',async()=>{
- if(scanning)return stopScan();scanning=true;const token=datasetGeneration,state=readState();
+ if(scanning)return stopScan();scanning=true;const epoch=++scanEpoch,token=++generation,state=readState(),started=performance.now();clearTimeout(prefetchTimer);
+ requestPins.set(token,new Set());
  $('auto-scan').innerHTML='<span class="play-icon">Ⅱ</span> Pause scan';$('auto-scan').setAttribute('aria-pressed','true');
  const keys=[imageKey(state)];if(displayMode!=='output')keys.push(keyFor(poseOf(state).index,displayMode));if(showGuidance)keys.push(keyFor(poseOf(state).index,`guidance-${state.shadow}`));
- try{await Promise.all(keys.map(key=>loadImage(key,'high',true)));if(scanning&&token===datasetGeneration)scanStep();}catch{stopScan();}
+ try{
+  const tiles=await Promise.all(keys.map(key=>loadImage(key,'high',true,token)));if(!scanning||epoch!==scanEpoch||token!==generation)return;
+  const cacheKeys=tiles.map(t=>t.cacheKey),records=manifest.positions.map((_,position)=>{
+   const pose=poseOf({...state,position}),at=t=>({...t,sx:position*256});
+   return {organ:activeOrgan,state:{...state,position},pose,bitmap:at(tiles[0]),reference:displayMode==='output'?null:at(tiles[1]),referenceMode:displayMode,guidanceBitmap:showGuidance?at(tiles.at(-1)):null,keys,cacheKeys};
+  });
+  probeMotion=null;transition=null;previous=null;current.cacheKeys=cacheKeys;$('position').step='any';
+  const resumePosition=current&&same(current.state,state)?current.playbackPosition??state.position:state.position;
+  sweep={start:performance.now(),phase:sweepPhase(resumePosition,records.length-1,scanDirection),curve:createJointCurve(records.map(r=>r.pose.q)),records,gaps:[],lastUI:0,lastReport:0,lastFrame:0};
+  $('image-loading').hidden=true;$('scene').dataset.playbackActive='true';$('scene').dataset.motionActive='false';
+  $('explorer').dataset.lastImageLoad=JSON.stringify({ms:Math.round(performance.now()-started),cached:tiles.every(t=>t.cached),files:keys.length});
+  paintSweep(sweep.start);
+ }catch(error){console.error('[SonoBridge] scan',error);stopScan();setStatus('The scan could not be loaded. Please try again.');}
+ finally{requestPins.delete(token);trimCache();}
 });
 new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)dirty=true;else stopScan();},{rootMargin:'100px'}).observe($('explorer'));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopScan();else dirty=true;});

@@ -1,0 +1,13 @@
+import {NodeIO} from '@gltf-transform/core';
+import {ALL_EXTENSIONS,EXTMeshoptCompression} from '@gltf-transform/extensions';
+import {quantize,reorder,prune} from '@gltf-transform/functions';
+import {MeshoptEncoder,MeshoptDecoder} from 'meshoptimizer';
+import fs from 'node:fs';import {gzipSync} from 'node:zlib';
+await Promise.all([MeshoptEncoder.ready,MeshoptDecoder.ready]);
+const io=new NodeIO().registerExtensions(ALL_EXTENSIONS).registerDependencies({'meshopt.encoder':MeshoptEncoder,'meshopt.decoder':MeshoptDecoder});
+const doc=await io.read('refs/demo-build/patient-v2/patient.glb');
+await doc.transform(prune(),reorder({encoder:MeshoptEncoder}),quantize({quantizePosition:16,quantizeNormal:10}));
+doc.createExtension(EXTMeshoptCompression).setRequired(true).setEncoderOptions({method:EXTMeshoptCompression.EncoderMethod.QUANTIZE});
+const bytes=await io.writeBinary(doc),file='static/demo/patient-v2.compact.glb';fs.writeFileSync(file,bytes);fs.writeFileSync(file+'.gz',gzipSync(bytes,{level:9}));
+fs.writeFileSync('static/demo/LICENSE-patient.txt','Illustrative patient mesh: adapted from the MakeHuman core base mesh and rig (CC0).\nSource: https://github.com/makehumancommunity/makehuman\nLicense: https://www.makehumancommunity.org/about/license.html\nSonoBridge modifications: resting poses, CT-aligned scaling, smoothing, and web packing.\nThis generic mesh is an illustrative patient outline, not a patient reconstruction.\n\n'+fs.readFileSync('refs/demo-build/patient-v2/LICENSE.ASSETS.md','utf8'));
+console.log('Patient mesh:',bytes.length,'bytes; gzip:',gzipSync(bytes).length);
