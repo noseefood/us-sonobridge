@@ -104,3 +104,31 @@
 @media(max-width:1100px) and (min-width:721px){.panel-kicker{display:none}.scene-actions{margin-left:auto}.viewer-grid{grid-template-columns:1.18fr 1fr}.control-heading{white-space:normal;align-items:flex-start}.image-tabs{gap:13px}}
 @media(max-width:720px){.demo-intro{align-items:flex-start;flex-direction:column;gap:18px;margin-bottom:18px}.demo-intro h2{font-size:26px}.demo-intro p:not(.section-eyebrow){max-width:330px}.organ-picker{align-self:flex-start}.organ-picker button{min-width:88px;padding:9px 19px}.anatomy-panel{height:380px}.ultrasound-panel{margin:0}.scene-toolbar{top:17px;left:17px;right:17px}.scene-actions{gap:6px}.scene-caption #case-label{display:none}.scene-bottom{left:20px;bottom:15px}.control-heading{white-space:normal;gap:8px;min-height:29px;align-items:flex-start}.controls-bar{padding:22px 20px 18px;gap:24px}.control-heading label{font-size:11px}.demo-caption{gap:12px}.scene-caption{font-size:10px}}
 @media(max-width:720px){.demo-caption{grid-template-columns:1fr;gap:12px}.demo-caption .data-note{font-size:11px}}
+/* Readable controls at both desktop and phone viewing sizes. */
+.demo-intro p:not(.section-eyebrow){font-size:15px;color:#66767d}
+.organ-picker button{font-size:14px;color:#617478}
+.panel-kicker{font-size:11px;color:#63777b;letter-spacing:.08em}
+.toggle-pill,.camera-view-button{font-size:12px;color:#4c686f}
+.scene-caption{font-size:12px;line-height:1.5;color:#526b71;margin-bottom:8px}
+.anatomy-legend{font-size:12px;color:#63767b;gap:14px}
+.anatomy-legend i{width:7px;height:7px}
+.liver-swatch{background:#865146}.kidney-swatch{background:#966e57}
+.image-tabs button{font-size:14px}.guidance-toggle{font-size:12px;color:#b2c4ca}
+.image-meta{font-size:12px;color:#a5b8c0;justify-content:flex-start}
+.control-heading label,.control-heading output{font-size:14px;font-weight:500;line-height:1.45}
+.control-heading label{color:#465c65}.control-heading output{color:#376e74}
+.range-labels{font-size:12px;color:#74868e}
+.explorer-footer p{font-size:12px;color:#6d818a}
+.text-button,.reset-button{font-size:14px}.reset-button{color:#637d87}
+.text-button{padding:8px 14px}.explorer-footer{padding-bottom:19px}
+.demo-caption,.demo-caption .data-note{font-size:14px;line-height:1.7;color:#6d818a}
+.icon-button{width:30px;height:30px}.camera-view-button{padding:6px 9px}
+@media(max-width:1100px){.panel-kicker{display:none}.scene-actions{margin-left:auto}.image-toolbar{padding-left:16px;padding-right:16px}.image-tabs{gap:12px}}
+@media(max-width:720px){
+ .toggle-pill,.camera-view-button,.scene-caption,.anatomy-legend,.guidance-toggle,.image-meta{font-size:12px}
+ .image-tabs button{font-size:14px}.control-heading{min-height:42px;flex-wrap:wrap;margin-bottom:17px}
+ .control-heading label,.control-heading output{font-size:13px}.control-heading output{margin-left:auto}
+ .range-labels{font-size:12px}.controls-bar{gap:25px 22px}
+ .demo-caption,.demo-caption .data-note{font-size:13px}.demo-intro p:not(.section-eyebrow){font-size:14px}
+ .anatomy-legend{gap:12px}.scene-actions{gap:5px}.scene-toolbar{left:12px;right:12px}
+}

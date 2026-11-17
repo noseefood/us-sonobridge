@@ -1,6 +1,6 @@
 """Local cold-load comparison: 8 Mbps shared throughput, 80 ms request latency.
 
-Serve /baseline/ from the saved v3 frontend, /candidate/ from the working tree.
+Serve /baseline/ from the last published snapshot, /candidate/ from the working tree.
 The injected DOM diagnostics only measure the test page; production has no
 benchmark script, throttling or telemetry endpoint.
 """
@@ -12,7 +12,7 @@ import mimetypes
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
-BASELINE = ROOT / 'refs/demo-build/v3-baseline'
+BASELINE = ROOT / 'refs/demo-build/pages-preview/us-sonobridge'
 lock = Lock()
 next_chunk = 0.0
 RATE = 1_000_000
@@ -53,7 +53,7 @@ class Handler(BaseHTTPRequestHandler):
         data = file.read_bytes()
         encoded=False
         compressed=Path(str(file)+'.gz')
-        if kind=='candidate' and file.suffix in ('.js','.css','.json') and compressed.is_file() and compressed.stat().st_mtime>=file.stat().st_mtime and 'gzip' in self.headers.get('Accept-Encoding',''):
+        if file.suffix in ('.js','.css','.json') and compressed.is_file() and compressed.stat().st_mtime>=file.stat().st_mtime and 'gzip' in self.headers.get('Accept-Encoding',''):
             data=compressed.read_bytes();encoded=True
         if file.suffix == '.html':
             data = data.replace(b'</head>', INSTRUMENT+b'</head>')
@@ -78,5 +78,7 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self,*args): pass
 
 if __name__=='__main__':
-    print('Benchmark: http://127.0.0.1:8781/{baseline,candidate}/',flush=True)
-    ThreadingHTTPServer(('127.0.0.1',8781),Handler).serve_forever()
+    import argparse
+    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8782);args=parser.parse_args()
+    print(f'Benchmark: http://127.0.0.1:{args.port}/{{baseline,candidate}}/',flush=True)
+    ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()

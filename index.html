@@ -18,14 +18,14 @@
   <link rel="icon" type="image/x-icon" href="static/images/ultrasound_icon.ico">
   <link rel="preload" href="static/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="static/css/fonts.css">
-  <link rel="preload" href="static/demo/frames/110/us-2-4.webp" as="fetch" crossorigin>
+  <link rel="preload" href="static/demo/liver/preview.webp" as="fetch" crossorigin>
   <!-- ?v= busts browser/CDN caches (GitHub Pages caches 10 min): bump it whenever css/js/slides change -->
   <link rel="stylesheet" href="static/css/bulma.min.css?v=20260927d">
   <link rel="stylesheet" href="static/css/index.css?v=20260927d">
 
-  <link rel="stylesheet" href="static/css/demo.css?v=22">
+  <link rel="stylesheet" href="static/css/demo.css?v=24">
   <script defer src="static/js/nav.js?v=20260927d"></script>
-  <script type="module" src="static/js/demo.js?v=23"></script>
+  <script type="module" src="static/js/demo.js?v=24"></script>
 </head>
 <body id="top">
 
@@ -92,23 +92,23 @@
      <div class="scene-toolbar"><span class="panel-kicker">ROBOTIC ACQUISITION</span><div class="scene-actions"><label class="toggle-pill" title="Show an illustrative patient outline aligned with the CT abdomen"><input type="checkbox" id="patient-toggle" checked><span>Patient outline</span></label><button type="button" class="camera-view-button" id="camera-overview" aria-pressed="false">Full setup</button><button type="button" class="icon-button" id="camera-reset" title="Reset camera" aria-label="Reset camera">↺</button><button type="button" class="icon-button" id="fullscreen" title="Full screen" aria-label="Expand interactive viewer">⛶</button></div></div>
      <div id="scene" role="img" aria-label="Interactive three-dimensional liver anatomy and robot probe"></div>
      <div class="stage-loading" id="scene-loading"><span class="loading-ring"></span><span>Preparing the acquisition view</span></div>
-     <div class="scene-bottom"><div class="scene-caption"><span id="scene-context">Liver · Supine acquisition</span><span id="case-label">Case 00039</span></div><div class="anatomy-legend"><span><i class="liver-swatch"></i>Liver</span><span><i class="kidney-swatch"></i>Kidneys</span><span><i class="plane-swatch"></i>Imaging plane</span></div><span class="orbit-hint">Drag to orbit · Scroll to zoom</span></div>
+     <div class="scene-bottom"><div class="scene-caption"><span id="scene-context">Liver · Supine acquisition</span></div><div class="anatomy-legend"><span><i class="liver-swatch"></i>Liver</span><span><i class="kidney-swatch"></i>Kidneys</span><span><i class="plane-swatch"></i>Imaging plane</span></div><span class="orbit-hint">Drag to orbit · Scroll to zoom</span></div>
     </div>
     <div class="ultrasound-panel">
      <div class="image-toolbar"><div class="image-tabs" role="tablist" aria-label="Ultrasound image display"><button type="button" role="tab" disabled aria-selected="true" data-view="output">SonoBridge</button><button type="button" role="tab" disabled aria-selected="false" data-view="label" title="Compare the anatomical label map with SonoBridge">Label map</button><button type="button" role="tab" disabled aria-selected="false" data-view="ct" title="Compare the CT slice with SonoBridge">CT</button></div><label class="guidance-toggle" title="Show visible fine-structure guidance and shadow boundaries"><input id="guidance-toggle" type="checkbox" disabled><span>Guidance</span></label></div>
      <div class="image-stage"><div class="image-wrap" id="image-wrap"><canvas id="us-canvas" width="1024" height="744" aria-label="SonoBridge ultrasound output"></canvas><div class="compare-divider" id="compare-divider" hidden><span>↔</span></div><div class="compare-labels" id="compare-labels" hidden><span id="compare-source">Label map</span><span>SonoBridge</span></div><input type="range" min="0" max="100" value="50" id="compare-range" aria-label="Comparison divider position" hidden></div><div class="image-loading" id="image-loading"><span class="loading-ring"></span><span>Loading ultrasound</span></div></div>
-     <div class="image-meta"><span id="scan-specs">3.4 MHz · 180 mm depth</span><span id="image-state">Reference view</span></div>
+     <div class="image-meta"><span id="scan-specs">3.4 MHz · 180 mm depth</span></div>
     </div>
    </div>
    <div class="controls-bar">
-    <div class="control-group"><div class="control-heading"><label for="position">Scan position</label><output id="position-value" for="position">0 mm</output></div><input type="range" id="position" min="0" max="16" step="1" value="8" disabled><div class="range-labels"><span id="position-min">−16 mm</span><span id="position-max">+16 mm</span></div></div>
-    <div class="control-group"><div class="control-heading"><label for="rotation">Probe rotation</label><output id="rotation-value" for="rotation">0°</output></div><input type="range" id="rotation" min="0" max="12" step="1" value="6" disabled><div class="range-labels"><span id="rotation-min">−18°</span><span id="rotation-max">+18°</span></div></div>
+    <div class="control-group"><div class="control-heading"><label for="position">Scan position</label><output id="position-value" for="position">0 mm</output></div><input type="range" id="position" min="0" max="16" step="1" value="8" disabled><div class="range-labels"><span id="position-min">−20 mm</span><span id="position-max">+20 mm</span></div></div>
+    <div class="control-group"><div class="control-heading"><label for="rotation">Probe rotation</label><output id="rotation-value" for="rotation">0°</output></div><input type="range" id="rotation" min="0" max="12" step="1" value="6" disabled><div class="range-labels"><span id="rotation-min">−24°</span><span id="rotation-max">+24°</span></div></div>
     <div class="control-group appearance-control"><div class="control-heading"><label for="shadow">Shadow area</label><output id="shadow-value" for="shadow">Default</output></div><input type="range" id="shadow" min="0" max="4" step="1" value="2" disabled><div class="range-labels"><span>Less</span><span>More</span></div></div>
     <div class="control-group appearance-control"><div class="control-heading"><label for="detail">Fine-structure strength</label><output id="detail-value" for="detail">1.00</output></div><input type="range" id="detail" min="0" max="4" step="1" value="4" disabled><div class="range-labels"><span>0.00</span><span>1.00</span></div></div>
    </div>
    <div class="explorer-footer"><p id="demo-status" role="status">Loading the liver acquisition…</p><div><button class="text-button" type="button" id="auto-scan" disabled><span class="play-icon">▷</span> Auto scan</button><button class="reset-button" type="button" id="reset-demo" disabled>Reset all <span>↺</span></button></div></div>
   </div>
-  <div class="demo-caption" id="about-demo"><p><strong>One anatomy, many appearances.</strong> Compare each scan with its anatomical labels and CT slice. Adjust shadow area and fine-structure strength independently.</p><p class="data-note">Precomputed SonoBridge results, synchronized with the robotic acquisition. The patient outline is illustrative. With guidance enabled, blue marks shadow boundaries and gold marks visible fine structures.</p></div>
+  <div class="demo-caption" id="about-demo"><p><strong>One anatomy, many appearances.</strong> Compare each scan with its anatomical labels and CT slice. Adjust shadow area and fine-structure strength independently.</p><p class="data-note">Guidance marks shadow boundaries in blue and visible fine structures in gold. The patient outline is illustrative.</p></div>
  </div>
 </section>
 </main>

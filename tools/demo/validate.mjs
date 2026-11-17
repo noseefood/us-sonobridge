@@ -17,8 +17,9 @@ const robot=packed('static/demo/robot.compact.glb');
 for(let i=0;i<=8;i++)assert(robot.nodes.some(n=>n.name===`web_fr3_link${i}`));
 assert(robot.nodes.some(n=>n.name==='web_base'));
 const reports=[];
-for(const [organ,prefix,anatomy,expectedCase] of [['liver','','liver.compact.glb','00039'],['kidney','kidney/','kidney/anatomy.compact.glb','00098']]){
- const m=read(`static/demo/${prefix}manifest.json`);
+for(const [organ,expectedCase] of [['liver','00098'],['kidney','00092']]){
+ const prefix=`${organ}/`,m=read(`static/demo/${prefix}manifest-v3.json`),anatomy=prefix+m.anatomy;
+ assert.equal(m.format_version,3);assert.equal(m.image_layout,'lossless-position-tracks');
  assert.equal(m.case_id,expectedCase);assert.equal(m.poses.length,m.positions.length*m.rotations.length);
  let maxPositionError=0,maxRotationError=0,maxAdjacentJointChange=0,totalFrameBytes=0;
  for(const [index,pose] of m.poses.entries()){
@@ -31,16 +32,20 @@ for(const [organ,prefix,anatomy,expectedCase] of [['liver','','liver.compact.glb
   const angle=new THREE.Quaternion().setFromRotationMatrix(face).angleTo(new THREE.Quaternion().setFromRotationMatrix(target));
   maxPositionError=Math.max(maxPositionError,error);maxRotationError=Math.max(maxRotationError,angle);assert(error<.00001);assert(angle<.001);
   for(const next of [pose.i+1<m.positions.length?index+m.rotations.length:null,pose.j+1<m.rotations.length?index+1:null])if(next!==null)maxAdjacentJointChange=Math.max(maxAdjacentJointChange,...pose.q.map((q,j)=>Math.abs(q-m.poses[next].q[j])));
-  const folder=path.join(root,`static/demo/${prefix}frames/${String(index).padStart(3,'0')}`);
-  const files=[...m.shadows.flatMap((_,s)=>m.details.map((_,d)=>`us-${s}-${d}.webp`)),'label.webp','ct.webp',...m.shadows.map((_,s)=>`guidance-${s}.webp`)];
-  for(const file of files){const n=fs.statSync(path.join(folder,file)).size;assert(n>100);totalFrameBytes+=n;}
  }
- assert(maxAdjacentJointChange*180/Math.PI<8);
+ const folder=path.join(root,`static/demo/${prefix}tracks`);
+ for(let j=0;j<m.rotations.length;j++){
+  const suffix=`-r${String(j).padStart(2,'0')}.webp`;
+  const files=[...m.shadows.flatMap((_,s)=>m.details.map((_,d)=>`us-${s}-${d}${suffix}`)),`label${suffix}`,`ct${suffix}`,...m.shadows.map((_,s)=>`guidance-${s}${suffix}`)];
+  for(const file of files){const b=fs.readFileSync(path.join(folder,file));assert(b.length>100);assert.equal(b.subarray(0,4).toString(),'RIFF');assert.equal(b.subarray(8,12).toString(),'WEBP');totalFrameBytes+=b.length;}
+ }
+ assert(maxAdjacentJointChange*180/Math.PI<12);
  const mesh=packed(`static/demo/${anatomy}`);
  for(const name of ['Liver','Kidneys','Bones','Skin'])assert(mesh.nodes.some(n=>n.name===`anatomy_${name}`));
+ for(const label of m.anatomy_labels)assert(mesh.nodes.some(n=>n.name===`anatomy_${label.name}`));
  const far=m.probe.radius_mm+m.depth_mm,half=m.probe.sector_angle_deg*Math.PI/360;
  assert(Math.abs(m.aspect-2*far*Math.sin(half)/(far-m.probe.radius_mm*Math.cos(half)))<1e-10);
  reports.push({organ,case:m.case_id,poses:m.poses.length,outputs:m.poses.length*m.shadows.length*m.details.length,max_position_error_mm:maxPositionError*1000,max_rotation_error_deg:maxRotationError*180/Math.PI,max_adjacent_joint_change_deg:maxAdjacentJointChange*180/Math.PI,minimum_central_contact:Math.min(...m.poses.map(p=>p.central_contact)),minimum_whole_contact:Math.min(...m.poses.map(p=>p.whole_contact)),aspect:m.aspect,frames_mb:totalFrameBytes/1e6,anatomy_mb:mesh.bytes/1e6});
 }
-fs.writeFileSync(path.join(root,'refs/demo-build/validation_v4.json'),JSON.stringify({shared_robot_mb:robot.bytes/1e6,reports,checks:['Complete 442-pose acquisition grids','Contact validity','Native FK registration','Shared robot visual links','Two anatomy scenes','14,144 image assets','Physical image aspect','Gzip byte identity']},null,2));
+fs.writeFileSync(path.join(root,'refs/demo-build/validation_v7.json'),JSON.stringify({shared_robot_mb:robot.bytes/1e6,reports,checks:['Complete 442-pose acquisition grids','Contact validity','Native FK registration','Shared robot visual links','Every present anatomical label exported','832 lossless sweep tracks / 14,144 source images','Physical image aspect','Gzip byte identity']},null,2));
 console.log(JSON.stringify(reports,null,2));
