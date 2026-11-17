@@ -1,0 +1,13 @@
+{
+  "name": "sonobridge-web-assets",
+  "private": true,
+  "type": "module",
+  "scripts": {"build": "node package_v4.mjs", "validate": "node validate.mjs"},
+  "dependencies": {
+    "@gltf-transform/core": "4.5.1",
+    "@gltf-transform/extensions": "4.5.1",
+    "@gltf-transform/functions": "4.5.1",
+    "esbuild": "0.28.2",
+    "meshoptimizer": "0.25.0"
+  }
+}

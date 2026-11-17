@@ -10,24 +10,22 @@
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="SonoBridge: A Visibility-Aware Schrödinger Bridge for CT-Based Ultrasound Synthesis">
-  <meta property="og:description" content="Project page for SonoBridge. Visuals and results are being prepared.">
+  <meta property="og:description" content="Explore controllable liver ultrasound synthesis with synchronized 3D anatomy and a robotic probe.">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SonoBridge: A Visibility-Aware Schrödinger Bridge for CT-Based Ultrasound Synthesis">
-  <meta name="twitter:description" content="Project page for SonoBridge. Visuals and results are being prepared.">
+  <meta name="twitter:description" content="Explore controllable liver ultrasound synthesis with synchronized 3D anatomy and a robotic probe.">
 
   <link rel="icon" type="image/x-icon" href="static/images/ultrasound_icon.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Inter for the page, JetBrains Mono for BibTeX, Roboto for the slide animations -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="static/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="static/css/fonts.css">
+  <link rel="preload" href="static/demo/frames/110/us-2-4.webp" as="fetch" crossorigin>
   <!-- ?v= busts browser/CDN caches (GitHub Pages caches 10 min): bump it whenever css/js/slides change -->
   <link rel="stylesheet" href="static/css/bulma.min.css?v=20260927d">
-  <link rel="stylesheet" href="static/anim/pptanim.css?v=20260927d">
   <link rel="stylesheet" href="static/css/index.css?v=20260927d">
 
-  <script defer src="static/anim/pptanim.js?v=20260927d"></script>
-  <script defer src="static/js/copybutton.js?v=20260927d"></script>
+  <link rel="stylesheet" href="static/css/demo.css?v=22">
   <script defer src="static/js/nav.js?v=20260927d"></script>
+  <script type="module" src="static/js/demo.js?v=23"></script>
 </head>
 <body id="top">
 
@@ -35,13 +33,7 @@
 <nav class="site-nav" aria-label="Sections">
   <div class="site-nav-inner">
     <a class="site-nav-brand" href="#top">SonoBridge</a>
-    <div class="site-nav-links">
-      <a href="#abstract">Overview</a>
-      <a href="#method">Method</a>
-      <a href="#phantom">Visuals</a>
-      <a href="#results">Results</a>
-      <a href="#BibTeX">BibTeX</a>
-    </div>
+    <div class="site-nav-links"><a href="#interactive">Interactive demo</a><a href="#about-demo">About the demo</a>    </div>
   </div>
 </nav>
 
@@ -51,7 +43,6 @@
 <section class="hero publication-hero">
   <div class="hero-body">
     <div class="container is-max-desktop has-text-centered">
-      <p class="publication-venue">Publication status: TBA</p>
       <h1 class="title is-1 publication-title">SonoBridge: A Visibility-Aware Schrödinger Bridge<br>for CT-Based Ultrasound Synthesis</h1>
 
       <div class="publication-authors">
@@ -65,7 +56,6 @@
         <span class="affiliation-block"><sup>a</sup>Chair for Computer Aided Medical Procedures and Augmented Reality (CAMP), Technical University of Munich, Munich, Germany</span>
         <span class="affiliation-block"><sup>b</sup>Munich Center for Machine Learning (MCML), 80333 Munich, Germany</span>
         <span class="affiliation-block"><sup>c</sup>Department of Mechanical Engineering, The University of Hong Kong, Hong Kong SAR, China</span>
-        <p class="equal-contribution-note">Corresponding authors: TBA.</p>
       </div>
 
       <div class="publication-links">
@@ -82,9 +72,9 @@
           </span>
         </span>
         <span class="link-block">
-          <a href="#BibTeX" class="button is-normal is-rounded is-dark">
-            <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 18v-5.5C4 8.4 6.1 5.8 10 5l.8 1.8C8.6 7.5 7.6 8.9 7.5 11H10v7zm10 0v-5.5c0-4.1 2.1-6.7 6-7.5l.8 1.8c-2.2.7-3.2 2.1-3.3 4.2H20v7z"/></svg></span>
-            <span>BibTeX</span>
+          <a href="#interactive" class="button is-normal is-rounded is-dark">
+            <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 5.5 19 12 9 18.5Z"/></svg></span>
+            <span>Explore the demo</span>
           </a>
         </span>
       </div>
@@ -93,207 +83,35 @@
 </section>
 
 
-<!-- ============ Teaser animation ============ -->
-<section class="section teaser">
-  <div class="container is-max-widescreen">
-    <figure class="anim-figure">
-      <div class="anim-card anim-wide">
-        <div class="ppt-anim" style="--ar: 1220 / 430" aria-label="Temporary legacy animation placeholder" data-slides="slide01" data-crop="30,205,1220,430" data-speed="1.3" data-end-hold="5000"></div>
-      </div>
-      <figcaption>
-        [SonoBridge teaser caption to be added. Existing animation retained as a temporary visual placeholder.]
-      </figcaption>
-    </figure>
-  </div>
-</section>
-
-
-<!-- ============ In a nutshell + abstract ============ -->
-<section class="section section-alt" id="abstract">
-  <div class="container is-max-desktop">
-    <p class="section-eyebrow">Overview</p>
-    <h2 class="title is-3 section-title">Overview</h2>
-    <div class="content nutshell">
-      <p>
-        [SonoBridge overview to be added.]
-      </p>
-      <ul class="highlights">
-        <li>[Key point 1 to be added.]</li>
-        <li>[Key point 2 to be added.]</li>
-        <li>[Key point 3 to be added.]</li>
-      </ul>
+<section class="section demo-section" id="interactive" aria-labelledby="demo-heading">
+ <div class="demo-container">
+  <div class="demo-intro"><div><p class="section-eyebrow">INTERACTIVE DEMO</p><h2 id="demo-heading">Explore ultrasound synthesis</h2><p>Choose an organ, move the probe, and adjust its appearance.</p></div><div class="organ-picker" role="tablist" aria-label="Organ"><button type="button" role="tab" data-organ="liver" aria-selected="true" disabled>Liver</button><button type="button" role="tab" data-organ="kidney" aria-selected="false" disabled>Kidney</button></div></div>
+  <div class="explorer" aria-busy="true" id="explorer">
+   <div class="viewer-grid">
+    <div class="anatomy-panel">
+     <div class="scene-toolbar"><span class="panel-kicker">ROBOTIC ACQUISITION</span><div class="scene-actions"><label class="toggle-pill" title="Show an illustrative patient outline aligned with the CT abdomen"><input type="checkbox" id="patient-toggle" checked><span>Patient outline</span></label><button type="button" class="camera-view-button" id="camera-overview" aria-pressed="false">Full setup</button><button type="button" class="icon-button" id="camera-reset" title="Reset camera" aria-label="Reset camera">↺</button><button type="button" class="icon-button" id="fullscreen" title="Full screen" aria-label="Expand interactive viewer">⛶</button></div></div>
+     <div id="scene" role="img" aria-label="Interactive three-dimensional liver anatomy and robot probe"></div>
+     <div class="stage-loading" id="scene-loading"><span class="loading-ring"></span><span>Preparing the acquisition view</span></div>
+     <div class="scene-bottom"><div class="scene-caption"><span id="scene-context">Liver · Supine acquisition</span><span id="case-label">Case 00039</span></div><div class="anatomy-legend"><span><i class="liver-swatch"></i>Liver</span><span><i class="kidney-swatch"></i>Kidneys</span><span><i class="plane-swatch"></i>Imaging plane</span></div><span class="orbit-hint">Drag to orbit · Scroll to zoom</span></div>
     </div>
-
-    <details class="accordion">
-      <summary><span>Read the full abstract</span><svg class="chevron" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-      <div class="content accordion-body">
-        <p>
-          [Abstract to be added.]
-        </p>
-      </div>
-    </details>
-  </div>
-</section>
-
-
-<!-- ============ How it works ============ -->
-<section class="section" id="method">
-  <div class="container is-max-widescreen">
-    <p class="section-eyebrow">Method</p>
-    <h2 class="title is-3 section-title">How It Works</h2>
-    <p class="section-lead">
-      [Method introduction to be added.]
-    </p>
-
-    <figure class="anim-figure">
-      <h3 class="anim-title"><span class="step-no">1</span>[Method visual title to be added]</h3>
-      <div class="anim-card anim-wide">
-        <div class="ppt-anim" style="--ar: 1220 / 520" data-slides="slide02" data-crop="30,160,1220,520" data-speed="2@25%,1.5" data-end-hold="4000"></div>
-      </div>
-      <figcaption>
-        [Method visual caption to be added. Existing animation retained as a temporary visual placeholder.]
-      </figcaption>
-    </figure>
-
-    <figure class="anim-figure">
-      <h3 class="anim-title"><span class="step-no">2</span>[Method visual title to be added]</h3>
-      <div class="anim-card anim-wide">
-        <div class="ppt-anim" style="--ar: 1230 / 585"
-             data-slides="slide04,slide05,slide06,slide07,slide08,slide09,slide10,slide11,slide12,slide13,slide14"
-             data-crop="25,110,1230,585" data-hold="700" data-end-hold="4000"></div>
-      </div>
-      <figcaption>
-        [Method visual caption to be added. Existing animation retained as a temporary visual placeholder.]
-        <span class="hint">Click to pause, drag the scrubber, or open it full screen.</span>
-      </figcaption>
-    </figure>
-  </div>
-</section>
-
-
-<!-- ============ Visual placeholders ============ -->
-<section class="section section-alt" id="phantom">
-  <div class="container is-max-widescreen">
-    <p class="section-eyebrow">Visuals</p>
-    <h2 class="title is-3 section-title">[Section title to be added]</h2>
-    <p class="section-lead">
-      [SonoBridge visual introduction to be added. Existing animations are temporary placeholders.]
-    </p>
-
-    <div class="columns is-variable is-5 pair-row">
-      <div class="column">
-        <figure class="anim-figure">
-          <h3 class="anim-title">[Visual title to be added]</h3>
-          <div class="anim-card">
-            <div class="ppt-anim" style="--ar: 970 / 524" data-slides="slide16" data-crop="150,188,970,524" data-controls="false"></div>
-          </div>
-        </figure>
-      </div>
-      <div class="column">
-        <figure class="anim-figure">
-          <h3 class="anim-title">[Visual title to be added]</h3>
-          <div class="anim-card">
-            <div class="ppt-anim" style="--ar: 880 / 475" data-slides="slide17" data-crop="200,160,880,475" data-controls="false"></div>
-          </div>
-        </figure>
-      </div>
+    <div class="ultrasound-panel">
+     <div class="image-toolbar"><div class="image-tabs" role="tablist" aria-label="Ultrasound image display"><button type="button" role="tab" disabled aria-selected="true" data-view="output">SonoBridge</button><button type="button" role="tab" disabled aria-selected="false" data-view="label" title="Compare the anatomical label map with SonoBridge">Label map</button><button type="button" role="tab" disabled aria-selected="false" data-view="ct" title="Compare the CT slice with SonoBridge">CT</button></div><label class="guidance-toggle" title="Show visible fine-structure guidance and shadow boundaries"><input id="guidance-toggle" type="checkbox" disabled><span>Guidance</span></label></div>
+     <div class="image-stage"><div class="image-wrap" id="image-wrap"><canvas id="us-canvas" width="1024" height="744" aria-label="SonoBridge ultrasound output"></canvas><div class="compare-divider" id="compare-divider" hidden><span>↔</span></div><div class="compare-labels" id="compare-labels" hidden><span id="compare-source">Label map</span><span>SonoBridge</span></div><input type="range" min="0" max="100" value="50" id="compare-range" aria-label="Comparison divider position" hidden></div><div class="image-loading" id="image-loading"><span class="loading-ring"></span><span>Loading ultrasound</span></div></div>
+     <div class="image-meta"><span id="scan-specs">3.4 MHz · 180 mm depth</span><span id="image-state">Reference view</span></div>
     </div>
-    <p class="pair-caption">
-      [Visual caption to be added. Existing animations retained as temporary placeholders.]
-      <span class="hint">Click a figure to view it full screen.</span>
-    </p>
-
-    <figure class="anim-figure">
-      <h3 class="anim-title">[Visual title to be added]</h3>
-      <div class="anim-card anim-wide">
-        <div class="ppt-anim" style="--ar: 1220 / 585" data-slides="slide18" data-crop="30,105,1220,585" data-end-hold="0"></div>
-      </div>
-      <figcaption>
-        [Visual caption to be added. Existing animation retained as a temporary placeholder.]
-      </figcaption>
-    </figure>
+   </div>
+   <div class="controls-bar">
+    <div class="control-group"><div class="control-heading"><label for="position">Scan position</label><output id="position-value" for="position">0 mm</output></div><input type="range" id="position" min="0" max="16" step="1" value="8" disabled><div class="range-labels"><span id="position-min">−16 mm</span><span id="position-max">+16 mm</span></div></div>
+    <div class="control-group"><div class="control-heading"><label for="rotation">Probe rotation</label><output id="rotation-value" for="rotation">0°</output></div><input type="range" id="rotation" min="0" max="12" step="1" value="6" disabled><div class="range-labels"><span id="rotation-min">−18°</span><span id="rotation-max">+18°</span></div></div>
+    <div class="control-group appearance-control"><div class="control-heading"><label for="shadow">Shadow area</label><output id="shadow-value" for="shadow">Default</output></div><input type="range" id="shadow" min="0" max="4" step="1" value="2" disabled><div class="range-labels"><span>Less</span><span>More</span></div></div>
+    <div class="control-group appearance-control"><div class="control-heading"><label for="detail">Fine-structure strength</label><output id="detail-value" for="detail">1.00</output></div><input type="range" id="detail" min="0" max="4" step="1" value="4" disabled><div class="range-labels"><span>0.00</span><span>1.00</span></div></div>
+   </div>
+   <div class="explorer-footer"><p id="demo-status" role="status">Loading the liver acquisition…</p><div><button class="text-button" type="button" id="auto-scan" disabled><span class="play-icon">▷</span> Auto scan</button><button class="reset-button" type="button" id="reset-demo" disabled>Reset all <span>↺</span></button></div></div>
   </div>
+  <div class="demo-caption" id="about-demo"><p><strong>One anatomy, many appearances.</strong> Compare each scan with its anatomical labels and CT slice. Adjust shadow area and fine-structure strength independently.</p><p class="data-note">Precomputed SonoBridge results, synchronized with the robotic acquisition. The patient outline is illustrative. With guidance enabled, blue marks shadow boundaries and gold marks visible fine structures.</p></div>
+ </div>
 </section>
-
-
-<!-- ============ Results ============ -->
-<section class="section" id="results">
-  <div class="container is-max-desktop">
-    <p class="section-eyebrow">Evaluation</p>
-    <h2 class="title is-3 section-title">Results at a Glance</h2>
-
-    <div class="stat-grid">
-      <div class="stat">
-        <div class="stat-value">TBA</div>
-        <div class="stat-label">[Result 1 to be added]</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">TBA</div>
-        <div class="stat-label">[Result 2 to be added]</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">TBA</div>
-        <div class="stat-label">[Result 3 to be added]</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">TBA</div>
-        <div class="stat-label">[Result 4 to be added]</div>
-      </div>
-    </div>
-
-    <details class="accordion">
-      <summary><span>[Detailed results to be added]</span><svg class="chevron" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-      <div class="accordion-body">
-        <p class="table-intro">
-          [Table description to be added.]
-        </p>
-        <div class="results-table-wrap">
-          <table class="results-table">
-            <thead>
-              <tr>
-                <th class="col-left">[Group]</th>
-                <th class="col-left">[Setting]</th>
-                <th class="is-hl">[Metric A]</th>
-                <th>[Metric B]</th>
-                <th>[Metric C]</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><th class="col-left" rowspan="3">[Group A]</th><td class="col-left">[A1]</td><td class="is-hl">—</td><td>—</td><td>—</td></tr>
-              <tr><td class="col-left">[A2]</td><td class="is-hl">—</td><td>—</td><td>—</td></tr>
-              <tr class="overall"><td class="col-left">[Summary]</td><td class="is-hl">—</td><td>—</td><td>—</td></tr>
-              <tr class="group-start"><th class="col-left" rowspan="3">[Group B]</th><td class="col-left">[B1]</td><td class="is-hl">—</td><td>—</td><td>—</td></tr>
-              <tr><td class="col-left">[B2]</td><td class="is-hl">—</td><td>—</td><td>—</td></tr>
-              <tr class="overall"><td class="col-left">[Summary]</td><td class="is-hl">—</td><td>—</td><td>—</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </details>
-  </div>
-</section>
-
-
-<!-- ============ BibTeX ============ -->
-<section class="section section-cite" id="BibTeX">
-  <div class="container is-max-desktop">
-    <p class="section-eyebrow">Citation</p>
-    <h2 class="title is-3 section-title">BibTeX</h2>
-    <div class="bibtex-block">
-      <button class="button is-small is-rounded copy-bibtex" id="copy-bibtex-btn" type="button" disabled title="BibTeX coming soon">
-        <span class="icon is-small"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>
-        <span class="copy-label">Copy</span>
-      </button>
-<pre><code id="bibtex-code">[BibTeX entry to be added when publication details are available.]</code></pre>
-    </div>
-  </div>
-</section>
-
 </main>
-
-<footer class="site-footer">
-  <a href="#top">Back to top &uarr;</a>
-</footer>
-
+<footer class="site-footer"><span>SonoBridge</span><a href="#top">Back to top ↑</a></footer>
 </body>
 </html>

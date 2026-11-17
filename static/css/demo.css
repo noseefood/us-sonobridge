@@ -1,0 +1,106 @@
+/* SonoBridge: anatomy first, with a quiet instrument panel. */
+.publication-hero .hero-body{padding:3.5rem 1.5rem 2.2rem}
+.demo-section{padding:24px 28px 64px}.demo-container{max-width:1240px;margin:auto}
+.demo-intro{display:flex;justify-content:space-between;align-items:end;margin-bottom:24px}
+.demo-intro .section-eyebrow{text-align:left;font-size:11px;letter-spacing:.12em;color:#8a8c8c;margin:0 0 8px}
+.demo-intro h2{font-size:34px;font-weight:500;letter-spacing:-.035em;line-height:1.2;color:#273135;margin:0 0 10px}
+.demo-intro p:not(.section-eyebrow){font-size:14px;line-height:1.5;color:#7b8285;margin:0}.case-badge{display:none}
+.explorer{--stage-height:clamp(350px,calc(100svh - 330px),510px);overflow:hidden;border:1px solid #e2e4e4;border-radius:20px;background:#fff;box-shadow:0 16px 50px -30px #15232a36}
+.viewer-grid{display:grid;grid-template-columns:1.30fr 1fr;height:var(--stage-height);background:radial-gradient(ellipse at 35% 24%,#f5f4f1,#e7e8e6)}
+.anatomy-panel{min-width:0;height:100%;position:relative;overflow:hidden}
+#scene{width:100%;height:100%;touch-action:none}#scene canvas{display:block;width:100%;height:100%}
+.scene-toolbar{position:absolute;z-index:3;inset:22px 20px auto 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.panel-kicker{color:#7a8488;font-size:10px;letter-spacing:.13em;font-weight:500}.scene-actions{display:flex;gap:7px;align-items:center}
+.toggle-pill{display:flex;gap:7px;align-items:center;color:#6b777d;font-size:11px;cursor:pointer;margin-right:4px}
+.toggle-pill input,.guidance-toggle input{appearance:none;width:24px;height:14px;border-radius:9px;margin:0;border:1px solid #b7c1c3;background:#bdc5c7;position:relative;cursor:pointer;transition:background .15s}
+.toggle-pill input::after,.guidance-toggle input::after{content:"";position:absolute;left:2px;top:2px;width:8px;height:8px;border-radius:50%;background:white;transition:transform .15s}
+.toggle-pill input:checked,.guidance-toggle input:checked{background:#6e979c;border-color:#6e979c}
+.toggle-pill input:checked::after,.guidance-toggle input:checked::after{transform:translateX(10px)}
+.icon-button{width:28px;height:28px;border:0;border-radius:50%;background:#ffffff80;color:#73838a;font:18px Arial;display:grid;place-items:center;cursor:pointer}
+.icon-button:hover{background:#fff;color:#264f5c}
+.scene-bottom{position:absolute;bottom:21px;left:24px;right:20px;pointer-events:none}
+.anatomy-legend{display:flex;gap:16px;color:#798489;font-size:10px}.anatomy-legend span{display:flex;gap:6px;align-items:center}.anatomy-legend i{width:6px;height:6px;border-radius:50%;display:inline-block}
+.liver-swatch{background:#b55f51}.kidney-swatch{background:#b18a73}.plane-swatch{background:#619da9}.orbit-hint{display:none}
+.ultrasound-panel{position:relative;min-width:0;display:flex;flex-direction:column;margin:18px 18px 18px 0;overflow:hidden;border-radius:13px;background:radial-gradient(ellipse at 48% 45%,#222b30,#141c21);box-shadow:0 10px 25px -14px #17252c60;color:#e9eef0}
+.image-toolbar{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 10px;gap:10px;flex:none}
+.image-tabs{display:flex;gap:18px}.image-tabs button{border:0;background:transparent;padding:3px 0 8px;font-family:inherit;font-size:12px;font-weight:500;color:#7d929b;border-bottom:1px solid transparent;cursor:pointer}
+.image-tabs button[aria-selected=true]{color:#eef4f5;border-bottom-color:#9dbfc8}.image-tabs button:hover{color:#eef4f5}
+.guidance-toggle{font-size:10px;display:flex;align-items:center;gap:6px;white-space:nowrap;cursor:pointer;color:#9aadb5}
+.guidance-toggle input{width:20px;height:12px;background:#39494f;border-color:#39494f}.guidance-toggle input::after{width:6px;height:6px}.guidance-toggle input:checked::after{transform:translateX(8px)}
+.image-stage{flex:1;min-height:0;position:relative;display:grid;place-items:center;padding:8px 24px 12px}
+.image-wrap{width:100%;max-height:100%;aspect-ratio:1.376688178;max-width:510px;position:relative;overflow:hidden}
+#us-canvas{width:100%;height:100%;display:block}
+.image-meta{display:flex;justify-content:space-between;gap:12px;padding:8px 21px 17px;font-size:10px;color:#748a94;flex:none}.image-meta i{font-style:normal;margin:0 5px;opacity:.5}
+.compare-divider{position:absolute;left:50%;top:4%;bottom:2%;border-left:1px solid #c3dbe0a0;pointer-events:none}
+.compare-divider span{position:absolute;top:50%;transform:translate(-50%,-50%);border:1px solid #e0eced;width:25px;height:25px;border-radius:50%;background:#e3eef1;color:#365b67;display:grid;place-items:center;font-size:16px}
+.compare-labels{position:absolute;bottom:3px;left:4px;right:4px;display:flex;justify-content:space-between;font-size:10px;color:#bdcfd6;pointer-events:none}
+#compare-range{position:absolute;inset:0;height:100%;width:100%;opacity:0;margin:0;cursor:ew-resize;z-index:2}
+[hidden]{display:none!important}
+.stage-loading,.image-loading{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;gap:12px;z-index:4;font-size:12px;color:#7a858a;background:#ebece8ee}
+.image-loading{background:#182128dc;color:#b8c6cd;pointer-events:none;font-size:11px}
+.loading-ring{width:16px;height:16px;border:1.5px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.controls-bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:30px;padding:24px 28px 19px;background:#fff}
+.control-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:6px;white-space:nowrap}
+.control-heading label{color:#4b5c65;font-size:13px;font-weight:500}.control-heading output{font-size:12px;font-variant-numeric:tabular-nums;color:#3b737e}
+.control-group input[type=range]{--fill:50%;display:block;appearance:none;width:100%;height:3px;border:0;margin:0;border-radius:4px;background:linear-gradient(to right,#7c9ba4 0%,#7c9ba4 var(--fill),#e4e9eb var(--fill),#e4e9eb 100%);cursor:pointer;outline-offset:7px}
+.control-group input[type=range]::-webkit-slider-thumb{appearance:none;width:16px;height:16px;border:2px solid #7799a3;border-radius:50%;background:#fff;box-shadow:0 1px 4px #34525c19}
+.control-group input[type=range]::-moz-range-thumb{width:12px;height:12px;border:2px solid #7799a3;border-radius:50%;background:#fff}
+.control-group input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 0 0 5px #759eaa12}
+.range-labels{display:flex;justify-content:space-between;margin-top:13px;color:#a1aab0;font-size:10px}
+.explorer-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:11px 28px 16px;background:#fff}
+.explorer-footer p{margin:0;font-size:11px;color:#909ca2}.explorer-footer>div{display:flex;align-items:center;gap:20px}
+.text-button,.reset-button{font-family:inherit;font-size:12px;color:#557581;padding:0;border:0;background:transparent;cursor:pointer;white-space:nowrap}
+.text-button{background:#edf3f4;border-radius:7px;padding:6px 12px;color:#47717d}.play-icon{font-size:14px;margin-right:5px;vertical-align:-1px}
+.reset-button{color:#929da3}.reset-button span{margin-left:6px}button:disabled,.control-group input:disabled{opacity:.4;cursor:wait}
+.demo-caption{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding:24px 4px 0;font-size:12px;color:#7f8a91;line-height:1.8}
+.demo-caption p{margin:0}.demo-caption strong{color:#566a75;font-weight:500}.demo-caption .data-note{font-size:11px;color:#98a2a8}
+.site-footer{display:flex;justify-content:space-between;max-width:1240px;margin:auto;padding:20px 28px 36px!important;border:0;background:transparent;font-size:11px;color:#929da2}
+.viewer-expanded{overflow:hidden}
+.explorer.is-expanded{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;max-height:100svh;border:0;border-radius:0;padding:16px;background:#f4f5f3}
+.explorer.is-expanded .viewer-grid{flex:1;min-height:0;border-radius:14px;height:auto}.explorer.is-expanded .image-wrap{max-width:650px}
+@media(min-width:721px) and (max-height:850px){
+ .demo-section{padding-top:18px}.demo-intro{margin-bottom:18px}.demo-intro .section-eyebrow{margin-bottom:6px;font-size:10px}
+ .demo-intro h2{font-size:30px;margin-bottom:6px}.demo-intro p:not(.section-eyebrow){font-size:13px}
+ .controls-bar{padding-top:20px;padding-bottom:14px}.explorer-footer{padding-top:5px;padding-bottom:12px}
+}
+@media(max-width:1050px){
+ .viewer-grid{grid-template-columns:1fr 1fr}.scene-toolbar{left:18px;right:14px}.panel-kicker{display:none}.scene-actions{margin-left:auto}
+ .image-toolbar{padding:16px 15px 8px}.image-tabs{gap:13px}.image-tabs button{font-size:11px}
+ .guidance-toggle{font-size:9px}.image-stage{padding:8px 15px}.controls-bar{gap:22px;padding-left:22px;padding-right:22px}
+ .control-heading{flex-wrap:wrap}.control-heading label{font-size:12px}
+}
+@media(max-width:720px){
+ .publication-hero .hero-body{padding:2.3rem 1.5rem 1.3rem}.demo-section{padding:24px 14px 36px}.demo-intro{margin-bottom:20px}
+ .demo-intro h2{font-size:27px}.demo-intro p:not(.section-eyebrow){font-size:13px;max-width:290px}
+ .explorer{border-radius:15px}.viewer-grid{display:flex;flex-direction:column;height:auto;padding:0 10px 10px}
+ .anatomy-panel{height:340px;margin:0 -10px}.ultrasound-panel{margin:0;min-height:330px;border-radius:11px}
+ .scene-toolbar{top:17px;right:17px}.scene-bottom{left:20px;bottom:16px}.anatomy-legend{font-size:10px;gap:13px}
+ .image-stage{min-height:235px;padding:5px 18px 9px}.image-toolbar{padding:16px 17px 10px}.image-tabs button{font-size:12px}.guidance-toggle{font-size:10px}
+ .image-meta{padding:8px 17px 16px;font-size:9px}.controls-bar{grid-template-columns:1fr 1fr;padding:24px 20px 18px;gap:28px 25px}
+ .control-heading{margin-bottom:18px}.control-heading label{font-size:12px}
+ .explorer-footer{padding:3px 20px 18px;flex-direction:column;align-items:flex-start;gap:15px}.explorer-footer>div{align-self:flex-end}
+ .demo-caption{grid-template-columns:1fr;gap:12px;font-size:12px}
+ .explorer.is-expanded{overflow:auto;padding:8px}.explorer.is-expanded .viewer-grid{flex:none}.explorer.is-expanded .anatomy-panel{height:42vh}
+}
+@media(prefers-reduced-motion:reduce){.loading-ring{animation:none}*{scroll-behavior:auto!important}}
+/* Organ switching and the quieter clinical scene. */
+.demo-container{max-width:1320px}.demo-intro{gap:28px}.demo-intro h2{font-size:33px;font-weight:500}
+.organ-picker{display:flex;flex:none;gap:4px;padding:4px;border:1px solid #dce3e3;border-radius:12px;background:#edf1f0;margin-bottom:2px}
+.organ-picker button{font:500 13px Inter,sans-serif;border:0;background:transparent;color:#81908f;min-width:88px;padding:10px 20px;border-radius:8px;cursor:pointer;transition:background .18s,color .18s,box-shadow .18s}
+.organ-picker button[aria-selected=true]{background:#fff;color:#335f65;box-shadow:0 2px 6px #344b4f12}.organ-picker button:hover{color:#335f65}.organ-picker button.is-loading{opacity:.55}
+.explorer{--stage-height:clamp(420px,calc(100svh - 300px),560px);border-radius:18px;border-color:#dce2e0;box-shadow:0 20px 65px -35px #17333136}
+.viewer-grid{grid-template-columns:1.35fr 1fr;background:radial-gradient(ellipse at 33% 18%,#f4f4f0,#e5e8e5)}
+.scene-toolbar{inset:20px 18px auto 22px}.scene-actions{gap:7px}.panel-kicker{font-size:9px;letter-spacing:.12em;color:#7b8b8c}
+.toggle-pill{font-size:10px;gap:5px;color:#728385}.camera-view-button{font:500 10px Inter,sans-serif;border:1px solid #cdd7d4;background:#f6f8f680;color:#637e80;border-radius:6px;padding:5px 7px;cursor:pointer;white-space:nowrap}
+.camera-view-button:hover{background:#fff;color:#335f65}.scene-bottom{bottom:19px;left:22px;right:18px}
+.scene-caption{display:flex;justify-content:space-between;font-size:10px;color:#73858a;margin-bottom:9px}.scene-caption #case-label{color:#96a2a4;font-size:9px}.anatomy-legend{font-size:9px;gap:13px}
+.ultrasound-panel{background:radial-gradient(ellipse at 48% 42%,#222e33,#152025);border-radius:12px;margin:16px 16px 16px 0;box-shadow:0 8px 24px -13px #11292e66}
+.image-tabs{gap:18px}.image-tabs button{font-size:12px}.image-toolbar{padding:18px 20px 10px}.image-meta{color:#83969d;font-size:10px}
+.control-heading label{font-size:12px;letter-spacing:-.01em}.control-heading output{font-size:12px;color:#447e81}.controls-bar{gap:25px;padding:23px 28px 18px}
+.demo-caption{grid-template-columns:1fr 1fr;gap:65px;color:#77888e}.demo-caption strong{color:#4d686e}.demo-caption .data-note{color:#919fa4}
+.stage-loading.anatomy-progress{inset:auto auto 50px 22px;background:#edf1ecc9;padding:8px 12px;border-radius:8px;gap:7px;font-size:10px;pointer-events:none}.stage-loading.anatomy-progress .loading-ring{width:11px;height:11px}
+.range-labels{color:#849398}.demo-caption .data-note{color:#7e8e95}.scene-caption #case-label{color:#7d8e92}.image-tabs button:not([aria-selected=true]){color:#94a6ac}
+@media(max-width:1100px) and (min-width:721px){.panel-kicker{display:none}.scene-actions{margin-left:auto}.viewer-grid{grid-template-columns:1.18fr 1fr}.control-heading{white-space:normal;align-items:flex-start}.image-tabs{gap:13px}}
+@media(max-width:720px){.demo-intro{align-items:flex-start;flex-direction:column;gap:18px;margin-bottom:18px}.demo-intro h2{font-size:26px}.demo-intro p:not(.section-eyebrow){max-width:330px}.organ-picker{align-self:flex-start}.organ-picker button{min-width:88px;padding:9px 19px}.anatomy-panel{height:380px}.ultrasound-panel{margin:0}.scene-toolbar{top:17px;left:17px;right:17px}.scene-actions{gap:6px}.scene-caption #case-label{display:none}.scene-bottom{left:20px;bottom:15px}.control-heading{white-space:normal;gap:8px;min-height:29px;align-items:flex-start}.controls-bar{padding:22px 20px 18px;gap:24px}.control-heading label{font-size:11px}.demo-caption{gap:12px}.scene-caption{font-size:10px}}
+@media(max-width:720px){.demo-caption{grid-template-columns:1fr;gap:12px}.demo-caption .data-note{font-size:11px}}
