@@ -132,22 +132,25 @@
  .demo-caption,.demo-caption .data-note{font-size:13px}.demo-intro p:not(.section-eyebrow){font-size:14px}
  .anatomy-legend{gap:12px}.scene-actions{gap:5px}.scene-toolbar{left:12px;right:12px}
 }
-/* Page chrome follows the manuscript's pale violet palette; scientific colours stay in the images and anatomy. */
-.demo-intro .section-eyebrow{color:#8d7caa;display:flex;align-items:center;gap:0}
-.demo-intro h2{color:#37313f}.demo-intro p:not(.section-eyebrow){color:#787080}
-.organ-picker{border-color:#e1daed;background:#f1edf8}.organ-picker button{color:#8a7e99}.organ-picker button[aria-selected=true]{color:#67509a;box-shadow:0 2px 6px #57406b12}.organ-picker button:hover{color:#5b4bb7}
-.explorer{border-color:#e2dceb;box-shadow:0 18px 55px -35px #44325e30}.viewer-grid{background:radial-gradient(ellipse at 33% 18%,#f5f3f8,#e9e6ef)}
-.panel-kicker{color:#82748e}.toggle-pill,.camera-view-button{color:#7a6b89}.camera-view-button{border-color:#ded5e8;background:#faf8fcbf}.camera-view-button:hover{color:#5b4bb7;background:#fff}
-.toggle-pill input:checked,.guidance-toggle input:checked{background:#9c8bc5;border-color:#9c8bc5}.icon-button{color:#8a769a}.icon-button:hover{color:#5b4bb7}
-.scene-caption,.anatomy-legend{color:#7d7185}.ultrasound-panel{background:radial-gradient(ellipse at 48% 42%,#2b2934,#1c1c26);box-shadow:0 8px 24px -13px #251d3766}
-.image-tabs button:not([aria-selected=true]){color:#b4aac3}.image-tabs button[aria-selected=true]{color:#f0eafb;border-bottom-color:#cfc8f4}.image-tabs button:hover{color:#f0eafb}.guidance-toggle{color:#beb3cd}.image-meta{color:#b2a7be}
-.control-heading label{color:#655c70}.control-heading output{color:#7962a2}
-.control-group input[type=range]{background:linear-gradient(to right,#a08cc7 0%,#a08cc7 var(--fill),#ebe5f2 var(--fill),#ebe5f2 100%)}
-.control-group input[type=range]::-webkit-slider-thumb{border-color:#a08cc7;box-shadow:0 1px 4px #5c3c7919}.control-group input[type=range]::-moz-range-thumb{border-color:#a08cc7}
-.control-group input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 0 0 5px #a08cc714}
-.range-labels{color:#81748f}.explorer-footer p{color:#8b7f96}.text-button{background:#f1edf8;color:#8167a3}.reset-button{color:#8d7c9c}
-.demo-caption,.demo-caption .data-note{color:#8a7d94}.demo-caption strong{color:#746081}
-.stage-loading{background:#f0edf6ed;color:#8d7a9b}.stage-loading.anatomy-progress{background:#f0edf6d9;color:#8d7a9b}
-.image-loading{background:#201d2adc;color:#c4b7d2}
-
-.guidance-toggle input{background:#494052;border-color:#494052}.guidance-toggle input:checked{background:#9c8bc5;border-color:#9c8bc5}
+/* A light, shared presentation surface. Violet marks interaction; image pixels and anatomical colours are unchanged. */
+.demo-section{--demo-ink:var(--text-body);--demo-muted:#777383;--demo-line:#e5e1ee;--demo-track:#e8e4f2}
+.demo-intro .section-eyebrow{color:var(--text-muted);display:flex;align-items:center;gap:0}
+.demo-intro h2{color:var(--text)}.demo-intro p:not(.section-eyebrow){color:var(--demo-muted)}
+.organ-picker{border-color:var(--demo-line);background:#f8f7fb}.organ-picker button{color:var(--demo-muted)}.organ-picker button[aria-selected=true]{color:var(--accent);box-shadow:0 1px 5px #33234b0d}.organ-picker button:hover{color:var(--accent)}
+.explorer{border-color:var(--demo-line);box-shadow:0 12px 36px -25px #3e2d6426}.viewer-grid{background:radial-gradient(ellipse at 36% 24%,#fdfcfe,#f2f0f8)}
+.panel-kicker{color:var(--demo-muted)}.toggle-pill,.camera-view-button{color:var(--demo-ink)}.camera-view-button{border-color:var(--demo-line);background:#ffffff80}.camera-view-button:hover{color:var(--accent);background:#fff}
+.toggle-pill input,.guidance-toggle input{background:#cecad8;border-color:#cecad8}.toggle-pill input:checked,.guidance-toggle input:checked{background:var(--accent-mid);border-color:var(--accent-mid)}
+.icon-button{color:var(--demo-muted);background:#ffffff80}.icon-button:hover{color:var(--accent)}
+.scene-caption,.anatomy-legend{color:var(--demo-muted)}
+.ultrasound-panel{background:#ffffffa6;border:1px solid var(--demo-line);box-shadow:none;color:var(--demo-ink)}
+.image-tabs button:not([aria-selected=true]){color:var(--demo-muted)}.image-tabs button[aria-selected=true]{color:var(--accent);border-bottom-color:var(--accent-mid)}.image-tabs button:hover{color:var(--accent)}
+.guidance-toggle,.image-meta{color:var(--demo-muted)}
+.compare-divider{border-left-color:#f0ebfcb3}.compare-divider span{border-color:#e2dbee;background:#faf8ff;color:var(--accent)}.compare-labels{color:var(--demo-ink)}
+.controls-bar{border-top:1px solid var(--demo-line)}.control-heading label{color:var(--demo-ink)}.control-heading output{color:var(--accent)}
+.control-group input[type=range]{background:linear-gradient(to right,var(--accent-mid) 0%,var(--accent-mid) var(--fill),var(--demo-track) var(--fill),var(--demo-track) 100%)}
+.control-group input[type=range]::-webkit-slider-thumb{border-color:var(--accent-mid);box-shadow:0 1px 4px #44336612}.control-group input[type=range]::-moz-range-thumb{border-color:var(--accent-mid)}
+.control-group input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 0 0 5px #8e80e610}
+.range-labels,.explorer-footer p{color:var(--demo-muted)}.text-button{background:var(--accent-soft);color:var(--accent)}.reset-button{color:var(--demo-muted)}.text-button:hover{background:#eae5f9}.reset-button:hover{color:var(--accent)}
+.demo-caption,.demo-caption .data-note{color:var(--demo-muted)}.demo-caption strong{color:var(--demo-ink)}
+.stage-loading{background:#f6f4fbed;color:var(--demo-muted)}.stage-loading.anatomy-progress{background:#f6f4fbd9;color:var(--demo-muted)}
+.image-loading{background:#faf9fdeb;color:var(--demo-muted)}.explorer.is-expanded{background:#faf9fd}

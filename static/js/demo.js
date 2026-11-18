@@ -1,4 +1,4 @@
-import {createEnvironment} from './environment.js?v=7';
+import {createEnvironment} from './environment.js?v=8';
 import {createJointCurve,sweepPhase,sweepPosition} from './motion.js?v=1';
 let THREE, OrbitControls, GLTFLoader, RoomEnvironment, MeshoptDecoder;
 const $ = id => document.getElementById(id);
@@ -245,7 +245,7 @@ function attachAnatomy(model){
  makeFan();applyPose(liveQ||poseOf(manifest.defaults).q);resetCamera();dirty=true;
 }
 async function setupScene(){
- const runtimePromise=import('../vendor/scene-runtime.js?v=4');
+ const runtimePromise=import('../vendor/scene-runtime.js?v=5');
  const robotPromise=geometryBytes('robot.compact.glb');
  const [runtime,robotBytes,patientBytes]=await Promise.all([runtimePromise,robotPromise,geometryBytes('patient-v2.compact.glb','2')]);
  THREE=runtime;({OrbitControls,GLTFLoader,RoomEnvironment,MeshoptDecoder}=runtime);
