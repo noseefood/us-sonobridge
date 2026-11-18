@@ -1,7 +1,7 @@
 import {createEnvironment} from './environment.js?v=9';
 import {createJointCurve,sweepPhase,sweepPosition} from './motion.js?v=1';
 import {labelPalette,labelPoseMasks} from './label-legend.js?v=1';
-import {cleanVisibilityContours} from './guidance.js?v=1';
+import {cleanVisibilityContours} from './guidance.js?v=2';
 let THREE, OrbitControls, GLTFLoader, RoomEnvironment, MeshoptDecoder;
 const $ = id => document.getElementById(id);
 const root = new URL('../demo/', import.meta.url);
