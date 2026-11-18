@@ -1,5 +1,7 @@
 import {createEnvironment} from './environment.js?v=9';
 import {createJointCurve,sweepPhase,sweepPosition} from './motion.js?v=1';
+import {labelPalette,labelPoseMasks} from './label-legend.js?v=1';
+import {cleanVisibilityContours} from './guidance.js?v=1';
 let THREE, OrbitControls, GLTFLoader, RoomEnvironment, MeshoptDecoder;
 const $ = id => document.getElementById(id);
 const root = new URL('../demo/', import.meta.url);
@@ -18,6 +20,30 @@ const blendFrom=document.createElement('canvas'),blendCtx=blendFrom.getContext('
 blendFrom.width=canvas.width;blendFrom.height=canvas.height;
 const cache=new Map(), overlays=new Map(),requestPins=new Map();
 const imageStage=$('image-wrap');
+// Move the same control between layouts, keeping its state and event handler.
+const compactLayout=matchMedia('(max-width:720px)');
+function placePlayback(){const mobile=compactLayout.matches&&!$('explorer').classList.contains('is-expanded');$(mobile?'mobile-playback':'playback-actions').prepend($('auto-scan'));}
+compactLayout.addEventListener('change',placePlayback);placePlayback();
+const labelLegend=$('label-legend'),legendItems=new Map();
+let legendLayoutKey='',legendMask=-1;
+for(const [id,name,color] of labelPalette){
+ const item=document.createElement('span'),swatch=document.createElement('i');item.className='label-legend-item';item.setAttribute('role','listitem');item.dataset.label=String(id);
+ swatch.style.backgroundColor=color;swatch.setAttribute('aria-hidden','true');item.append(swatch,document.createTextNode(name));labelLegend.append(item);legendItems.set(id,item);
+}
+function syncLabelLegend(record){
+ const enabled=displayMode==='label'&&record?.referenceMode==='label';labelLegend.hidden=!enabled;$('image-meta').hidden=enabled;
+ if(!enabled)return;
+ const poses=labelPoseMasks[record.organ],layoutKey=`${record.organ}:${labelLegend.clientWidth}`;
+ if(layoutKey!==legendLayoutKey){
+  // Reserve the case's full palette height once; only its present labels are
+  // shown, without changing the image size as an automatic sweep advances.
+  const all=poses.reduce((mask,value)=>mask|value,0);
+  for(const [id,item] of legendItems)item.hidden=!(all&(1<<id));
+  labelLegend.style.height='auto';labelLegend.style.height=`${labelLegend.getBoundingClientRect().height}px`;legendLayoutKey=layoutKey;legendMask=-1;
+ }
+ const mask=record.blend?poses[record.blend.a.pose.index]|poses[record.blend.b.pose.index]:poses[record.pose.index];
+ if(mask!==legendMask){for(const [id,item] of legendItems)item.hidden=!(mask&(1<<id));legendMask=mask;}
+}
 const setStatus = text => { $('demo-status').textContent=text; };
 const signed = (v,unit) => `${v>0?'+':v<0?'−':''}${Math.abs(v)}${unit}`;
 const same = (a,b) => ['position','rotation','shadow','detail'].every(k=>a[k]===b[k]);
@@ -151,6 +177,7 @@ function guidance(record){
  const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d',{willReadFrequently:true});
  const t=record.guidanceBitmap;x.drawImage(t.image,t.sx,t.sy,t.sw,t.sh,0,0,256,256);
  const pixels=x.getImageData(0,0,256,256);
+ cleanVisibilityContours(pixels.data,256,256);
  for(let i=0;i<pixels.data.length;i+=4){const support=pixels.data[i],edge=pixels.data[i+1];pixels.data[i]=edge?91:245;pixels.data[i+1]=edge?180:189;pixels.data[i+2]=edge?218:76;pixels.data[i+3]=edge?225:Math.round(support*.7);}
  x.putImageData(pixels,0,0);overlays.set(key,c);while(overlays.size>16)overlays.delete(overlays.keys().next().value);return c;
 }
@@ -165,6 +192,7 @@ function drawRecord(record,alpha=1){
  if(showGuidance){const overlay=guidance(record);if(overlay){ctx.save();if(comparing){ctx.beginPath();ctx.rect(canvas.width*split,0,canvas.width,canvas.height);ctx.clip();}tile(overlay,alpha);ctx.restore();}}
 }
 function drawUltrasound(u=1){
+ syncLabelLegend(current);
  ctx.clearRect(0,0,canvas.width,canvas.height);ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.save();ctx.clip(fanPath(canvas.width,canvas.height));
  if(previous&&u<1){ctx.drawImage(blendFrom,0,0);drawRecord(current,u);}else drawRecord(current);
  ctx.restore();
@@ -295,7 +323,7 @@ function configureDataset(){
  document.querySelectorAll('[data-organ]').forEach(b=>{b.setAttribute('aria-selected',String(b.dataset.organ===activeOrgan));b.classList.remove('is-loading');});
 }
 function resizeImage(){
- if(!manifest)return;const box=document.querySelector('.image-stage'),style=getComputedStyle(box);
+ if(!manifest)return;syncLabelLegend(current);const box=document.querySelector('.image-stage'),style=getComputedStyle(box);
  const width=box.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight),height=box.clientHeight-parseFloat(style.paddingTop)-parseFloat(style.paddingBottom);
  const w=Math.min(width,height*manifest.aspect,$('explorer').classList.contains('is-expanded')?650:500);imageStage.style.width=`${w}px`;imageStage.style.height=`${w/manifest.aspect}px`;
 }
@@ -373,6 +401,7 @@ document.querySelectorAll('[data-organ]').forEach(b=>b.addEventListener('click',
 $('camera-reset').addEventListener('click',()=>{wideView=false;resetCamera(true);});
 function expandViewer(expanded){
  $('explorer').classList.toggle('is-expanded',expanded);document.body.classList.toggle('viewer-expanded',expanded);document.documentElement.classList.toggle('viewer-expanded',expanded);
+ placePlayback();
  $('fullscreen').setAttribute('aria-label',expanded?'Exit expanded viewer':'Expand interactive viewer');
  $('fullscreen').title=expanded?'Exit expanded view (Esc)':'Expand viewer';$('fullscreen').textContent=expanded?'×':'⛶';dirty=true;
 }

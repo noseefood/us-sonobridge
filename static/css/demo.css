@@ -110,10 +110,12 @@
 .panel-kicker{font-size:13px;color:#63777b;letter-spacing:.06em}
 .toggle-pill,.camera-view-button{font-size:14px;color:#4c686f}
 .scene-caption{font-size:14px;line-height:1.5;color:#526b71;margin-bottom:8px}
-.anatomy-legend{font-size:14px;color:#63767b;gap:14px}
-.anatomy-legend i{width:7px;height:7px}
-.liver-swatch{background:#865146}.kidney-swatch{background:#966e57}
-.image-toolbar{flex-wrap:wrap;row-gap:7px}.image-tabs button{font-size:16px}.guidance-toggle{font-size:14px;color:#b2c4ca;margin-left:auto}
+.anatomy-legend{font-size:15px;font-weight:500;color:#443e51;gap:15px;flex-wrap:wrap}
+.anatomy-legend i{width:12px;height:12px;border-radius:3px;box-shadow:0 0 0 1px #35293630;flex:none}
+.liver-swatch{background:#865146}.kidney-swatch{background:#966e57}.plane-swatch{background:#276f79}
+.image-toolbar{flex-wrap:wrap;row-gap:7px}.image-tabs button{font-size:16px}.guidance-toggle{font-size:16px;font-weight:500;color:#554f63;margin-left:auto;min-height:34px;padding:4px 8px;border:1px solid #e1dbea;border-radius:7px;background:#f7f5fb}
+.guidance-toggle input{width:28px;height:16px;flex:none}.guidance-toggle input::after{width:10px;height:10px}.guidance-toggle input:checked::after{transform:translateX(12px)}
+.guidance-toggle:hover{border-color:#c8bde2;background:#f1edf9}
 .image-meta{font-size:14px;color:#a5b8c0;justify-content:flex-start}.compare-labels{font-size:13px}.compare-labels span{background:#faf9fdeb;border-radius:4px;padding:2px 5px;line-height:1.4}
 .control-heading label,.control-heading output{font-size:16px;font-weight:500;line-height:1.45}
 .control-heading label{color:#465c65}.control-heading output{color:#376e74}
@@ -125,7 +127,7 @@
 .icon-button{width:32px;height:32px}.camera-view-button{padding:6px 9px}.scene-actions{flex:none}.scene-toolbar{flex-wrap:wrap;row-gap:8px}
 @media(max-width:1100px){.panel-kicker{display:none}.scene-actions{margin-left:auto}.image-toolbar{padding-left:16px;padding-right:16px}.image-tabs{gap:12px}}
 @media(max-width:720px){
- .toggle-pill,.camera-view-button,.scene-caption,.anatomy-legend,.guidance-toggle,.image-meta{font-size:14px}
+ .toggle-pill,.camera-view-button,.scene-caption,.image-meta{font-size:14px}.anatomy-legend{font-size:15px}.guidance-toggle{font-size:16px}
  .image-tabs button{font-size:15px}.image-toolbar{padding-left:14px;padding-right:14px}.image-tabs{gap:12px}.ultrasound-panel{min-height:360px}
  .control-heading{min-height:46px;flex-wrap:wrap;margin-bottom:17px;gap:4px 6px}
  .control-heading label,.control-heading output{font-size:15px}.control-heading output{margin-left:auto}
@@ -144,10 +146,15 @@
 .panel-kicker{color:#656171}.toggle-pill,.camera-view-button{color:var(--demo-ink)}.camera-view-button{border-color:#d6d2e0;background:#ffffff99}.camera-view-button:hover{color:var(--accent);background:#fff}
 .toggle-pill input,.guidance-toggle input{background:#cecad8;border-color:#cecad8}.toggle-pill input:checked,.guidance-toggle input:checked{background:var(--accent-mid);border-color:var(--accent-mid)}
 .icon-button{color:var(--demo-muted);background:#ffffff80}.icon-button:hover{color:var(--accent)}
-.scene-caption,.anatomy-legend{color:#5c5869}
+.scene-bottom{width:fit-content;max-width:calc(100% - 32px);left:16px;right:auto;bottom:14px;padding:9px 12px;border:1px solid #ffffffd9;border-radius:10px;background:#f9f8fcf0;box-shadow:0 2px 10px #392e4e0a}
+.scene-caption{color:#625b70;margin-bottom:5px}.anatomy-legend{color:#443e51}
 .ultrasound-panel{background:#ffffffa6;border:1px solid var(--demo-line);box-shadow:none;color:var(--demo-ink)}
 .image-tabs button:not([aria-selected=true]){color:var(--demo-muted)}.image-tabs button[aria-selected=true]{color:var(--accent);border-bottom-color:var(--accent-mid)}.image-tabs button:hover{color:var(--accent)}
-.guidance-toggle,.image-meta{color:var(--demo-muted)}
+.image-meta{color:var(--demo-muted)}.guidance-toggle{color:var(--demo-ink)}
+.label-legend{display:flex;flex:none;flex-wrap:wrap;align-content:flex-start;gap:7px 13px;margin:0 20px 12px;padding:10px 0 0;border-top:1px solid var(--demo-line);font-size:13px;line-height:1.45;color:#524c60}
+.label-legend-item{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.label-legend-item i{display:block;flex:none;width:18px;height:7px;border-radius:2px;box-shadow:0 0 0 1px #3d35432b}
+@media(max-width:720px){.label-legend{margin-left:14px;margin-right:14px;gap:6px 12px}.scene-bottom{left:12px;max-width:calc(100% - 24px);padding:8px 10px}.anatomy-legend{gap:12px}}
 .compare-divider{border-left-color:#f0ebfcb3}.compare-divider span{border-color:#e2dbee;background:#faf8ff;color:var(--accent)}.compare-labels{color:var(--demo-ink)}
 .controls-bar{border-top:1px solid var(--demo-line)}.control-heading label{color:var(--demo-ink)}.control-heading output{color:var(--accent)}
 .control-group input[type=range]{background:linear-gradient(to right,var(--accent-mid) 0%,var(--accent-mid) var(--fill),var(--demo-track) var(--fill),var(--demo-track) 100%)}
@@ -157,3 +164,12 @@
 .demo-caption,.demo-caption .data-note{color:var(--demo-muted)}.demo-caption strong{color:var(--demo-ink)}
 .stage-loading{background:#f6f4fbed;color:var(--demo-muted)}.stage-loading.anatomy-progress{background:#f6f4fbd9;color:var(--demo-muted)}
 .image-loading{background:#faf9fdeb;color:var(--demo-muted)}.explorer.is-expanded{background:#faf9fd}
+.demo-actions{display:flex;align-items:center;flex:none}.mobile-playback{display:none}
+@media(max-width:720px){
+ .demo-intro{display:contents}.demo-copy{margin-bottom:16px}
+ .demo-actions{position:sticky;top:calc(var(--nav-h) + 6px);z-index:8;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:4px;margin-bottom:18px;border:1px solid #e4deed;border-radius:12px;background:#faf9fef5;box-shadow:0 4px 14px #4635670b}
+ .demo-actions .organ-picker{align-self:center;margin:0;padding:0;border:0;background:transparent}
+ .demo-actions .organ-picker button{min-width:74px;padding:9px 14px}
+ .mobile-playback{display:block;margin-left:auto}.mobile-playback .text-button{display:inline-flex;align-items:center;justify-content:center;min-width:126px;min-height:42px;padding:8px 10px;font-size:16px}
+ .mobile-playback .text-button[aria-pressed=true]{background:#e8e2f8;color:#493b96}
+}
