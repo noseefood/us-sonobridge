@@ -4,7 +4,7 @@ let demoStarted = false;
 function loadDemo() {
   if (demoStarted) return;
   demoStarted = true;
-  import('./demo.js?v=32').catch(() => {
+  import('./demo.js?v=33').catch(() => {
     document.getElementById('demo-status').textContent = 'The demo could not be loaded. Please reload to try again.';
   });
 }
@@ -49,3 +49,21 @@ video.addEventListener('error', () => { error.hidden = false; });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) video.pause();
 });
+
+const chapters = [...dialog.querySelectorAll('[data-time]')];
+let selectedChapter;
+function updateChapter() {
+  const active = chapters.filter(button => Number(button.dataset.time) <= video.currentTime).at(-1);
+  if (active === selectedChapter) return;
+  selectedChapter?.removeAttribute('aria-current');
+  active?.setAttribute('aria-current', 'true');
+  selectedChapter = active;
+}
+for (const button of chapters) {
+  button.addEventListener('click', () => {
+    video.currentTime = Number(button.dataset.time);
+    updateChapter();
+    video.play().catch(() => {});
+  });
+}
+video.addEventListener('timeupdate', updateChapter);
