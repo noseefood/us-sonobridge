@@ -2,7 +2,9 @@
 export function createEnvironment(T,scene,patientAsset){
  const group=new T.Group();group.name='clinical_context';scene.add(group);
  const mat=(color,roughness=.8,metalness=0)=>new T.MeshStandardMaterial({color,roughness,metalness});
- const upholstery=mat(0x85828e,.96),metal=mat(0xb1b0b7,.68,.08),base=mat(0x8c8a94,.75,.06),seam=mat(0x9f9ca8,.9);
+ const setupBed = 0x7c8688, setupSeam = 0x959d9e;
+ const upholstery = mat(setupBed,.96), seam = mat(setupSeam,.9);
+ const metal = mat(0xa7afb0,.68,.08), base = mat(0x8d979a,.75,.06);
  function rounded(name,size,position,material,r=.015){
   const [w,h,d]=size;const b=Math.min(r,d*.22),x=w/2-b,y=h/2-b,k=Math.min(r,x,y),s=new T.Shape();
   s.moveTo(-x+k,-y);s.lineTo(x-k,-y);s.quadraticCurveTo(x,-y,x,-y+k);s.lineTo(x,y-k);s.quadraticCurveTo(x,y,x-k,y);s.lineTo(-x+k,y);s.quadraticCurveTo(-x,y,-x,y-k);s.lineTo(-x,-y+k);s.quadraticCurveTo(-x,-y,-x+k,-y);
@@ -19,10 +21,10 @@ export function createEnvironment(T,scene,patientAsset){
  // A thin dark collar makes the existing calibrated mounting plate readable.
  rounded('pedestal_top',[.30,.30,.014],[.505,.12,.692],base,.01);
  // Keep the CSS backdrop continuous through the scene, with only a soft grounding shadow.
- const floor=new T.Mesh(new T.PlaneGeometry(200,200),new T.ShadowMaterial({color:0x746e82,opacity:.12,depthWrite:false}));floor.position.z=-.005;floor.receiveShadow=true;group.add(floor);
+ const floor=new T.Mesh(new T.PlaneGeometry(200,200),new T.ShadowMaterial({color:0x586468,opacity:.12,depthWrite:false}));floor.position.z=-.005;floor.receiveShadow=true;group.add(floor);
  const silhouette=patientAsset;silhouette.name='illustrative_patient';group.add(silhouette);
  const cutCenter={value:new Float32Array(2)},cutHalf={value:new Float32Array([.21,.18])};
- const ghost=new T.MeshStandardMaterial({color:0xa7a6ad,roughness:1,metalness:0,envMapIntensity:.12,transparent:true,opacity:.5,depthWrite:false,side:T.FrontSide});
+ const ghost=new T.MeshStandardMaterial({color:0xa6adae,roughness:1,metalness:0,envMapIntensity:.12,transparent:true,opacity:.5,depthWrite:false,side:T.FrontSide});
  // One connected surface avoids the overlapping rings of separate body parts.
  // A soft anatomical window keeps the actual CT surface and organs readable.
  ghost.onBeforeCompile=shader=>{
@@ -49,5 +51,5 @@ export function createEnvironment(T,scene,patientAsset){
   group.userData.patientAlignment={ctCenter:center.toArray(),ctBounds:[bounds.min.toArray(),bounds.max.toArray()],bodyOrigin:silhouette.position.toArray(),abdominalAnchor:anchor.toArray(),bodyOffsetY:bodyY-center.y,mattressTop:.72,posture,backFacingUp:posture==='prone',illustrative:true,connectedSurface:true};
  }
  return {group,alignPatient,setPatientVisible:on=>silhouette.visible=on,
-  setScanView:on=>{upholstery.color.set(on?0xaaa7b3:0x85828e);seam.color.set(on?0xc2bfcb:0x9f9ca8);},dispose:()=>{}};
+  setScanView:on=>{upholstery.color.set(on?0xa1abad:setupBed);seam.color.set(on?0xb8c0c1:setupSeam);},dispose:()=>{}};
 }

@@ -4,7 +4,7 @@ let demoStarted = false;
 function loadDemo() {
   if (demoStarted) return;
   demoStarted = true;
-  import('./demo.js?v=33').catch(() => {
+  import('./demo.js?v=34').catch(() => {
     document.getElementById('demo-status').textContent = 'The demo could not be loaded. Please reload to try again.';
   });
 }

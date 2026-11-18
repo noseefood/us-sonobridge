@@ -1,4 +1,4 @@
-import {createEnvironment} from './environment.js?v=9';
+import {createEnvironment} from './environment.js?v=10';
 import {createJointCurve,sweepPhase,sweepPosition} from './motion.js?v=1';
 import {labelPalette,labelPoseMasks} from './label-legend.js?v=1';
 import {cleanVisibilityContours} from './guidance.js?v=2';
