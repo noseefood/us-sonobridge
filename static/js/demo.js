@@ -18,7 +18,13 @@ let liveQ, dirty=true, sceneReady=false, inView=true, lastPaint=0, lastTick=0, m
 let probeMotion,wheelZoom,lastFrame=0,lastShadowUpdate=0,shadowDirty=true;
 const blendFrom=document.createElement('canvas'),blendCtx=blendFrom.getContext('2d');
 blendFrom.width=canvas.width;blendFrom.height=canvas.height;
-const cache=new Map(), overlays=new Map(),requestPins=new Map();
+const cache=new Map(), overlays=new Map(),requestPins=new Map(),displayImages=new Map();
+// One fixed display curve for liver US: lift tissue midtones while anchoring
+// black and gently tapering the lift below 24/255. Source image data stay raw.
+const liverDisplayLut=Uint8ClampedArray.from({length:256},(_,v)=>{
+ const t=Math.min(1,v/24),weight=t*t*(3-2*t);
+ return Math.round(v+(255*Math.pow(v/255,.86)-v)*weight);
+});
 const imageStage=$('image-wrap');
 // Move the same control between layouts, keeping its state and event handler.
 const compactLayout=matchMedia('(max-width:720px)');
@@ -170,6 +176,19 @@ function fanPath(w,h){
  path.closePath();return path;
 }
 function tile(bitmap,alpha=1){if(!bitmap)return;ctx.globalAlpha=alpha;if(bitmap.image)ctx.drawImage(bitmap.image,bitmap.sx,bitmap.sy,bitmap.sw,bitmap.sh,0,0,canvas.width,canvas.height);else ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);ctx.globalAlpha=1;}
+function ultrasoundDisplay(record){
+ if(record.organ!=='liver')return record.bitmap;
+ const key=`${record.pose.index}:${record.state.shadow}:${record.state.detail}`;
+ if(displayImages.has(key))return displayImages.get(key);
+ const c=document.createElement('canvas');c.width=c.height=256;
+ const x=c.getContext('2d',{willReadFrequently:true}),t=record.bitmap;
+ x.drawImage(t.image,t.sx,t.sy,t.sw,t.sh,0,0,256,256);
+ const pixels=x.getImageData(0,0,256,256),data=pixels.data;
+ for(let p=0;p<data.length;p+=4){data[p]=liverDisplayLut[data[p]];data[p+1]=liverDisplayLut[data[p+1]];data[p+2]=liverDisplayLut[data[p+2]];}
+ x.putImageData(pixels,0,0);displayImages.set(key,c);
+ while(displayImages.size>16)displayImages.delete(displayImages.keys().next().value);
+ return c;
+}
 function guidance(record){
  if(!record.guidanceBitmap)return null;
  const key=`${record.organ}:${record.pose.index}:${record.state.shadow}`;
@@ -184,11 +203,12 @@ function guidance(record){
 function drawRecord(record,alpha=1){
  if(!record)return;
  if(record.blend){drawRecord(record.blend.a,alpha);drawRecord(record.blend.b,alpha*record.blend.u);return;}
+ const output=ultrasoundDisplay(record);
  const comparing=displayMode!=='output'&&record.reference&&record.referenceMode===displayMode;
  if(comparing){
   ctx.save();ctx.beginPath();ctx.rect(0,0,canvas.width*split,canvas.height);ctx.clip();tile(record.reference,alpha);ctx.restore();
-  ctx.save();ctx.beginPath();ctx.rect(canvas.width*split,0,canvas.width,canvas.height);ctx.clip();tile(record.bitmap,alpha);ctx.restore();
- }else tile(record.bitmap,alpha);
+  ctx.save();ctx.beginPath();ctx.rect(canvas.width*split,0,canvas.width,canvas.height);ctx.clip();tile(output,alpha);ctx.restore();
+ }else tile(output,alpha);
  if(showGuidance){const overlay=guidance(record);if(overlay){ctx.save();if(comparing){ctx.beginPath();ctx.rect(canvas.width*split,0,canvas.width,canvas.height);ctx.clip();}tile(overlay,alpha);ctx.restore();}}
 }
 function drawUltrasound(u=1){
