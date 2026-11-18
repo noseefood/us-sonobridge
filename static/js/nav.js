@@ -29,9 +29,12 @@ document.addEventListener('DOMContentLoaded', function () {
   function update() {
     var current = null;
     sections.forEach(function (s) { if (visible[s.id]) current = current || s.id; });
-    // At the very bottom the last section may be too short to reach the band.
-    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
-      current = sections[sections.length - 1].id;
+    // Short placeholder sections can share the viewport. Respect the selected
+    // anchor while its heading is visible, including when scrolling is clamped.
+    var selected = sections.find(function (s) { return '#' + s.id === window.location.hash; });
+    if (selected) {
+      var top = selected.getBoundingClientRect().top;
+      if (top >= nav.offsetHeight && top < window.innerHeight - 48) current = selected.id;
     }
     setActive(current);
   }
@@ -43,4 +46,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
   sections.forEach(function (s) { observer.observe(s); });
   window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('hashchange', update);
 });

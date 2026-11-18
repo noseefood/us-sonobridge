@@ -132,3 +132,22 @@
  .demo-caption,.demo-caption .data-note{font-size:13px}.demo-intro p:not(.section-eyebrow){font-size:14px}
  .anatomy-legend{gap:12px}.scene-actions{gap:5px}.scene-toolbar{left:12px;right:12px}
 }
+/* Page chrome follows the manuscript's pale violet palette; scientific colours stay in the images and anatomy. */
+.demo-intro .section-eyebrow{color:#8d7caa;display:flex;align-items:center;gap:0}
+.demo-intro h2{color:#37313f}.demo-intro p:not(.section-eyebrow){color:#787080}
+.organ-picker{border-color:#e1daed;background:#f1edf8}.organ-picker button{color:#8a7e99}.organ-picker button[aria-selected=true]{color:#67509a;box-shadow:0 2px 6px #57406b12}.organ-picker button:hover{color:#5b4bb7}
+.explorer{border-color:#e2dceb;box-shadow:0 18px 55px -35px #44325e30}.viewer-grid{background:radial-gradient(ellipse at 33% 18%,#f5f3f8,#e9e6ef)}
+.panel-kicker{color:#82748e}.toggle-pill,.camera-view-button{color:#7a6b89}.camera-view-button{border-color:#ded5e8;background:#faf8fcbf}.camera-view-button:hover{color:#5b4bb7;background:#fff}
+.toggle-pill input:checked,.guidance-toggle input:checked{background:#9c8bc5;border-color:#9c8bc5}.icon-button{color:#8a769a}.icon-button:hover{color:#5b4bb7}
+.scene-caption,.anatomy-legend{color:#7d7185}.ultrasound-panel{background:radial-gradient(ellipse at 48% 42%,#2b2934,#1c1c26);box-shadow:0 8px 24px -13px #251d3766}
+.image-tabs button:not([aria-selected=true]){color:#b4aac3}.image-tabs button[aria-selected=true]{color:#f0eafb;border-bottom-color:#cfc8f4}.image-tabs button:hover{color:#f0eafb}.guidance-toggle{color:#beb3cd}.image-meta{color:#b2a7be}
+.control-heading label{color:#655c70}.control-heading output{color:#7962a2}
+.control-group input[type=range]{background:linear-gradient(to right,#a08cc7 0%,#a08cc7 var(--fill),#ebe5f2 var(--fill),#ebe5f2 100%)}
+.control-group input[type=range]::-webkit-slider-thumb{border-color:#a08cc7;box-shadow:0 1px 4px #5c3c7919}.control-group input[type=range]::-moz-range-thumb{border-color:#a08cc7}
+.control-group input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 0 0 5px #a08cc714}
+.range-labels{color:#81748f}.explorer-footer p{color:#8b7f96}.text-button{background:#f1edf8;color:#8167a3}.reset-button{color:#8d7c9c}
+.demo-caption,.demo-caption .data-note{color:#8a7d94}.demo-caption strong{color:#746081}
+.stage-loading{background:#f0edf6ed;color:#8d7a9b}.stage-loading.anatomy-progress{background:#f0edf6d9;color:#8d7a9b}
+.image-loading{background:#201d2adc;color:#c4b7d2}
+
+.guidance-toggle input{background:#494052;border-color:#494052}.guidance-toggle input:checked{background:#9c8bc5;border-color:#9c8bc5}
