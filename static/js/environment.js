@@ -37,12 +37,16 @@ export function createEnvironment(T,scene,patientAsset){
  };
  ghost.customProgramCacheKey=()=> 'patient-window-v2';
  silhouette.traverse(o=>{if(o.isMesh){o.material=ghost;o.renderOrder=7;o.castShadow=false;o.receiveShadow=false;}});
- function alignPatient(bounds,posture='supine'){
+ function alignPatient(bounds,posture='supine',abdominalAnchor){
   const center=bounds.getCenter(new T.Vector3()),size=bounds.getSize(new T.Vector3());
-  silhouette.position.set(center.x,center.y,bounds.min.z);silhouette.scale.set(size.x/.4,1,size.z/.28);
+  // The baked body's upper lumbar region is at local Y=0.09 m (between
+  // spine02 and spine03). Align the kidney centre here instead of treating
+  // the arbitrary CT crop centre as the body's abdominal origin.
+  const anchor=abdominalAnchor||center,bodyY=anchor.y-.09;
+  silhouette.position.set(center.x,bodyY,bounds.min.z);silhouette.scale.set(size.x/.4,1,size.z/.28);
   silhouette.traverse(o=>{if(o.isMesh)o.visible=o.name===`patient_${posture}`;});
   cutCenter.value.set([center.x,center.y]);cutHalf.value.set([size.x*.62,size.y*.86]);
-  group.userData.patientAlignment={ctCenter:center.toArray(),ctBounds:[bounds.min.toArray(),bounds.max.toArray()],mattressTop:.72,posture,backFacingUp:posture==='prone',illustrative:true,connectedSurface:true};
+  group.userData.patientAlignment={ctCenter:center.toArray(),ctBounds:[bounds.min.toArray(),bounds.max.toArray()],bodyOrigin:silhouette.position.toArray(),abdominalAnchor:anchor.toArray(),bodyOffsetY:bodyY-center.y,mattressTop:.72,posture,backFacingUp:posture==='prone',illustrative:true,connectedSurface:true};
  }
  return {group,alignPatient,setPatientVisible:on=>silhouette.visible=on,
   setScanView:on=>{upholstery.color.set(on?0xaaa7b3:0x85828e);seam.color.set(on?0xc2bfcb:0x9f9ca8);},dispose:()=>{}};

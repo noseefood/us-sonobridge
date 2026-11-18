@@ -64,4 +64,16 @@ body>.site-footer{font-size:12px;line-height:1.5;color:#90839a;max-width:1320px;
  body>.site-footer{font-size:11px;padding-left:18px!important;padding-right:18px!important}
 }
 @media(max-width:380px){.site-nav-links a{padding:6px 8px;font-size:11px}.publication-title{font-size:27px}.publication-links .resource-button{padding:9px 8px}.section-heading h2{font-size:22px}.section-status{font-size:9px}}
+/* Keep supporting text legible at normal browser zoom. */
+.site-nav-links a{font-size:15px}.publication-authors{font-size:18px}.publication-affiliations{font-size:14px;color:#756d80}
+.project-button{font-size:16px}.button-status{font-size:12px}.video-duration{font-size:14px}
+.section-eyebrow{font-size:12px}.section-index{font-size:12px;min-width:24px;height:24px}.section-status{font-size:13px}
+.video-dialog-heading span{font-size:14px}body>.site-footer{font-size:14px;color:#756d80}
+@media(max-width:720px){
+ .site-nav-inner{padding:0 8px}.site-nav-links{gap:0}.site-nav-links a{font-size:13px;padding:6px 9px}
+ .publication-authors{font-size:16px}.publication-affiliations{font-size:13px}.publication-summary{font-size:16px}
+ .project-button,.publication-links .resource-button{font-size:14px}.publication-links .resource-button{padding:9px;gap:5px}.button-status{font-size:11px}.video-duration{font-size:13px}
+ .section-heading .section-eyebrow,.section-status{font-size:12px}.video-dialog-heading span{font-size:13px}body>.site-footer{font-size:13px}
+}
+@media(max-width:380px){.site-nav-links a{padding:6px 7px}.resource-links{gap:5px}.publication-links .resource-button{padding:9px 7px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}

@@ -1,4 +1,4 @@
-import {createEnvironment} from './environment.js?v=8';
+import {createEnvironment} from './environment.js?v=9';
 import {createJointCurve,sweepPhase,sweepPosition} from './motion.js?v=1';
 let THREE, OrbitControls, GLTFLoader, RoomEnvironment, MeshoptDecoder;
 const $ = id => document.getElementById(id);
@@ -240,7 +240,8 @@ function attachAnatomy(model){
  if(anatomyAsset)asset.remove(anatomyAsset);anatomyAsset=model;asset.add(model);model.updateMatrixWorld(true);
  const skin=model.getObjectByName('anatomy_Skin'),target=model.getObjectByName(activeOrgan==='liver'?'anatomy_Liver':'anatomy_Kidneys');
  anatomyCenter=new THREE.Box3().setFromObject(target).getCenter(new THREE.Vector3());
- environment.alignPatient(new THREE.Box3().setFromObject(skin),datasets[activeOrgan].posture);environment.setPatientVisible($('patient-toggle').checked);
+ const abdominalAnchor=new THREE.Box3().setFromObject(model.getObjectByName('anatomy_Kidneys')).getCenter(new THREE.Vector3());
+ environment.alignPatient(new THREE.Box3().setFromObject(skin),datasets[activeOrgan].posture,abdominalAnchor);environment.setPatientVisible($('patient-toggle').checked);
  $('scene').dataset.patientAlignment=JSON.stringify(environment.group.userData.patientAlignment);
  makeFan();applyPose(liveQ||poseOf(manifest.defaults).q);resetCamera();dirty=true;
 }
