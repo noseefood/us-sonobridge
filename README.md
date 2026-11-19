@@ -1,11 +1,10 @@
 # SonoBridge
 
-An anatomy-conditioned Schrödinger bridge for CT-based ultrasound synthesis.
+Anatomy-Conditioned Schrödinger Bridge for Unpaired CT-to-Ultrasound Synthesis.
 
-**[Explore the live demo](https://noseefood.github.io/us-sonobridge/)**
+**[Project website](https://noseefood.github.io/us-sonobridge/)**
 
-Move a robotic probe through liver and kidney anatomy, compare ultrasound with
-CT or labels, and adjust shadows and fine structures.
+Watch the one-minute system video, explore liver and kidney scans, and compare the results.
 
 For a local preview, run `python3 tools/serve.py` and open
 [localhost:8780](http://127.0.0.1:8780/).

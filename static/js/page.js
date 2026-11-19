@@ -21,19 +21,24 @@ document.querySelectorAll('a[href="#interactive"]').forEach(link => link.addEven
 
 const dialog = document.getElementById('video-dialog');
 const video = document.getElementById('overview-video');
-const trigger = document.getElementById('open-overview');
 const error = document.getElementById('video-error');
-trigger.addEventListener('click', () => {
+let videoOpener;
+function openOverview(event) {
+  videoOpener = event.currentTarget;
   document.dispatchEvent(new Event('sonobridge:pause'));
-  if (!video.hasAttribute('src')) {
+  if (!video.hasAttribute('src') || video.error) {
+    const useSmallVideo = matchMedia('(max-width: 720px)').matches || navigator.connection?.saveData;
     video.poster = video.dataset.poster;
-    video.src = video.dataset.src;
+    video.src = useSmallVideo ? video.dataset.mobileSrc : video.dataset.src;
   }
   dialog.showModal();
   document.body.classList.add('video-open');
   error.hidden = true;
   video.play().catch(() => { /* Native controls remain available if play is interrupted. */ });
-});
+}
+for (const button of document.querySelectorAll('[data-open-overview]')) {
+  button.addEventListener('click', openOverview);
+}
 document.getElementById('close-overview').addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', event => {
   if (event.target !== dialog) return;
@@ -43,7 +48,7 @@ dialog.addEventListener('click', event => {
 dialog.addEventListener('close', () => {
   video.pause();
   document.body.classList.remove('video-open');
-  trigger.focus({ preventScroll: true });
+  videoOpener?.focus({ preventScroll: true });
 });
 video.addEventListener('error', () => { error.hidden = false; });
 document.addEventListener('visibilitychange', () => {
@@ -51,9 +56,10 @@ document.addEventListener('visibilitychange', () => {
 });
 
 const chapters = [...dialog.querySelectorAll('[data-time]')];
-let selectedChapter;
+let selectedChapter = chapters.find(button => button.hasAttribute('aria-current'));
+let pendingChapterTime = null;
 function updateChapter() {
-  const active = chapters.filter(button => Number(button.dataset.time) <= video.currentTime).at(-1);
+  const active = chapters.filter(button => Number(button.dataset.time) <= video.currentTime + 0.001).at(-1);
   if (active === selectedChapter) return;
   selectedChapter?.removeAttribute('aria-current');
   active?.setAttribute('aria-current', 'true');
@@ -61,9 +67,19 @@ function updateChapter() {
 }
 for (const button of chapters) {
   button.addEventListener('click', () => {
-    video.currentTime = Number(button.dataset.time);
+    const time = Number(button.dataset.time);
+    if (video.readyState >= HTMLMediaElement.HAVE_METADATA) video.currentTime = time;
+    else pendingChapterTime = time;
     updateChapter();
     video.play().catch(() => {});
   });
 }
+video.addEventListener('loadedmetadata', () => {
+  if (pendingChapterTime !== null) {
+    video.currentTime = pendingChapterTime;
+    pendingChapterTime = null;
+  }
+  updateChapter();
+});
 video.addEventListener('timeupdate', updateChapter);
+video.addEventListener('seeked', updateChapter);
