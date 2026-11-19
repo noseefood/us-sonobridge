@@ -1,5 +1,7 @@
-// The short placeholder sections share the bottom of the page. When an anchor
-// scroll reaches that limit, its own link should remain selected.
+// Leave the browser's initial jump to a deep link instant.
+document.addEventListener('click', event => {
+  if (event.target.closest('a[href^="#"]')) document.documentElement.classList.add('smooth-navigation');
+});
 const nav = document.querySelector('.site-nav');
 const links = [...nav.querySelectorAll('.site-nav-links a')];
 const sections = links.map(link => document.getElementById(link.hash.slice(1)));

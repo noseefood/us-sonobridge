@@ -20,10 +20,10 @@
   <link rel="icon" type="image/x-icon" href="static/images/ultrasound_icon.ico">
   <link rel="preload" href="static/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="static/css/fonts.css">
-  <link rel="stylesheet" href="static/css/index.css?v=32">
+  <link rel="stylesheet" href="static/css/index.css?v=33">
   <link rel="stylesheet" href="static/css/demo.css?v=32">
-  <script defer src="static/js/nav.js?v=28"></script>
-  <script type="module" src="static/js/page.js?v=9"></script>
+  <script defer src="static/js/nav.js?v=29"></script>
+  <script type="module" src="static/js/page.js?v=10"></script>
 </head>
 <body id="top">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -39,7 +39,7 @@
 <section class="hero publication-hero" id="overview" aria-labelledby="paper-title">
   <div class="hero-body">
     <div class="hero-copy">
-      <h1 class="publication-title" id="paper-title"><span class="project-name">SonoBridge:</span> <span class="keep-word">Anatomy-Conditioned</span> Schrödinger Bridge for Unpaired <span class="keep-word">CT-to-Ultrasound</span> Synthesis</h1>
+      <h1 class="publication-title" id="paper-title"><span class="project-name">SonoBridge:</span> <span class="keep-word">Anatomy-Conditioned</span> Schrödinger Bridge for Unpaired <span class="title-subject"><span class="keep-word">CT-to-Ultrasound</span> Synthesis</span></h1>
       <div class="publication-authors">
         <span class="author-block"><a href="https://www.linkedin.com/in/xuesong-li-robo/" target="_blank" rel="noopener">Xuesong Li</a><sup>a,b</sup>,</span>
         <span class="author-block"><a href="https://mech.hku.hk/academic-staff/jiang-z-l/" target="_blank" rel="noopener">Zhongliang Jiang</a><sup>c</sup>,</span>
@@ -70,7 +70,9 @@
   <dialog id="video-dialog" aria-labelledby="video-title">
     <div class="video-dialog-heading"><div><h2 id="video-title">SonoBridge · System video</h2><span>One liver scan, from probe placement to shadow and vessel control</span></div><button type="button" class="video-close" id="close-overview" aria-label="Close video"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
     <video id="overview-video" controls playsinline preload="none" width="1920" height="1080" aria-label="One-minute SonoBridge system video" data-src="static/video/sonobridge-overview.mp4?v=21" data-mobile-src="static/video/sonobridge-overview-720.mp4?v=21" data-poster="static/video/overview-poster.jpg?v=21"></video>
-    <nav class="video-chapters" aria-label="Video chapters">
+    <details id="chapter-menu" open>
+      <summary><span>Chapters</span><span id="current-chapter">0:00 · Overview</span></summary>
+      <nav class="video-chapters" aria-label="Video chapters">
       <button type="button" data-time="0" aria-current="true"><span>0:00</span> Overview</button>
       <button type="button" data-time="1.8333333333333333"><span>0:02</span> Probe placement</button>
       <button type="button" data-time="5.25"><span>0:05</span> Skin contact</button>
@@ -84,7 +86,8 @@
       <button type="button" data-time="43.25"><span>0:43</span> Shadow area</button>
       <button type="button" data-time="50.375"><span>0:50</span> Fine-structure gain</button>
       <button type="button" data-time="57.25"><span>0:57</span> Workstation</button>
-    </nav>
+      </nav>
+    </details>
     <p id="video-error" hidden>The video could not be played. <a href="static/video/sonobridge-overview.mp4?v=21">Open the video directly</a>.</p>
   </dialog>
 </section>
@@ -143,8 +146,11 @@
       <p>During training, the bridge learns tissue appearance from unpaired clinical scans. The source labels also supervise the anatomy of each prediction in visible tissue.</p>
     </div>
     <figure class="paper-figure method-figure">
-      <img src="static/images/method-overview-800.webp" srcset="static/images/method-overview-800.webp 800w, static/images/method-overview-1600.webp 1600w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 52vw, 640px" width="1600" height="1050" loading="lazy" decoding="async" alt="A simulated ultrasound view with acoustic shadows starts the bridge. Anatomical maps guide its path toward clinical ultrasound at each step.">
-      <figcaption>For one probe pose, the simulated echoes and shadows set the starting point. The upper path follows the source anatomy through refinement. <a href="static/images/method-overview-1600.webp" target="_blank" rel="noopener">Full-size figure <span aria-hidden="true">↗</span></a></figcaption>
+      <a class="figure-preview" href="static/images/method-overview-1600.webp" data-figure-title="Anatomy-conditioned refinement" aria-haspopup="dialog" aria-label="Enlarge the method figure" aria-describedby="method-caption">
+        <img src="static/images/method-overview-800.webp" srcset="static/images/method-overview-800.webp 800w, static/images/method-overview-1600.webp 1600w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 52vw, 640px" width="1600" height="1050" loading="lazy" decoding="async" alt="A simulated ultrasound view with acoustic shadows starts the bridge. Anatomical maps guide its path toward clinical ultrasound at each step.">
+        <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
+      </a>
+      <figcaption id="method-caption">For one probe pose, the simulated echoes and shadows set the starting point. The upper path follows the source anatomy through refinement.</figcaption>
     </figure>
   </div>
 </section>
@@ -175,25 +181,45 @@
     </div>
     <figure class="paper-figure result-figure">
       <h3>Anatomical correspondence</h3>
-      <img src="static/images/liver-correspondence-800.webp" srcset="static/images/liver-correspondence-800.webp 800w, static/images/liver-correspondence-1600.webp 1600w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 51vw, 660px" width="1600" height="679" loading="lazy" decoding="async" alt="Two liver test views compare CT, simulated ultrasound, UNSB and SonoBridge. The liver outline segmented from each SonoBridge image closely follows the outline from CT.">
-      <figcaption>The dashed gold line marks the liver boundary from CT. Violet shows the boundary segmented from each output, in a clear window (top) and a view with rib shadows (bottom). <a href="static/images/liver-correspondence-1600.webp" target="_blank" rel="noopener">Full-size figure <span aria-hidden="true">↗</span></a></figcaption>
-      <a class="comparison-link" href="static/images/liver-kidney-comparison.webp" target="_blank" rel="noopener">Compare all methods on liver and kidney views <span aria-hidden="true">↗</span></a>
-      <p class="comparison-note">The full comparison includes unpaired clinical reference frames selected by similarity.</p>
+      <a class="figure-preview" href="static/images/liver-correspondence-1600.webp" data-figure-title="Anatomical correspondence" aria-haspopup="dialog" aria-label="Enlarge the liver correspondence figure" aria-describedby="liver-caption">
+        <img src="static/images/liver-correspondence-800.webp" srcset="static/images/liver-correspondence-800.webp 800w, static/images/liver-correspondence-1600.webp 1600w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 51vw, 660px" width="1600" height="679" loading="lazy" decoding="async" alt="Two liver test views compare CT, simulated ultrasound, UNSB and SonoBridge. The liver outline segmented from each SonoBridge image closely follows the outline from CT.">
+        <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
+      </a>
+      <figcaption id="liver-caption">The dashed gold line marks the liver boundary from CT. Violet shows the boundary segmented from each output, in a clear window (top) and a view with rib shadows (bottom).</figcaption>
+      <a class="comparison-link" href="static/images/liver-kidney-comparison.webp" data-figure-title="Liver and kidney comparisons" data-figure-alt="Five test views compare SonoBridge and seven baselines for clear acoustic windows, modeled shadows and challenging anatomy." aria-haspopup="dialog" aria-describedby="comparison-caption">Compare all methods on liver and kidney views</a>
+      <p class="comparison-note" id="comparison-caption">The full comparison includes unpaired clinical reference frames selected by similarity.</p>
     </figure>
   </div>
 </section>
+<dialog id="figure-dialog" aria-labelledby="figure-title" aria-describedby="figure-caption">
+  <header class="figure-heading">
+    <h2 id="figure-title">Paper figure</h2>
+    <button type="button" id="figure-scale" aria-controls="figure-stage">Actual size</button>
+    <form method="dialog"><button type="submit" class="video-close" aria-label="Close figure" autofocus><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></form>
+  </header>
+  <div id="figure-stage" tabindex="0" role="region" aria-label="Figure detail"><img id="figure-image" alt=""></div>
+  <p id="figure-error" hidden>This figure could not be loaded. <a>Open the image directly</a>.</p>
+  <p id="figure-caption"></p>
+</dialog>
 <section id="resources" class="project-section" aria-labelledby="resources-heading">
   <h2 class="section-heading" id="resources-heading">Resources</h2>
   <div class="resource-layout">
     <div class="film-resource">
       <button type="button" class="film-poster" data-open-overview aria-label="Play the SonoBridge system video" aria-haspopup="dialog" aria-controls="video-dialog">
-        <img src="static/video/overview-poster.jpg?v=21" alt="" width="1280" height="720" loading="lazy" decoding="async">
+        <img src="static/video/overview-thumb.webp" alt="" width="448" height="252" loading="lazy" decoding="async">
         <span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20"><path d="m6 3 10 7-10 7z" fill="currentColor"/></svg></span>
       </button>
       <div><h3>System video</h3><p>1 min · 1080p</p><a class="download-link" href="static/video/sonobridge-overview.mp4?v=21" download="SonoBridge-system-video.mp4">Download MP4 <span aria-hidden="true">↓</span></a></div>
     </div>
     <div class="release-resource"><h3>Research code and data</h3><p>We plan to release the research code and the associated dataset.</p></div>
   </div>
+  <section id="citation" class="citation-block" aria-labelledby="citation-heading">
+    <h3 id="citation-heading">Citation</h3>
+    <div class="citation-entry" id="citation-content">
+      <!-- Replace the availability note with the final citation or a BibTeX block. -->
+      <p>Publication details to follow.</p>
+    </div>
+  </section>
 </section>
 </main>
 <footer class="site-footer"><span>SonoBridge · Unpaired CT-to-ultrasound synthesis</span><a href="#top">Back to top ↑</a></footer>
