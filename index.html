@@ -21,9 +21,9 @@
   <link rel="preload" href="static/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="static/css/fonts.css">
   <link rel="stylesheet" href="static/css/index.css?v=33">
-  <link rel="stylesheet" href="static/css/demo.css?v=32">
+  <link rel="stylesheet" href="static/css/demo.css?v=33">
   <script defer src="static/js/nav.js?v=29"></script>
-  <script type="module" src="static/js/page.js?v=10"></script>
+  <script type="module" src="static/js/page.js?v=11"></script>
 </head>
 <body id="top">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -112,7 +112,15 @@
     </div>
     <div class="ultrasound-panel">
      <div class="image-toolbar"><div class="image-tabs" role="group" aria-label="Ultrasound image display"><button type="button" disabled aria-pressed="true" data-view="output">SonoBridge</button><button type="button" disabled aria-pressed="false" data-view="label" title="Compare the anatomical label map with SonoBridge">Label map</button><button type="button" disabled aria-pressed="false" data-view="ct" title="Compare the CT slice with SonoBridge">CT</button></div><label class="guidance-toggle" title="Show visible fine-structure guidance and shadow boundaries"><input id="guidance-toggle" type="checkbox" disabled><span>Guidance</span></label></div>
-     <div class="image-stage"><div class="image-wrap" id="image-wrap"><canvas id="us-canvas" width="1024" height="744" aria-label="SonoBridge ultrasound output"></canvas><div class="compare-divider" id="compare-divider" hidden><span>↔</span></div><div class="compare-labels" id="compare-labels" hidden><span id="compare-source">Label map</span><span>SonoBridge</span></div><input type="range" min="0" max="100" value="50" id="compare-range" aria-label="Comparison divider position" hidden></div><div class="image-loading" id="image-loading"><span class="loading-ring"></span><span>Loading ultrasound</span></div></div>
+     <div class="image-stage">
+      <div class="image-wrap" id="image-wrap">
+       <canvas id="us-canvas" width="1024" height="744" aria-label="SonoBridge ultrasound output"></canvas>
+       <div class="compare-divider" id="compare-divider" aria-hidden="true" hidden><span>↔</span></div>
+       <div class="compare-labels" id="compare-labels" aria-hidden="true" hidden><span id="compare-source">Label map</span><span>SonoBridge</span></div>
+       <input type="range" min="0" max="100" value="50" id="compare-range" aria-label="Image comparison divider" hidden>
+      </div>
+      <div class="image-loading" id="image-loading"><span class="loading-ring"></span><span>Loading ultrasound</span></div>
+     </div>
      <div class="label-legend" id="label-legend" role="list" aria-label="Label-map colors" hidden></div>
      <div class="image-meta" id="image-meta"><span id="scan-specs">3.4 MHz · 180 mm depth</span><div id="guidance-key" hidden><span><i class="shadow-key"></i>Shadow boundary</span><span><i class="structure-key"></i><span id="structure-label">Visible vessels</span></span></div></div>
     </div>

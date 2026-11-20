@@ -16,7 +16,7 @@ const organButtons = [...document.querySelectorAll('.organ-picker button')];
 const canvas = $('us-canvas'), ctx = canvas.getContext('2d');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let manifest, current, transition, generation = 0, sceneUnavailable = false;
-let displayMode='output', split=.5, showGuidance=false, scanning=false, scanDirection=1, sweep=null;
+let displayMode='output', showGuidance=false, scanning=false, scanDirection=1, sweep=null;
 let renderer, scene, camera, orbit, asset, fan, fanGroup, robotNodes={}, joints, linkTransforms, jointRotation, faceOffset, fanManifest;
 let liveQ, dirty=true, sceneReady=false, inView=true, lastPaint=0, lastTick=0, measurements=[], cameraTransition;
 let probeMotion,wheelZoom,lastFrame=0,lastShadowUpdate=0,shadowDirty=true,framePending=false;
@@ -33,6 +33,7 @@ const liverDisplayLut=Uint8ClampedArray.from({length:256},(_,v)=>{
  return Math.round(v+(255*Math.pow(v/255,.86)-v)*weight);
 });
 const imageStage=$('image-wrap');
+const compareRange=$('compare-range'), compareDivider=$('compare-divider');
 const compactLayout=matchMedia('(max-width:720px)');
 const labelLegend=$('label-legend'),legendItems=new Map();
 let legendLayoutKey='',legendMask=-1;
@@ -274,6 +275,20 @@ function guidance(record){
  for(let i=0;i<pixels.data.length;i+=4){const support=pixels.data[i],edge=pixels.data[i+1];pixels.data[i]=edge?91:245;pixels.data[i+1]=edge?180:189;pixels.data[i+2]=edge?218:76;pixels.data[i+3]=edge?225:Math.round(support*.7);}
  x.putImageData(pixels,0,0);overlays.set(key,c);while(overlays.size>16)overlays.delete(overlays.keys().next().value);return c;
 }
+function syncComparison() {
+ if (compareRange.hidden) return;
+ const percent = compareRange.valueAsNumber;
+ const [source, output] = $('compare-labels').children;
+ const width = imageStage.clientWidth;
+ const left = width * percent / 100;
+ const sourceFits = left >= source.offsetWidth + 8;
+ const outputFits = width - left >= output.offsetWidth + 8;
+ source.style.visibility = sourceFits ? '' : 'hidden';
+ output.style.visibility = outputFits ? '' : 'hidden';
+ imageStage.style.setProperty('--compare-position', percent + '%');
+ compareRange.setAttribute('aria-valuetext', `${source.textContent} ${percent}%, SonoBridge ${100 - percent}%`);
+}
+
 function updateImageMode(record) {
  const comparing = record.referenceMode !== 'output';
  const label = record.referenceMode === 'label' ? 'Label map' : 'CT';
@@ -282,6 +297,7 @@ function updateImageMode(record) {
   imageModeKey = key;
   for (const id of ['compare-range', 'compare-divider', 'compare-labels']) $(id).hidden = !comparing;
   $('compare-source').textContent = label;
+  syncComparison();
   $('guidance-key').hidden = !record.guidanceBitmap;
   $('structure-label').textContent = datasets[record.organ].structure;
   canvas.setAttribute('aria-label', comparing ? label + ' and SonoBridge ultrasound comparison' : 'SonoBridge ultrasound output');
@@ -299,7 +315,8 @@ function drawSeries(record, getTile, alpha) {
 
 function drawRecord(record, alpha) {
  const comparing = Boolean(record.reference);
- const width = canvas.width, height = canvas.height, divider = width * split;
+ const width = canvas.width, height = canvas.height;
+ const divider = comparing ? width * compareRange.valueAsNumber / 100 : 0;
  if (comparing) {
   ctx.save();
   ctx.beginPath(); ctx.rect(0, 0, divider, height); ctx.clip();
@@ -536,6 +553,7 @@ function resizeImage() {
   drawUltrasound();
  }
  syncLabelLegend(current);
+ syncComparison();
 }
 
 function setControlsEnabled(enabled) {
@@ -811,10 +829,52 @@ for (const button of document.querySelectorAll('[data-view]')) {
   updateSelection(false);
  });
 }
-$('compare-range').addEventListener('input', event => {
- split = Number(event.target.value) / 100;
- $('compare-divider').style.left = split*100+'%';
+function redrawComparison() {
+ syncComparison();
+ transition = null;
  drawUltrasound();
+}
+function moveDividerTo(clientX) {
+ const bounds = compareDivider.getBoundingClientRect();
+ if (!bounds.width) return;
+ const percent = Math.round(100 * (clientX - bounds.left) / bounds.width);
+ const value = Math.min(100, Math.max(0, percent));
+ if (compareRange.valueAsNumber === value) return;
+ compareRange.valueAsNumber = value;
+ redrawComparison();
+}
+compareRange.addEventListener('input', redrawComparison);
+
+// Wait for a horizontal touch gesture so scrolling through the image keeps the split.
+let dividerGesture = null;
+compareDivider.addEventListener('pointerdown', event => {
+ if (!event.isPrimary || event.button !== 0) return;
+ const dragging = event.pointerType !== 'touch';
+ dividerGesture = {id:event.pointerId, x:event.clientX, y:event.clientY, dragging};
+ compareDivider.setPointerCapture(event.pointerId);
+ if (dragging) {
+  event.preventDefault();
+  compareRange.focus({preventScroll:true});
+  moveDividerTo(event.clientX);
+ }
+});
+compareDivider.addEventListener('pointermove', event => {
+ if (dividerGesture?.id !== event.pointerId) return;
+ if (!dividerGesture.dragging) {
+  const dx = Math.abs(event.clientX - dividerGesture.x), dy = Math.abs(event.clientY - dividerGesture.y);
+  if (Math.max(dx, dy) < 6) return;
+  if (dy > dx) { dividerGesture = null; return; }
+  dividerGesture.dragging = true;
+ }
+ moveDividerTo(event.clientX);
+});
+compareDivider.addEventListener('pointerup', event => {
+ if (dividerGesture?.id !== event.pointerId) return;
+ moveDividerTo(event.clientX);
+ dividerGesture = null;
+});
+compareDivider.addEventListener('lostpointercapture', event => {
+ if (dividerGesture?.id === event.pointerId) dividerGesture = null;
 });
 $('patient-toggle').addEventListener('change', e => { environment?.setPatientVisible(e.target.checked); invalidate(); });
 $('camera-overview').addEventListener('click', () => { wideView = !wideView; resetCamera(true); });
@@ -857,10 +917,10 @@ document.addEventListener('keydown', event => {
 });
 $('reset-demo').addEventListener('click', () => {
  stopScan();
- displayMode = 'output'; showGuidance = false; split = .5; scanDirection = 1;
+ displayMode = 'output'; showGuidance = false; scanDirection = 1;
  markViewButtons();
- $('compare-range').value = '50';
- $('compare-divider').style.left = '50%';
+ compareRange.value = '50';
+ redrawComparison();
  $('patient-toggle').checked = true;
  environment?.setPatientVisible(true);
  wideView = false;
