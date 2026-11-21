@@ -6,8 +6,8 @@ let THREE, OrbitControls, GLTFLoader, RoomEnvironment, MeshoptDecoder;
 const $ = id => document.getElementById(id);
 const root = new URL('../demo/', import.meta.url);
 const datasets = {
- liver: {manifest:'liver/manifest-v4.json', imageRoot:'liver/', label:'Liver', posture:'supine', structure:'Visible vessels', note:'Liver ultrasound is lightly brightened for display.'},
- kidney: {manifest:'kidney/manifest-v4.json', imageRoot:'kidney/', label:'Kidney', posture:'prone', structure:'Visible medulla', note:'Kidney ultrasound uses local texture blending to soften the gray rim.'}
+ liver: {manifest:'liver/manifest-v4.json', imageRoot:'liver/', label:'Liver', posture:'supine', structure:'vessels', note:'Liver ultrasound is lightly brightened for display.'},
+ kidney: {manifest:'kidney/manifest-v4.json', imageRoot:'kidney/', label:'Kidney', posture:'prone', structure:'medulla', note:'Kidney ultrasound uses local texture blending to soften the gray rim.'}
 };
 let activeOrgan='liver',datasetGeneration=0,switching=false,wideView=false,environment,anatomyAsset;
 const manifests=new Map(),anatomies=new Map();
@@ -74,7 +74,7 @@ function updateShadowControl(pose) {
  const slider = $('shadow'), available = pose.shadow_control !== false, value = manifest.shadows[Number(slider.value)];
  slider.disabled = switching || !available;
  slider.title = available ? '' : 'Move the probe to a view with an adjustable shadow.';
- $('shadow-value').textContent = available ? (value === 0 ? 'Default' : signed(value,'%')) : 'Not active';
+ $('shadow-value').textContent = available ? signed(value,'%') : 'Not active';
  slider.setAttribute('aria-valuetext',$('shadow-value').textContent);
 }
 function poseOf(state){return manifest.poses[state.position*manifest.rotations.length+state.rotation];}
@@ -299,7 +299,9 @@ function updateImageMode(record) {
   $('compare-source').textContent = label;
   syncComparison();
   $('guidance-key').hidden = !record.guidanceBitmap;
-  $('structure-label').textContent = datasets[record.organ].structure;
+  const structure = datasets[record.organ].structure;
+  $('structure-label').textContent = 'Visible ' + structure;
+  $('overlay-label').textContent = 'Visibility & ' + structure;
   canvas.setAttribute('aria-label', comparing ? label + ' and SonoBridge ultrasound comparison' : 'SonoBridge ultrasound output');
  }
  syncLabelLegend(record);
@@ -514,7 +516,7 @@ function configureDataset() {
   input.max = axes[input.id].length - 1;
   input.value = manifest.defaults[input.id];
  }
- for (const [id, values, unit] of [['position',manifest.positions,' mm'], ['rotation',manifest.rotations,'°']]) {
+ for (const [id, values, unit] of [['position',manifest.positions,' mm'], ['rotation',manifest.rotations,'°'], ['shadow',manifest.shadows,'%']]) {
   $(id+'-min').textContent = signed(values[0], unit);
   $(id+'-max').textContent = signed(values.at(-1), unit);
  }
