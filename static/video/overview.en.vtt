@@ -1,0 +1,46 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.000
+Read left to right from labeled CT to SimUS to SonoBridge at the same probe pose.
+
+00:00:04.000 --> 00:00:07.700
+The virtual probe samples the skin over the liver to choose a scan plane.
+
+00:00:07.700 --> 00:00:11.850
+The probe lowers until the central scanlines meet the skin.
+
+00:00:11.850 --> 00:00:14.000
+Two pulses illustrate incident, reflected and refracted rays.
+
+00:00:14.000 --> 00:00:17.350
+CT labels and simulated echoes share the same probe pose. SimUS uses display gamma 0.5.
+
+00:00:17.350 --> 00:00:21.000
+Purple marks vessels with V > 0.5, even in partial shadow.
+
+00:00:21.000 --> 00:00:26.550
+SimUS is on the left. The middle wipe reveals SonoBridge at the same probe pose.
+
+00:00:26.550 --> 00:00:33.000
+The moving scan on the right is an independent clinical training example. The two magnified regions are aligned.
+
+00:00:33.000 --> 00:00:36.200
+The image updates with the known probe pose.
+
+00:00:36.200 --> 00:00:40.000
+Axial rotation reveals a different liver plane.
+
+00:00:40.000 --> 00:00:45.220
+The lines trace the main rib shadow. Purple shows changes across the whole view.
+
+00:00:45.220 --> 00:00:46.650
+Hold the shadow at +40% in both outputs.
+
+00:00:46.650 --> 00:00:53.000
+The reference stays at λ = 1 as vessel contrast fades and returns in the adjusted view.
+
+00:00:53.000 --> 00:00:56.500
+Each refined ultrasound view retains the CT labels and probe pose.
+
+00:00:56.500 --> 00:01:00.000
+noseefood.github.io/us-sonobridge · Code coming soon.

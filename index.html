@@ -10,20 +10,20 @@
   <meta property="og:title" content="SonoBridge: Anatomy-Conditioned Schrödinger Bridge for Unpaired CT-to-Ultrasound Synthesis">
   <meta property="og:description" content="Move a virtual probe through liver and kidney CT anatomy, then see how readers judged the realism and anatomical correspondence of the synthesized views.">
   <meta property="og:url" content="https://noseefood.github.io/us-sonobridge/">
-  <meta property="og:image" content="https://noseefood.github.io/us-sonobridge/static/video/overview-poster.jpg?v=21">
-  <meta property="og:image:alt" content="Virtual ultrasound probe above a liver reconstructed from CT.">
+  <meta property="og:image" content="https://noseefood.github.io/us-sonobridge/static/video/overview-poster.jpg?v=174c272524bf">
+  <meta property="og:image:alt" content="Labeled liver CT, simulated ultrasound and the SonoBridge output at the same probe pose.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SonoBridge: Anatomy-Conditioned Schrödinger Bridge for Unpaired CT-to-Ultrasound Synthesis">
   <meta name="twitter:description" content="Explore ultrasound synthesis from labeled CT and unpaired clinical scans, with an interactive demo and blinded reader comparisons for liver and kidney.">
-  <meta name="twitter:image" content="https://noseefood.github.io/us-sonobridge/static/video/overview-poster.jpg?v=21">
+  <meta name="twitter:image" content="https://noseefood.github.io/us-sonobridge/static/video/overview-poster.jpg?v=174c272524bf">
   <link rel="canonical" href="https://noseefood.github.io/us-sonobridge/">
   <link rel="icon" type="image/x-icon" href="static/images/ultrasound_icon.ico">
   <link rel="preload" href="static/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="static/css/fonts.css">
-  <link rel="stylesheet" href="static/css/index.css?v=35">
+  <link rel="stylesheet" href="static/css/index.css?v=d5fced726b4d">
   <link rel="stylesheet" href="static/css/demo.css?v=33">
   <script defer src="static/js/nav.js?v=29"></script>
-  <script type="module" src="static/js/page.js?v=12"></script>
+  <script type="module" src="static/js/page.js?v=038562a56ea9"></script>
 </head>
 <body id="top">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -55,33 +55,36 @@
       <div class="publication-links">
         <div class="experience-links">
           <a href="#interactive" class="project-button primary"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.3 5.3a7.5 7.5 0 0 0 7.4 0l5.2 12.2a17.4 17.4 0 0 1-17.8 0L8.3 5.3ZM5.5 12.1a13.6 13.6 0 0 0 13 0" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round" stroke-linecap="round"/></svg>Explore demo</a>
-          <button type="button" class="project-button video-button" id="open-overview" data-open-overview aria-haspopup="dialog" aria-controls="video-dialog"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 4.5 12 7.5-12 7.5Z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/></svg>Watch video<span class="video-duration">1:00</span></button>
+          <button type="button" class="project-button video-button" id="open-overview" data-open-overview aria-haspopup="dialog" aria-controls="video-dialog"><picture class="watch-thumbnail-frame"><source srcset="static/images/watch-fan.webp?v=80536ba703bb" type="image/webp"><img class="watch-thumbnail" src="static/video/overview-fan.webp?v=be2179dc1504" alt="" width="76" height="25"></picture><svg class="watch-icon" width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 4.5 12 7.5-12 7.5Z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/></svg>Watch video<span class="video-duration">1:00</span></button>
         </div>
         <div class="resource-links" role="group" aria-label="Forthcoming publication links">
           <!-- Replace these pending buttons with links when the paper and research code are released. -->
+          <span class="resource-status" aria-hidden="true">Coming soon</span>
           <button type="button" class="project-button resource-button" disabled aria-label="Paper, coming soon" title="Paper link coming soon"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h7M9 17h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/></svg><span>Paper</span></button>
           <button type="button" class="project-button resource-button" disabled aria-label="arXiv, coming soon" title="arXiv link coming soon"><svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 3 14 18M19 3 5 21M9 3l10 13M5 8l10 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>arXiv</span></button>
           <button type="button" class="project-button resource-button" disabled aria-label="Code, coming soon" title="Research code coming soon"><svg width="17" height="17" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span>Code</span></button>
-          <span class="resource-status" aria-hidden="true">Coming soon</span>
         </div>
       </div>
     </div>
   </div>
   <dialog id="video-dialog" aria-labelledby="video-title">
-    <div class="video-dialog-heading"><div><h2 id="video-title">SonoBridge · System video</h2><span>One liver scan, from probe placement to shadow and vessel control</span></div><button type="button" class="video-close" id="close-overview" aria-label="Close video"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
-    <video id="overview-video" controls playsinline preload="none" width="1920" height="1080" aria-label="One-minute SonoBridge system video" data-src="static/video/sonobridge-overview.mp4?v=22" data-mobile-src="static/video/sonobridge-overview-720.mp4?v=22" data-poster="static/video/overview-poster.jpg?v=21"></video>
+    <div class="video-dialog-heading"><div><h2 id="video-title">SonoBridge · System video</h2><span>Labeled CT, simulated ultrasound and SonoBridge</span></div><button type="button" class="video-close" id="close-overview" aria-label="Close video"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
+    <video id="overview-video" controls playsinline preload="none" width="1920" height="1080" aria-label="One-minute SonoBridge system video" data-src="static/video/sonobridge-overview.mp4?v=c7f0f569aec8" data-mobile-src="static/video/sonobridge-overview-720.mp4?v=997b5a7a24ec" data-poster="static/video/overview-poster.jpg?v=174c272524bf">
+      <track id="overview-cues" kind="captions" srclang="en" label="English" src="static/video/overview.en.vtt?v=1fdf68bbe87e">
+    </video>
+    <p id="overview-caption" hidden></p>
     <details id="chapter-menu" open>
-      <summary><span>Chapters</span><span id="current-chapter">0:00 · Virtual acquisition</span></summary>
+      <summary><span>Chapters</span><span id="current-chapter">0:00 · From CT to ultrasound</span></summary>
       <nav class="video-chapters" aria-label="Video chapters">
-      <button type="button" data-time="0" aria-current="true"><span>0:00</span> Virtual acquisition</button>
-      <button type="button" data-time="17"><span>0:17</span> Anatomy &amp; visibility</button>
-      <button type="button" data-time="27.625"><span>0:28</span> Refinement</button>
-      <button type="button" data-time="36.25"><span>0:36</span> Probe motion</button>
-      <button type="button" data-time="43.25"><span>0:43</span> Shadow &amp; fine-structure control</button>
-      <button type="button" data-time="57.25"><span>0:57</span> Workstation</button>
+      <button type="button" data-time="0" aria-current="true"><span>0:00</span> From CT to ultrasound</button>
+      <button type="button" data-time="4"><span>0:04</span> Virtual acquisition</button>
+      <button type="button" data-time="14"><span>0:14</span> Anatomy and visibility</button>
+      <button type="button" data-time="21"><span>0:21</span> Ultrasound refinement</button>
+      <button type="button" data-time="33"><span>0:33</span> Probe motion and controls</button>
+      <button type="button" data-time="53"><span>0:53</span> SonoBridge</button>
       </nav>
     </details>
-    <p id="video-error" hidden>The video could not be played. <a href="static/video/sonobridge-overview.mp4?v=22">Open the video directly</a>.</p>
+    <p id="video-error" hidden>The video could not be played. <a href="static/video/sonobridge-overview.mp4?v=c7f0f569aec8">Open the video directly</a>.</p>
   </dialog>
 </section>
 
@@ -89,7 +92,7 @@
 <section class="section demo-section" id="interactive" aria-labelledby="demo-heading">
  <div class="demo-container">
   <div class="demo-intro">
-   <div class="demo-copy"><h2 id="demo-heading">Interactive demo</h2><p>Move the probe to compare ultrasound with its CT slice and labels. At a fixed pose, adjust shadow area and fine-structure strength.</p></div>
+   <div class="demo-copy"><h2 id="demo-heading">Interactive demo</h2><p>Move the probe to compare ultrasound with its CT slice and labels. At a fixed pose, use visibility editing to vary shadow area and adjust the fine-structure weight λ.</p></div>
    <div class="demo-actions" id="demo-actions">
     <div class="organ-picker" role="group" aria-label="Organ"><button type="button" data-organ="liver" aria-pressed="true" disabled>Liver</button><button type="button" data-organ="kidney" aria-pressed="false" disabled>Kidney</button></div>
     <button class="scan-button" type="button" id="auto-scan" aria-pressed="false" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path class="play-symbol" d="m7 4.5 12 7.5-12 7.5Z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/><path class="pause-symbol" d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg><span id="scan-label">Auto scan</span></button>
@@ -124,8 +127,8 @@
     <div class="control-group"><div class="control-heading"><label for="rotation">Probe rotation</label><output id="rotation-value" for="rotation">0°</output></div><input type="range" id="rotation" min="0" max="12" step="1" value="6" disabled><div class="range-labels"><span id="rotation-min">−24°</span><span id="rotation-max">+24°</span></div></div>
     </div></fieldset>
     <fieldset class="control-pair"><legend>Image appearance</legend><div class="slider-pair">
-    <div class="control-group appearance-control"><div class="control-heading"><label for="shadow">Shadow area</label><output id="shadow-value" for="shadow">0%</output></div><input type="range" id="shadow" min="0" max="4" step="1" value="2" aria-valuetext="0%" disabled><div class="range-labels"><span id="shadow-min">−40%</span><span id="shadow-max">+40%</span></div></div>
-    <div class="control-group appearance-control"><div class="control-heading"><label for="detail">Fine-structure strength</label><output id="detail-value" for="detail">1.00</output></div><input type="range" id="detail" min="0" max="4" step="1" value="4" disabled><div class="range-labels"><span>0.00</span><span>1.00</span></div></div>
+    <div class="control-group appearance-control"><div class="control-heading"><label for="shadow" title="Change the area of the modeled shadow">Visibility editing</label><output id="shadow-value" for="shadow">0%</output></div><input type="range" id="shadow" min="0" max="4" step="1" value="2" aria-valuetext="0%" disabled><div class="range-labels"><span id="shadow-min">−40%</span><span id="shadow-max">+40%</span></div></div>
+    <div class="control-group appearance-control"><div class="control-heading"><label for="detail">Fine-structure weight λ</label><output id="detail-value" for="detail">1.00</output></div><input type="range" id="detail" min="0" max="4" step="1" value="4" disabled><div class="range-labels"><span>0.00</span><span>1.00</span></div></div>
     </div></fieldset>
    </div>
    <div class="explorer-footer">
@@ -144,7 +147,7 @@
       <p id="acquisition-caption">A virtual probe samples the abdomen from the front for liver views and from the back for left kidney views. Each orientation is checked for skin contact across the central part of the probe. At each accepted pose, ray-based simulation produces an ultrasound image on the same grid as the CT slice and anatomical labels.</p>
       <a class="comparison-link" href="static/images/virtual-acquisition.webp" data-figure-title="Virtual acquisition" data-figure-alt="Anterior liver and posterior left kidney scans, skin contact across the probe footprint, and the aligned images, labels, visibility and pose for one liver view." aria-haspopup="dialog" aria-describedby="acquisition-caption">View probe placement and the acquisition record</a>
       <h3>Anatomy-conditioned refinement</h3>
-      <p>A five-step Schrödinger bridge starts from the simulated echoes and shadows. At every step, the full target-organ mask supplies the organ layout. Visibility derived from the simulated acquisition limits fine-structure guidance to visible hepatic vessels or renal medulla.</p>
+      <p>A five-step Schrödinger bridge starts from the simulated echoes and shadows. At every step, the organ-level semantic context, a mask of the whole target organ, provides the layout of the view. The fine-grained structural maps add hepatic vessels or the renal medulla, which the simulation renders weakly. Visibility derived from the simulated acquisition limits them to visible tissue.</p>
       <p>During training, a frozen ultrasound model (UltraSAM3) segments the organ in each prediction. One loss compares its mask with the CT label in visible tissue. A second encourages visible fine structures to appear darker than their surroundings.</p>
     </div>
     <figure class="paper-figure method-figure">
@@ -161,7 +164,7 @@
       <img src="static/images/bridge-training-800.webp" srcset="static/images/bridge-training-800.webp 800w, static/images/bridge-training-1440.webp 1440w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 94vw, 1280px" width="1440" height="422" loading="lazy" decoding="async" alt="The bridge starts from simulated ultrasound and uses the organ mask and visible fine structures at every step. The training panel shows a frozen segmenter and an echo loss that compares fine structures with surrounding tissue.">
       <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
     </a>
-    <figcaption id="architecture-caption">Fig. 3. The anatomy conditions stay fixed as the image changes. During training, the frozen segmenter checks the visible organ and the echo loss keeps fine structures darker than the surrounding tissue.</figcaption>
+    <figcaption id="architecture-caption">Fig. 3. The organ-level semantic context (whole organ) and the fine-grained structural maps (visible part) stay fixed as the image changes. During training, the frozen segmenter checks the visible organ and the echo loss keeps fine structures darker than the surrounding tissue.</figcaption>
   </figure>
 </section>
 <section id="results" class="project-section" aria-labelledby="results-heading">
@@ -250,7 +253,7 @@
       <div class="secondary-findings">
         <h3>Ablation results</h3>
         <p>We measured FID, KID, two BiomedCLIP distances and a Fréchet distance on 40 handcrafted ultrasound statistics. On both organs, refining simulated ultrasound gave lower values on all five measures than translating CT slices or label maps directly. This also held for the <em>No conditions</em> variant, which retained anatomical supervision during training.</p>
-        <p>Removing fine-structure guidance alone lowered liver FID and KID but increased the other three distances.</p>
+        <p>Removing the fine-grained structural maps alone lowered liver FID and KID but increased the other three distances.</p>
         <h3>Control at a fixed pose</h3>
         <p id="control-caption">Increasing the fine-structure weight from 0 to 1 raised mean vessel contrast from 0.015 to 0.154 across 1,200 liver views. The figure shows one view as vessel contrast and shadow extent are varied separately.</p>
         <a class="comparison-link" href="static/images/liver-appearance-control.webp?v=2" data-figure-title="Control at a fixed liver pose" data-figure-alt="At one liver pose, increasing fine-structure weight darkens visible vessels. Enlarging one modeled shadow increases the shadowed fraction of the imaging sector from 36% to 73%." aria-haspopup="dialog" aria-describedby="control-caption">View the liver control experiment</a>
@@ -273,10 +276,10 @@
   <div class="resource-layout">
     <div class="film-resource">
       <button type="button" class="film-poster" data-open-overview aria-label="Play the SonoBridge system video" aria-haspopup="dialog" aria-controls="video-dialog">
-        <img src="static/video/overview-thumb.webp" alt="" width="448" height="252" loading="lazy" decoding="async">
+        <img src="static/video/overview-thumb.webp?v=2aac4887c0e5" alt="" width="768" height="432" loading="lazy" decoding="async">
         <span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20"><path d="m6 3 10 7-10 7z" fill="currentColor"/></svg></span>
       </button>
-      <div><h3>System video</h3><p>1 min · 1080p</p><a class="download-link" href="static/video/sonobridge-overview.mp4?v=22" download="SonoBridge-system-video.mp4">Download MP4 <span aria-hidden="true">↓</span></a></div>
+      <div><h3>System video</h3><p>1 min · 1080p</p><a class="download-link" href="static/video/sonobridge-overview.mp4?v=c7f0f569aec8" download="SonoBridge-system-video.mp4">Download MP4 <span aria-hidden="true">↓</span></a></div>
     </div>
     <div class="release-resource"><h3>Research code and data</h3><p>We plan to release the acquisition and refinement code together with simulated ultrasound images, aligned anatomical labels and probe poses.</p></div>
   </div>
@@ -288,6 +291,6 @@
   <nav aria-label="Research institutions"><a href="https://www.cs.cit.tum.de/en/camp/start/">CAMP</a><a href="https://mcml.ai/">MCML</a><a href="https://mech.hku.hk/">HKU Mechanical Engineering</a></nav>
   <div class="footer-meta"><span>Updated <time datetime="2026-11-21">21 Nov 2026</time></span><a href="#top">Back to top ↑</a></div>
 </footer>
-<noscript><p class="no-script">Enable JavaScript to use the interactive demo. <a href="static/video/sonobridge-overview.mp4?v=22">Watch the system video</a>.</p></noscript>
+<noscript><p class="no-script">Enable JavaScript to use the interactive demo. <a href="static/video/sonobridge-overview.mp4?v=c7f0f569aec8">Watch the system video</a>.</p></noscript>
 </body>
 </html>

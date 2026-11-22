@@ -28,7 +28,57 @@ const video = document.getElementById('overview-video');
 const error = document.getElementById('video-error');
 const chapterMenu = document.getElementById('chapter-menu');
 const currentChapter = document.getElementById('current-chapter');
-const compactChapters = matchMedia('(max-width: 720px), (max-height: 580px)');
+const captionTrack = document.getElementById('overview-cues').track;
+const captionLine = document.getElementById('overview-caption');
+const phoneCaptions = matchMedia('(max-width: 720px)');
+function showCaptionAt(time) {
+  const cues = captionTrack.cues;
+  let cue;
+  if (phoneCaptions.matches && captionTrack.mode === 'hidden' && cues?.length) {
+    if (video.ended) {
+      cue = cues[cues.length - 1];
+    } else {
+      for (let i = 0; i < cues.length && cues[i].startTime <= time; i++) {
+        if (time < cues[i].endTime) {
+          cue = cues[i];
+          break;
+        }
+      }
+    }
+  }
+  const text = cue?.text || '';
+  if (captionLine.textContent !== text) captionLine.textContent = text;
+  if (captionLine.hidden !== !cue) captionLine.hidden = !cue;
+}
+let captionFrame = null;
+function followCaptionFrames() {
+  if (captionFrame !== null || video.paused || !dialog.open || !phoneCaptions.matches ||
+      captionTrack.mode !== 'hidden' || !video.requestVideoFrameCallback) return;
+  captionFrame = video.requestVideoFrameCallback((_, frame) => {
+    captionFrame = null;
+    showCaptionAt(frame.mediaTime);
+    followCaptionFrames();
+  });
+}
+function updateCaptionLine() {
+  showCaptionAt(video.currentTime);
+  followCaptionFrames();
+}
+function fitVideoCaptions() {
+  if (dialog.open && phoneCaptions.matches && captionTrack.mode === 'disabled') {
+    captionTrack.mode = 'hidden';
+  }
+  updateCaptionLine();
+}
+captionTrack.addEventListener('cuechange', updateCaptionLine);
+document.getElementById('overview-cues').addEventListener('load', updateCaptionLine);
+video.addEventListener('playing', updateCaptionLine);
+video.addEventListener('seeked', updateCaptionLine);
+video.addEventListener('ended', updateCaptionLine);
+if (!video.requestVideoFrameCallback) video.addEventListener('timeupdate', updateCaptionLine);
+video.textTracks.addEventListener('change', updateCaptionLine);
+phoneCaptions.addEventListener('change', fitVideoCaptions);
+const compactChapters = matchMedia('(max-width: 720px), (max-height: 820px)');
 function fitChapterMenu() {
   chapterMenu.open = !compactChapters.matches;
 }
@@ -44,6 +94,7 @@ function openOverview(event) {
     video.src = useSmallVideo ? video.dataset.mobileSrc : video.dataset.src;
   }
   dialog.showModal();
+  fitVideoCaptions();
   document.body.classList.add('video-open');
   error.hidden = true;
   video.play().catch(() => { /* Native controls remain available if play is interrupted. */ });
