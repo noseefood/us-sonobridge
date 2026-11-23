@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="static/css/index.css?v=d5fced726b4d">
   <link rel="stylesheet" href="static/css/demo.css?v=7a125b5583de">
   <script defer src="static/js/nav.js?v=29"></script>
-  <script type="module" src="static/js/page.js?v=2fd1d41a8e2e"></script>
+  <script type="module" src="static/js/page.js?v=7ffb43f68ae1"></script>
 </head>
 <body id="top">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -92,7 +92,7 @@
 <section class="section demo-section" id="interactive" aria-labelledby="demo-heading">
  <div class="demo-container">
   <div class="demo-intro">
-   <div class="demo-copy"><h2 id="demo-heading">Interactive demo</h2><p>Move the probe to compare ultrasound with its CT slice and labels. At a fixed pose, use visibility editing to vary shadow area and adjust the fine-structure weight λ.</p></div>
+   <div class="demo-copy"><h2 id="demo-heading">Interactive demo</h2><p>Move the probe to compare ultrasound with its CT slice and labels. At a fixed pose, adjust the fine-structure weight&nbsp;λ or enlarge the modeled shadows.</p></div>
    <div class="demo-actions" id="demo-actions">
     <div class="organ-picker" role="group" aria-label="Scan case">
       <button type="button" data-case-key="liver" aria-pressed="true" disabled>Liver 1</button>
@@ -132,7 +132,7 @@
     </div></fieldset>
     <fieldset class="control-pair"><legend>Image appearance</legend><div class="slider-pair">
     <div class="control-group appearance-control"><div class="control-heading"><label for="shadow" title="Change the area of the modeled shadow">Visibility editing</label><output id="shadow-value" for="shadow">0%</output></div><input type="range" id="shadow" min="0" max="4" step="1" value="2" aria-valuetext="0%" disabled><div class="range-labels"><span id="shadow-min">−40%</span><span id="shadow-max">+40%</span></div></div>
-    <div class="control-group appearance-control"><div class="control-heading"><label for="detail">Fine-structure weight λ</label><output id="detail-value" for="detail">1.00</output></div><input type="range" id="detail" min="0" max="4" step="1" value="4" disabled><div class="range-labels"><span>0.00</span><span>1.00</span></div></div>
+    <div class="control-group appearance-control"><div class="control-heading"><label for="detail">Fine-structure weight&nbsp;λ</label><output id="detail-value" for="detail">1.00</output></div><input type="range" id="detail" min="0" max="4" step="1" value="4" disabled><div class="range-labels"><span>0.00</span><span>1.00</span></div></div>
     </div></fieldset>
    </div>
    <div class="explorer-footer">
@@ -140,7 +140,7 @@
     <button class="reset-button" type="button" id="reset-demo" disabled><span aria-hidden="true">↺</span> Reset demo</button>
    </div>
   </div>
-  <p class="demo-caption"><span id="display-note">Liver ultrasound is lightly brightened for display.</span> The patient outline is illustrative.</p>
+  <p class="demo-caption"><span id="display-note" hidden></span> The patient outline is illustrative.</p>
  </div>
 </section>
 <section id="method" class="project-section" aria-labelledby="method-heading">
@@ -173,7 +173,7 @@
 </section>
 <section id="results" class="project-section" aria-labelledby="results-heading">
   <h2 class="section-heading" id="results-heading">Results</h2>
-  <p class="section-lead">Ten readers chose SonoBridge as the best anatomical match in <strong>68% of trials</strong>, against at most <strong>7%</strong> for any baseline (chance 12.5%), and rated its realism slightly higher. On liver, SonoBridge reduced FID by <strong>19%</strong> and KID by <strong>36%</strong> relative to UNSB.</p>
+  <p class="section-lead">Ten readers chose SonoBridge as the best anatomical match in <strong>68% of trials</strong>, against at most <strong>7%</strong> for any baseline (chance 12.5%), and rated its images the most realistic among the eight methods. SonoBridge had the lowest values for all four distribution distances on both liver and kidney. On liver, it reduced FID by <strong>19%</strong> and KID by <strong>36%</strong> relative to UNSB.</p>
   <div class="results-layout">
     <div class="scores">
       <details class="metric-group" open>
@@ -241,7 +241,7 @@
         <p class="figure-note" id="biomed-note">FD<sub>B</sub> and KD<sub>B</sub> are the Fréchet and kernel distances in BiomedCLIP’s biomedical image features. Both are unscaled, and lower values indicate closer agreement with clinical ultrasound.</p>
       </details>
       <p class="figure-note score-key" id="score-key"><strong>Bold</strong> marks the best value in each column. <u>Underlining</u> marks the runner-up.</p>
-      <p class="figure-note runtime-note">Liver refinement averaged <strong>23.3 ms per image</strong> across 80 test views on one NVIDIA RTX PRO 6000, including preprocessing.</p>
+      <p class="figure-note runtime-note">Including preprocessing, liver refinement averaged <strong>23.3 ms per image</strong> across 80 test views on one NVIDIA RTX PRO 6000, fast enough for real-time synthesis.</p>
     </div>
     <div class="results-visuals">
       <figure class="paper-figure result-figure">
@@ -256,11 +256,11 @@
       </figure>
       <div class="secondary-findings">
         <h3>Ablation results</h3>
-        <p>We measured FID, KID, two BiomedCLIP distances and a Fréchet distance on 40 handcrafted ultrasound statistics. On both organs, refining simulated ultrasound gave lower values on all five measures than translating CT slices or label maps directly. This also held for the <em>No conditions</em> variant, which retained anatomical supervision during training.</p>
-        <p>Removing the fine-grained structural maps alone lowered liver FID and KID but increased the other three distances.</p>
+        <p>We measured FID, KID, and two BiomedCLIP distances. On both organs, refining simulated ultrasound gave lower values on all four measures than translating CT slices or label maps directly. This also held for the <em>No conditions</em> variant, which retained anatomical supervision during training.</p>
+        <p>Removing the fine-grained structural maps raised both BiomedCLIP distances on liver. Removing the semantic loss had a larger effect, increasing FD<sub>B</sub> by 71% and KD<sub>B</sub> by 152% relative to the full model.</p>
         <h3>Control at a fixed pose</h3>
         <p id="control-caption">Increasing the fine-structure weight from 0 to 1 raised mean vessel contrast from 0.015 to 0.154 across 1,200 liver views. The figure shows one view as vessel contrast and shadow extent are varied separately.</p>
-        <a class="comparison-link" href="static/images/liver-appearance-control.webp?v=2" data-figure-title="Control at a fixed liver pose" data-figure-alt="At one liver pose, increasing fine-structure weight darkens visible vessels. Enlarging one modeled shadow increases the shadowed fraction of the imaging sector from 36% to 73%." aria-haspopup="dialog" aria-describedby="control-caption">View the liver control experiment</a>
+        <a class="comparison-link" href="static/images/liver-appearance-control.webp?v=de7015d4a39b" data-figure-title="Control at a fixed liver pose" data-figure-alt="At one liver pose, visible vessels darken as λ increases from 0 to 1. At λ = 1, enlarging the left bone shadow by 60% and 120% increases the shadowed fraction from 36% to 55% and 73%, respectively." aria-haspopup="dialog" aria-describedby="control-caption">View the liver control experiment</a>
       </div>
     </div>
   </div>

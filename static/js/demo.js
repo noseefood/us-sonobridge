@@ -5,7 +5,7 @@ import {cleanVisibilityContours} from './guidance.js?v=2';
 let THREE, OrbitControls, GLTFLoader, RoomEnvironment, MeshoptDecoder;
 const $ = id => document.getElementById(id);
 const root = new URL('../demo/', import.meta.url);
-const liver = {organ:'liver', posture:'supine', structure:'vessels', note:'Liver ultrasound is lightly brightened for display.'};
+const liver = {organ:'liver', posture:'supine', structure:'vessels'};
 const datasets = {
  liver: {...liver, label:'Liver 1'},
  'liver-2': {...liver, label:'Liver 2'},
@@ -527,7 +527,9 @@ function configureDataset() {
  $('scan-specs').textContent = manifest.frequency_mhz.toFixed(1) + ' MHz · ' + manifest.depth_mm + ' mm depth';
  $('scene').setAttribute('aria-label', 'Interactive ' + data.label.toLowerCase() + ' anatomy and robotic probe, patient ' + data.posture);
  $('scene-context').textContent = data.label + ' · ' + (data.posture === 'supine' ? 'Supine' : 'Prone (back up)');
- $('display-note').textContent = data.note;
+ const displayNote = $('display-note');
+ displayNote.textContent = data.note ?? '';
+ displayNote.hidden = !data.note;
  $('explorer').dataset.organ = data.organ;
  $('explorer').dataset.case = manifest.case_id;
  caseButtons.forEach(button => {
