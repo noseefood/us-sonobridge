@@ -21,9 +21,9 @@
   <link rel="preload" href="static/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="static/css/fonts.css">
   <link rel="stylesheet" href="static/css/index.css?v=d5fced726b4d">
-  <link rel="stylesheet" href="static/css/demo.css?v=33">
+  <link rel="stylesheet" href="static/css/demo.css?v=7a125b5583de">
   <script defer src="static/js/nav.js?v=29"></script>
-  <script type="module" src="static/js/page.js?v=038562a56ea9"></script>
+  <script type="module" src="static/js/page.js?v=2fd1d41a8e2e"></script>
 </head>
 <body id="top">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -94,7 +94,11 @@
   <div class="demo-intro">
    <div class="demo-copy"><h2 id="demo-heading">Interactive demo</h2><p>Move the probe to compare ultrasound with its CT slice and labels. At a fixed pose, use visibility editing to vary shadow area and adjust the fine-structure weight λ.</p></div>
    <div class="demo-actions" id="demo-actions">
-    <div class="organ-picker" role="group" aria-label="Organ"><button type="button" data-organ="liver" aria-pressed="true" disabled>Liver</button><button type="button" data-organ="kidney" aria-pressed="false" disabled>Kidney</button></div>
+    <div class="organ-picker" role="group" aria-label="Scan case">
+      <button type="button" data-case-key="liver" aria-pressed="true" disabled>Liver 1</button>
+      <button type="button" data-case-key="liver-2" aria-pressed="false" disabled>Liver 2</button>
+      <button type="button" data-case-key="kidney" aria-pressed="false" disabled>Kidney</button>
+    </div>
     <button class="scan-button" type="button" id="auto-scan" aria-pressed="false" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path class="play-symbol" d="m7 4.5 12 7.5-12 7.5Z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linejoin="round"/><path class="pause-symbol" d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg><span id="scan-label">Auto scan</span></button>
    </div>
   </div>
@@ -104,7 +108,7 @@
      <div class="scene-toolbar"><span class="panel-kicker">Anatomy &amp; probe pose</span><div class="scene-actions"><label class="toggle-pill" title="Show an illustrative patient outline aligned with the CT abdomen"><input type="checkbox" id="patient-toggle" checked><span>Patient outline</span></label><button type="button" class="camera-view-button" id="camera-overview" aria-pressed="false">Full setup</button><button type="button" class="icon-button" id="camera-reset" title="Reset camera" aria-label="Reset camera"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10a8 8 0 1 1 .9 6M4 5v5h5"/></svg></button><button type="button" class="icon-button" id="fullscreen" title="Full screen" aria-label="Expand interactive viewer" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="expand-symbol" d="M14 4h6v6m0-6-7 7M10 20H4v-6m0 6 7-7"/><path class="collapse-symbol" d="M20 10h-6V4m0 6 7-7M4 14h6v6m0-6-7 7"/></svg></button></div></div>
      <div id="scene" role="img" aria-label="Interactive three-dimensional liver anatomy and robot probe"></div>
      <div class="stage-loading" id="scene-loading"><span class="loading-ring"></span><span>Loading the 3D scene</span></div>
-     <div class="scene-bottom"><div class="scene-caption"><span id="scene-context">Liver · Supine</span></div><div class="anatomy-legend"><span><i class="liver-swatch"></i>Liver</span><span><i class="kidney-swatch"></i>Kidneys</span><span><i class="plane-swatch"></i>Imaging plane</span></div></div>
+     <div class="scene-bottom"><div class="scene-caption"><span id="scene-context">Liver 1 · Supine</span></div><div class="anatomy-legend"><span><i class="liver-swatch"></i>Liver</span><span><i class="kidney-swatch"></i>Kidneys</span><span><i class="plane-swatch"></i>Imaging plane</span></div></div>
     </div>
     <div class="ultrasound-panel">
      <div class="image-toolbar"><div class="image-tabs" role="group" aria-label="Ultrasound image display"><button type="button" disabled aria-pressed="true" data-view="output">SonoBridge</button><button type="button" disabled aria-pressed="false" data-view="label" title="Compare the anatomical label map with SonoBridge">Label map</button><button type="button" disabled aria-pressed="false" data-view="ct" title="Compare the CT slice with SonoBridge">CT</button></div><label class="guidance-toggle"><input id="guidance-toggle" type="checkbox" disabled><span id="overlay-label">Visibility &amp; vessels</span></label></div>
@@ -289,7 +293,7 @@
 <footer class="site-footer">
   <div class="footer-project"><span>SonoBridge</span><a href="mailto:xuesong.li@tum.de">Contact Xuesong Li</a></div>
   <nav aria-label="Research institutions"><a href="https://www.cs.cit.tum.de/en/camp/start/">CAMP</a><a href="https://mcml.ai/">MCML</a><a href="https://mech.hku.hk/">HKU Mechanical Engineering</a></nav>
-  <div class="footer-meta"><span>Updated <time datetime="2026-11-21">21 Nov 2026</time></span><a href="#top">Back to top ↑</a></div>
+  <div class="footer-meta"><span>Updated <time datetime="2026-11-23">23 Nov 2026</time></span><a href="#top">Back to top ↑</a></div>
 </footer>
 <noscript><p class="no-script">Enable JavaScript to use the interactive demo. <a href="static/video/sonobridge-overview.mp4?v=c7f0f569aec8">Watch the system video</a>.</p></noscript>
 </body>

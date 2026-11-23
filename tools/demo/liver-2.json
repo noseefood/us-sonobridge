@@ -1,0 +1,22 @@
+{
+  "case": "00091",
+  "xy": [
+    0.06298948551452992,
+    0.13756412571292592
+  ],
+  "spin": -0.2617993877991494,
+  "tilt": [
+    0.0,
+    0.0
+  ],
+  "direction": [
+    0.2635718426412426,
+    -0.9646397689120536
+  ],
+  "span_mm": 12,
+  "rotation_span_deg": 18,
+  "position_count": 33,
+  "default_position_mm": 7.5,
+  "default_rotation_deg": 9,
+  "ultrasound_webp_quality": 95
+}

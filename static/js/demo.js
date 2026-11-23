@@ -5,14 +5,18 @@ import {cleanVisibilityContours} from './guidance.js?v=2';
 let THREE, OrbitControls, GLTFLoader, RoomEnvironment, MeshoptDecoder;
 const $ = id => document.getElementById(id);
 const root = new URL('../demo/', import.meta.url);
+const liver = {organ:'liver', posture:'supine', structure:'vessels', note:'Liver ultrasound is lightly brightened for display.'};
 const datasets = {
- liver: {manifest:'liver/manifest-v4.json', imageRoot:'liver/', label:'Liver', posture:'supine', structure:'vessels', note:'Liver ultrasound is lightly brightened for display.'},
- kidney: {manifest:'kidney/manifest-v4.json', imageRoot:'kidney/', label:'Kidney', posture:'prone', structure:'medulla', note:'Kidney ultrasound uses local texture blending to soften the gray rim.'}
+ liver: {...liver, label:'Liver 1'},
+ 'liver-2': {...liver, label:'Liver 2'},
+ kidney: {organ:'kidney', label:'Kidney', posture:'prone', structure:'medulla', note:'Kidney ultrasound uses local texture blending to soften the gray rim.'}
 };
-let activeOrgan='liver',datasetGeneration=0,switching=false,wideView=false,environment,anatomyAsset;
+const requestedCase=new URLSearchParams(location.search).get('case');
+let activeCase=Object.hasOwn(datasets,requestedCase)?requestedCase:'liver';
+let datasetGeneration=0,switching=false,wideView=false,environment,anatomyAsset;
 const manifests=new Map(),anatomies=new Map();
 const inputs = ['position','rotation','shadow','detail'].map($);
-const organButtons = [...document.querySelectorAll('.organ-picker button')];
+const caseButtons = [...document.querySelectorAll('.organ-picker button')];
 const canvas = $('us-canvas'), ctx = canvas.getContext('2d');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let manifest, current, transition, generation = 0, sceneUnavailable = false;
@@ -44,7 +48,7 @@ for(const [id,name,color] of labelPalette){
 function syncLabelLegend(record){
  const enabled=record?.referenceMode==='label';labelLegend.hidden=!enabled;
  if(!enabled)return;
- const poses=labelPoseMasks[record.organ],layoutKey=`${record.organ}:${labelLegend.clientWidth}`;
+ const poses=record.labelMasks,layoutKey=`${record.caseKey}:${labelLegend.clientWidth}`;
  if(layoutKey!==legendLayoutKey){
   // Reserve the case's full palette height once; only its present labels are
   // shown, without changing the image size as an automatic sweep advances.
@@ -93,8 +97,8 @@ function trimCache() {
  }
 }
 
-function loadTile(organ, data, pose, name, forceTrack, pins, priority = 'high') {
- const folder = datasets[organ].imageRoot;
+function loadTile(caseKey, data, pose, name, forceTrack, pins, priority = 'high') {
+ const folder = caseKey + '/';
  const track = folder + (data.tracks || 'tracks') + '/' + name + '-r' + String(pose.j).padStart(2, '0') + '.webp';
  const defaults = data.defaults;
  const preview = !forceTrack && !cache.get(track)?.bitmap && pose.i === defaults.position && pose.j === defaults.rotation
@@ -152,13 +156,13 @@ function finishRequest(token) {
  trimCache();
 }
 
-function loadViewTiles(organ, data, state, mode, guided, token, forceTrack = false) {
+function loadViewTiles(caseKey, data, state, mode, guided, token, forceTrack = false) {
  const pose = data.poses[state.position * data.rotations.length + state.rotation];
  const pins = requestPins.get(token);
  const names = ['us-' + state.shadow + '-' + state.detail];
  if (mode !== 'output') names.push(mode);
  if (guided) names.push('guidance-' + state.shadow);
- const loads = names.map(name => loadTile(organ, data, pose, name, forceTrack, pins));
+ const loads = names.map(name => loadTile(caseKey, data, pose, name, forceTrack, pins));
  // Retain a shared track across rapid position changes. Obsolete downloads for
  // unrelated rotations or appearance settings should release the connection.
  cancelUnusedTiles(pins);
@@ -177,13 +181,13 @@ function cancelUnusedTiles(pins) {
 function warmScan() {
  if (!manifest || switching || scanning || !current || navigator.connection?.saveData) return;
  const state = readState();
- loadTile(activeOrgan, manifest, poseOf(state), 'us-' + state.shadow + '-' + state.detail, true, null, 'low')
+ loadTile(activeCase, manifest, poseOf(state), 'us-' + state.shadow + '-' + state.detail, true, null, 'low')
   .then(trimCache).catch(() => {});
 }
 
 function frameRecord(state, mode, guided, tiles) {
  return {
-  organ:activeOrgan, state:{...state}, pose:poseOf(state),
+  caseKey:activeCase, labelMasks:manifest.label_masks || labelPoseMasks[activeCase], state:{...state}, pose:poseOf(state),
   bitmap:tiles[0], reference:mode === 'output' ? null : tiles[1], referenceMode:mode,
   guidanceBitmap:guided ? tiles.at(-1) : null, cacheKeys:tiles.map(tile => tile.cacheKey)
  };
@@ -226,7 +230,7 @@ async function requestState(state, animate = true) {
  const mode = displayMode, guided = showGuidance;
  paintValues();
  try {
-  const tiles = await loadViewTiles(activeOrgan, manifest, state, mode, guided, token);
+  const tiles = await loadViewTiles(activeCase, manifest, state, mode, guided, token);
   if (token !== generation) return;
   showFrame(frameRecord(state, mode, guided, tiles), animate);
   $('explorer').dataset.lastImageLoad = JSON.stringify({ms:Math.round(performance.now()-started), cached:tiles.every(t => t.cached), files:tiles.length});
@@ -252,8 +256,8 @@ function fanPath(w,h){
 }
 function tile(bitmap,alpha=1){if(!bitmap)return;ctx.globalAlpha=alpha;if(bitmap.image)ctx.drawImage(bitmap.image,bitmap.sx,bitmap.sy,bitmap.sw,bitmap.sh,0,0,canvas.width,canvas.height);else ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);ctx.globalAlpha=1;}
 function ultrasoundDisplay(record){
- if(record.organ!=='liver')return record.bitmap;
- const key=`${record.pose.index}:${record.state.shadow}:${record.state.detail}`;
+ if(datasets[record.caseKey].organ!=='liver')return record.bitmap;
+ const key=`${record.caseKey}:${record.pose.index}:${record.state.shadow}:${record.state.detail}`;
  if(displayImages.has(key))return displayImages.get(key);
  const c=document.createElement('canvas');c.width=c.height=256;
  const x=c.getContext('2d',{willReadFrequently:true}),t=record.bitmap;
@@ -266,7 +270,7 @@ function ultrasoundDisplay(record){
 }
 function guidance(record){
  if(!record.guidanceBitmap)return null;
- const key=`${record.organ}:${record.pose.index}:${record.state.shadow}`;
+ const key=`${record.caseKey}:${record.pose.index}:${record.state.shadow}`;
  if(overlays.has(key))return overlays.get(key);
  const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d',{willReadFrequently:true});
  const t=record.guidanceBitmap;x.drawImage(t.image,t.sx,t.sy,t.sw,t.sh,0,0,256,256);
@@ -292,14 +296,14 @@ function syncComparison() {
 function updateImageMode(record) {
  const comparing = record.referenceMode !== 'output';
  const label = record.referenceMode === 'label' ? 'Label map' : 'CT';
- const key = [record.organ, record.referenceMode, Boolean(record.guidanceBitmap)].join('/');
+ const key = [record.caseKey, record.referenceMode, Boolean(record.guidanceBitmap)].join('/');
  if (imageModeKey !== key) {
   imageModeKey = key;
   for (const id of ['compare-range', 'compare-divider', 'compare-labels']) $(id).hidden = !comparing;
   $('compare-source').textContent = label;
   syncComparison();
   $('guidance-key').hidden = !record.guidanceBitmap;
-  const structure = datasets[record.organ].structure;
+  const structure = datasets[record.caseKey].structure;
   $('structure-label').textContent = 'Visible ' + structure;
   $('overlay-label').textContent = 'Visibility & ' + structure;
   canvas.setAttribute('aria-label', comparing ? label + ' and SonoBridge ultrasound comparison' : 'SonoBridge ultrasound output');
@@ -417,7 +421,7 @@ function resetCamera(animate=false){
  const target=bounds.getCenter(new THREE.Vector3());
  // In the scan view, fit the entire robot and CT anatomy, not the bed or plinth.
  // Looking from the patient's side brings the organs forward in perspective.
- const direction=(wideView?new THREE.Vector3(-1.6,-1.9,1.3):activeOrgan==='kidney'?new THREE.Vector3(-.6,1.65,1.22):new THREE.Vector3(-.9,-1.5,.62)).normalize();
+ const direction=(wideView?new THREE.Vector3(-1.6,-1.9,1.3):datasets[activeCase].posture==='prone'?new THREE.Vector3(-.6,1.65,1.22):new THREE.Vector3(-.9,-1.5,.62)).normalize();
  // Fit actual mesh vertices: rotated bounding boxes include empty corners and
  // needlessly pull the camera away from the probe. This is a single linear pass.
  const right=new THREE.Vector3().crossVectors(camera.up,direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right),p=new THREE.Vector3();
@@ -439,22 +443,22 @@ async function geometryBytes(path,revision){
  if(!response.ok)throw Error('3D asset unavailable');
  return compressed?new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer():response.arrayBuffer();
 }
-function getManifest(organ){
- if(!manifests.has(organ))manifests.set(organ,fetch(new URL(datasets[organ].manifest,root)).then(r=>{if(!r.ok)throw Error('Acquisition data unavailable');return r.json();}).catch(e=>{manifests.delete(organ);throw e;}));
- return manifests.get(organ);
+function getManifest(caseKey){
+ if(!manifests.has(caseKey))manifests.set(caseKey,fetch(new URL(caseKey+'/manifest-v4.json',root)).then(r=>{if(!r.ok)throw Error('Acquisition data unavailable');return r.json();}).catch(e=>{manifests.delete(caseKey);throw e;}));
+ return manifests.get(caseKey);
 }
-async function getAnatomy(organ){
- if(!anatomies.has(organ))anatomies.set(organ,getManifest(organ).then(m=>geometryBytes(`${datasets[organ].imageRoot}${m.anatomy}`)).then(bytes=>new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(bytes,root.href)).then(g=>{
-  const materials={Liver:[0x865146,organ==='liver'?1:.32],Kidneys:[0x966e57,organ==='kidney'?1:.55],Vessels:[0x95636b,.5],Bones:[0xb6b1a1,.24],Skin:[0x9caaa7,.016],Spleen:[0x84758e,.38],Gallbladder:[0x7e9468,.50],Pancreas:[0xb29d79,.44],Stomach:[0xac977c,.30],Lungs:[0x7695a7,.20],Myocardium:[0x946275,.30],Heart:[0x9c6d7c,.30],Intestines:[0x93a47d,.22]};
+async function getAnatomy(caseKey){
+ if(!anatomies.has(caseKey))anatomies.set(caseKey,getManifest(caseKey).then(m=>geometryBytes(`${caseKey}/${m.anatomy}`)).then(bytes=>new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(bytes,root.href)).then(g=>{
+  const materials={Liver:[0x865146,datasets[caseKey].organ==='liver'?1:.32],Kidneys:[0x966e57,datasets[caseKey].organ==='kidney'?1:.55],Vessels:[0x95636b,.5],Bones:[0xb6b1a1,.24],Skin:[0x9caaa7,.016],Spleen:[0x84758e,.38],Gallbladder:[0x7e9468,.50],Pancreas:[0xb29d79,.44],Stomach:[0xac977c,.30],Lungs:[0x7695a7,.20],Myocardium:[0x946275,.30],Heart:[0x9c6d7c,.30],Intestines:[0x93a47d,.22]};
   g.scene.traverse(o=>{if(!o.isMesh)return;const name=o.name.replace('anatomy_',''),[color,opacity]=materials[name]||[0x9a9183,.30];o.material=new THREE.MeshStandardMaterial({color,roughness:.83,metalness:0,envMapIntensity:.24,transparent:opacity<1,opacity,depthWrite:opacity>=1,side:THREE.FrontSide});o.castShadow=opacity===1;o.receiveShadow=opacity===1;o.renderOrder=name==='Skin'?8:2;});return g.scene;
- }).catch(e=>{anatomies.delete(organ);throw e;}));
- return anatomies.get(organ);
+ }).catch(e=>{anatomies.delete(caseKey);throw e;}));
+ return anatomies.get(caseKey);
 }
 function attachAnatomy(model){
  if(anatomyAsset)asset.remove(anatomyAsset);anatomyAsset=model;asset.add(model);model.updateMatrixWorld(true);
  const skin=model.getObjectByName('anatomy_Skin');
  const abdominalAnchor=new THREE.Box3().setFromObject(model.getObjectByName('anatomy_Kidneys')).getCenter(new THREE.Vector3());
- environment.alignPatient(new THREE.Box3().setFromObject(skin),datasets[activeOrgan].posture,abdominalAnchor);environment.setPatientVisible($('patient-toggle').checked);
+ environment.alignPatient(new THREE.Box3().setFromObject(skin),datasets[activeCase].posture,abdominalAnchor);environment.setPatientVisible($('patient-toggle').checked);
  $('scene').dataset.patientAlignment=JSON.stringify(environment.group.userData.patientAlignment);
  makeFan();applyPose(liveQ||poseOf(manifest.defaults).q);resetCamera();invalidate();
 }
@@ -502,15 +506,15 @@ async function setupScene(){
  $('scene-loading').classList.add('anatomy-progress');
  $('scene-loading').lastElementChild.textContent='Loading anatomy';
  container.dataset.robotReadyMs=String(Math.round(performance.now()));
- const model = await getAnatomy(activeOrgan);
+ const model = await getAnatomy(activeCase);
  attachAnatomy(model);
  $('scene-loading').hidden=true;
  container.dataset.ready='true';
  container.dataset.readyMs=String(Math.round(performance.now()));
- organButtons.forEach(button => button.disabled=false);
+ caseButtons.forEach(button => button.disabled=false);
 }
 function configureDataset() {
- const data = datasets[activeOrgan];
+ const data = datasets[activeCase];
  const axes = {position:manifest.positions, rotation:manifest.rotations, shadow:manifest.shadows, detail:manifest.details};
  for (const input of inputs) {
   input.max = axes[input.id].length - 1;
@@ -522,12 +526,12 @@ function configureDataset() {
  }
  $('scan-specs').textContent = manifest.frequency_mhz.toFixed(1) + ' MHz · ' + manifest.depth_mm + ' mm depth';
  $('scene').setAttribute('aria-label', 'Interactive ' + data.label.toLowerCase() + ' anatomy and robotic probe, patient ' + data.posture);
- $('scene-context').textContent = activeOrgan === 'liver' ? 'Liver · Supine' : 'Kidney · Prone (back up)';
+ $('scene-context').textContent = data.label + ' · ' + (data.posture === 'supine' ? 'Supine' : 'Prone (back up)');
  $('display-note').textContent = data.note;
- $('explorer').dataset.organ = activeOrgan;
+ $('explorer').dataset.organ = data.organ;
  $('explorer').dataset.case = manifest.case_id;
- organButtons.forEach(button => {
-  button.setAttribute('aria-pressed', String(button.dataset.organ === activeOrgan));
+ caseButtons.forEach(button => {
+  button.setAttribute('aria-pressed', String(button.dataset.caseKey === activeCase));
  });
  fanClip = null;
  resizeImage();
@@ -579,8 +583,8 @@ function restoreControls() {
  paintValues();
 }
 
-async function switchOrgan(organ) {
- if (!switching && organ === activeOrgan) return;
+async function switchCase(caseKey) {
+ if (!switching && caseKey === activeCase) return;
  stopScan();
  const revision = ++datasetGeneration, token = beginRequest();
  const mode = displayMode, guided = showGuidance;
@@ -588,17 +592,17 @@ async function switchOrgan(organ) {
  setControlsEnabled(false);
  $('explorer').dataset.switchStartMs = String(Math.round(performance.now()));
  $('explorer').setAttribute('aria-busy','true');
- organButtons.forEach(button => button.classList.toggle('is-loading', button.dataset.organ === organ));
- setStatus('Loading the ' + organ + ' demo…');
+ caseButtons.forEach(button => button.classList.toggle('is-loading', button.dataset.caseKey === caseKey));
+ setStatus('Loading ' + datasets[caseKey].label + '…');
  try {
-  const next = await getManifest(organ);
+  const next = await getManifest(caseKey);
   if (revision !== datasetGeneration) return;
   const [model,tiles] = await Promise.all([
-   sceneReady ? getAnatomy(organ) : null,
-   loadViewTiles(organ, next, next.defaults, mode, guided, token)
+   sceneReady ? getAnatomy(caseKey) : null,
+   loadViewTiles(caseKey, next, next.defaults, mode, guided, token)
   ]);
   if (revision !== datasetGeneration) return;
-  activeOrgan = organ;
+  activeCase = caseKey;
   manifest = next;
   current = null;
   transition = probeMotion = liveQ = null;
@@ -610,11 +614,15 @@ async function switchOrgan(organ) {
    attachAnatomy(model);
   }
   showFrame(frameRecord(next.defaults, mode, guided, tiles), false);
+  const url = new URL(location.href);
+  if (caseKey === 'liver') url.searchParams.delete('case');
+  else url.searchParams.set('case', caseKey);
+  history.replaceState(history.state, '', url);
   $('explorer').dataset.switchReadyMs = String(Math.round(performance.now()));
   setStatus(sceneUnavailable ? '' : orbitHint());
  } catch (error) {
   if (revision !== datasetGeneration || error.name === 'AbortError') return;
-  console.error('[SonoBridge] organ switch', error);
+  console.error('[SonoBridge] case switch', error);
   setStatus('The case could not be loaded. Select it again to retry.');
  } finally {
   finishRequest(token);
@@ -622,7 +630,7 @@ async function switchOrgan(organ) {
    switching = false;
    setControlsEnabled(true);
    $('explorer').setAttribute('aria-busy','false');
-   organButtons.forEach(button => button.classList.remove('is-loading'));
+   caseButtons.forEach(button => button.classList.remove('is-loading'));
   }
  }
 }
@@ -772,7 +780,7 @@ function paintSweep(now) {
 async function loadSweep(state) {
  const token = beginRequest(), mode = displayMode, guided = showGuidance;
  try {
-  const tiles = await loadViewTiles(activeOrgan,manifest,state,mode,guided,token,true);
+  const tiles = await loadViewTiles(activeCase,manifest,state,mode,guided,token,true);
   if (!scanning || token !== generation) return;
   const records = manifest.positions.map((_,position) => frameRecord(
    {...state,position}, mode, guided, tiles.map(t => ({...t,sx:position*t.sw}))
@@ -881,7 +889,7 @@ compareDivider.addEventListener('lostpointercapture', event => {
 $('patient-toggle').addEventListener('change', e => { environment?.setPatientVisible(e.target.checked); invalidate(); });
 $('camera-overview').addEventListener('click', () => { wideView = !wideView; resetCamera(true); });
 $('camera-reset').addEventListener('click', () => { wideView = false; resetCamera(true); });
-for (const button of organButtons) button.addEventListener('click', () => switchOrgan(button.dataset.organ));
+for (const button of caseButtons) button.addEventListener('click', () => switchCase(button.dataset.caseKey));
 
 function expandViewer(expanded) {
  const explorer = $('explorer');
@@ -940,7 +948,7 @@ document.addEventListener('sonobridge:pause', () => stopScan());
 
 async function init() {
  try {
-  manifest = await getManifest(activeOrgan);
+  manifest = await getManifest(activeCase);
   configureDataset();
   new ResizeObserver(resizeImage).observe(document.querySelector('.image-stage'));
   setupScene().catch(error => {
@@ -950,7 +958,7 @@ async function init() {
    $('scene-loading').classList.remove('anatomy-progress');
    $('scene-loading').textContent = '3D is unavailable on this device.';
    for (const id of ['camera-reset','camera-overview','patient-toggle']) $(id).disabled = true;
-   organButtons.forEach(button => button.disabled = false);
+   caseButtons.forEach(button => button.disabled = false);
    if (current) setStatus('');
   });
   await requestState(readState(),false);

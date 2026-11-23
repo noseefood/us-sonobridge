@@ -1,13 +1,17 @@
 """Read existing SonoGym assets; generated website assets stay in this repo."""
 from pathlib import Path
-import sys,json
+import sys,json,os
 sys.dont_write_bytecode=True
 import numpy as np,yaml
 from scipy.spatial.transform import Rotation
 ROOT=Path(__file__).resolve().parents[2]
 WORK=ROOT/'refs/demo-build';WORK.mkdir(parents=True,exist_ok=True)
 OUT=ROOT/'static/demo';OUT.mkdir(parents=True,exist_ok=True)
-APP=Path('/home/xuesong-li/Research_IFL/CT-MRI2US/SonoGym/apps/sonobridge')
+_research=Path.home()/'Research_IFL/CT-MRI2US'
+_robot=_research/'Sonobridge_RobUS'
+if not _robot.is_dir():
+ _robot=_research/'SonoGym'
+APP=Path(os.environ.get('SONOBRIDGE_ROBOT_ROOT',_robot))/'apps/sonobridge'
 sys.path[:0]=[str(APP),str(APP/'sonobridge'),str(APP.parents[1]/'packages')]
 def configuration(case):
  cfg=yaml.safe_load((APP/'config/scene.yaml').read_text().replace('00091',case))

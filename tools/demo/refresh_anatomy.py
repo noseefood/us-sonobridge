@@ -5,12 +5,13 @@ import numpy as np
 import pyvista as pv
 import trimesh
 from scipy import ndimage
-organ=sys.argv[1]
+dataset=sys.argv[1]
+organ=dataset.split('-')[0]
 if organ=='liver':import common as native
 else:import kidney_assets as native
 from sonobridge_core.geometry.closed_display import cached_closed_display
 from sonobridge_core.data.labels import LABEL_NAMES,ANATOMY_LABELS
-ROOT=Path(__file__).resolve().parents[2];WORK=ROOT/'refs/demo-build/refresh'/organ
+ROOT=Path(__file__).resolve().parents[2];WORK=ROOT/'refs/demo-build/refresh'/dataset
 meta=json.loads((WORK/'grid_meta.json').read_text());patient,cfg=native.patient_for(meta['case_id'])
 folder=WORK/'surfaces';folder.mkdir(exist_ok=True);reports=[]
 for label in ANATOMY_LABELS:
