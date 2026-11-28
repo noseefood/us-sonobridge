@@ -19,7 +19,7 @@ OUT = ROOT / "static/images"
 # paper figure -> (page file stem, widths); a single width writes <stem>.webp, several write <stem>-<width>.webp
 FIGURES = {
     "fig_teaser": ("method-overview", [800, 1600]),               # Fig. 1
-    "fig_datagen2": ("virtual-acquisition", [1600]),              # Fig. 2
+    "fig_datagen2": ("virtual-acquisition", [800, 1600]),              # Fig. 2
     "fig_method7": ("bridge-training", [800, 1440, 3200]),        # Fig. 3
     "fig_tsne_combined": ("tsne", [800, 1600]),                   # Fig. 4
     "fig10_comparison": ("liver-kidney-comparison", [1200, 2400]),  # Fig. 5

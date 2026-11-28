@@ -276,3 +276,60 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 .control-block{align-items:center}
 @media(max-width:900px){.reader-charts{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:720px){.reader-chart{column-gap:12px}.chart-label{font-size:13px}.data-stats{gap:10px 18px}.data-stats dd{font-size:16px}}
+/* Results polish (2026-11-28 b): key numbers, chart panels, light table toggles, ablation findings. */
+.section-lead{margin-bottom:18px}
+.key-results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:0 0 clamp(34px,4vw,48px);border-top:1px solid #e3deea;border-bottom:1px solid #e3deea}
+.key-results div{padding:16px 18px 17px;border-left:1px solid #ece8f2}
+.key-results div:first-child{border-left:0;padding-left:2px}
+.key-results dt{color:var(--text-muted);font-size:13px;font-weight:550;letter-spacing:.01em}
+.key-results dd{margin:3px 0 4px;color:var(--accent);font-size:clamp(25px,2.4vw,31px);font-weight:650;letter-spacing:-.03em;line-height:1.15;font-variant-numeric:tabular-nums}
+.key-results p{color:#665d70;font-size:13.5px;line-height:1.5}
+.reader-charts{gap:18px}
+.reader-chart{padding:16px 20px 12px;border:1px solid #ebe7f1;border-radius:10px;background:#fcfbfe}
+.chart-row.ours .chart-label,.chart-row.ours .chart-cell{background:#f0edf9}
+.chart-row.ours .chart-label{margin-left:-8px;padding:3px 0 3px 8px;border-radius:5px 0 0 5px}
+.chart-row.ours .chart-cell:last-child{border-radius:0 5px 5px 0}
+.chart-row.ours .chart-cell{height:28px}
+.realism-chart .chart-row.ours .chart-cell b{background:#f0edf9}
+.realism-chart .chart-cell::after{background:#e9e5f0}
+.reader-chart .chart-cell b{z-index:2}
+.table-toggle{margin-top:14px}
+.table-toggle summary{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border:1px solid #ddd6e7;border-radius:999px;color:#5d4f72;font-size:14px;font-weight:550;list-style:none;cursor:pointer;user-select:none}
+.table-toggle summary::-webkit-details-marker{display:none}
+.table-toggle summary::before{content:"Show";color:var(--text-muted);font-weight:450}
+.table-toggle[open] summary::before{content:"Hide"}
+.table-toggle summary::after{content:"";width:6px;height:6px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:translateY(-2px) rotate(45deg)}
+.table-toggle[open] summary::after{transform:translateY(1px) rotate(225deg)}
+.table-toggle summary:hover,.table-toggle summary:focus-visible{border-color:#b9acd0;color:var(--accent);background:var(--accent-soft)}
+.table-toggle[open] > :not(summary){margin-top:12px}
+.metric-group summary{font-size:16px;min-height:42px;padding-block:8px}
+.block-heading{margin-bottom:6px}
+.results-layout.result-block{align-items:start}
+.results-layout .result-figure{position:sticky;top:calc(var(--nav-h) + 18px)}
+.block-copy p{margin-top:8px;font-size:15.5px;line-height:1.65}
+.block-copy h3 + p{margin-top:10px}
+.correspondence-block{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}
+.ablation-block .block-intro{max-width:100ch;margin-top:8px;font-size:15.5px;line-height:1.65}
+.findings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,3vw,40px);margin:18px 0 22px}
+.findings div{padding-top:12px;border-top:2px solid var(--accent-line)}
+.findings h4{margin:0;color:#453c53;font-size:15.5px;font-weight:620;letter-spacing:-.01em}
+.findings p{margin-top:6px;font-size:14.5px;line-height:1.6}
+.ablation-figure{margin-top:0}
+.control-block{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}
+@media(max-width:1000px){.key-results{grid-template-columns:repeat(2,minmax(0,1fr))}.key-results div:nth-child(3){border-left:0;padding-left:2px}.key-results div:nth-child(n+3){border-top:1px solid #ece8f2}}
+@media(max-width:900px){.findings{grid-template-columns:minmax(0,1fr);gap:4px}.correspondence-block,.control-block{grid-template-columns:minmax(0,1fr)}.results-layout .result-figure{position:static}}
+@media(max-width:720px){.reader-chart{padding:12px 12px 8px}.key-results dd{font-size:24px}.key-results div{padding:12px 10px}}
+.project-section sub,.project-section sup{line-height:0}
+.chart-row.ours .chart-label{margin-right:-18px;padding-right:18px}
+@media(max-width:720px){.chart-row.ours .chart-label{margin-right:-12px;padding-right:12px}}
+@media(max-width:720px){.match-chart .axis-ticks em:nth-child(2),.match-chart .axis-ticks em:nth-child(4){display:none}.match-chart .axis-ticks em:nth-child(3)::after{content:"%"}}
+/* Method rows (2026-11-28 c): each text beside its figure, alternating sides. */
+.method-row{align-items:center}
+.method-row + .method-row{margin-top:clamp(34px,4.5vw,56px)}
+.method-row .method-figure{max-width:700px;justify-self:end}
+.method-row.flip{grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr)}
+.method-row.flip .method-figure{justify-self:start}
+.method-row .method-copy h3{margin-bottom:2px}
+.architecture-figure{margin-top:clamp(40px,5vw,62px)}
+.figure-intro{max-width:100ch;margin:-4px 0 14px;font-size:15.5px;line-height:1.65}
+@media(max-width:900px){.method-row.flip{grid-template-columns:minmax(0,1fr)}.method-row.flip .method-copy{order:-1}.method-row .method-figure{max-width:none}}
