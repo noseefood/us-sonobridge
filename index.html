@@ -20,7 +20,7 @@
   <link rel="icon" type="image/x-icon" href="static/images/ultrasound_icon.ico">
   <link rel="preload" href="static/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="static/css/fonts.css">
-  <link rel="stylesheet" href="static/css/index.css?v=d5fced726b4d">
+  <link rel="stylesheet" href="static/css/index.css?v=27f6dacaa169">
   <link rel="stylesheet" href="static/css/demo.css?v=7a125b5583de">
   <script defer src="static/js/nav.js?v=29"></script>
   <script type="module" src="static/js/page.js?v=7ffb43f68ae1"></script>
@@ -69,8 +69,8 @@
   </div>
   <dialog id="video-dialog" aria-labelledby="video-title">
     <div class="video-dialog-heading"><div><h2 id="video-title">SonoBridge · System video</h2><span>Labeled CT, simulated ultrasound and SonoBridge</span></div><button type="button" class="video-close" id="close-overview" aria-label="Close video"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div>
-    <video id="overview-video" controls playsinline preload="none" width="1920" height="1080" aria-label="One-minute SonoBridge system video" data-src="static/video/sonobridge-overview.mp4?v=c7f0f569aec8" data-mobile-src="static/video/sonobridge-overview-720.mp4?v=997b5a7a24ec" data-poster="static/video/overview-poster.jpg?v=174c272524bf">
-      <track id="overview-cues" kind="captions" srclang="en" label="English" src="static/video/overview.en.vtt?v=1fdf68bbe87e">
+    <video id="overview-video" controls playsinline preload="none" width="1920" height="1080" aria-label="One-minute SonoBridge system video" data-src="static/video/sonobridge-overview.mp4?v=7e0f0af1616b" data-mobile-src="static/video/sonobridge-overview-720.mp4?v=624c5c1095b3" data-poster="static/video/overview-poster.jpg?v=174c272524bf">
+      <track id="overview-cues" kind="captions" srclang="en" label="English" src="static/video/overview.en.vtt?v=95620e83b92d">
     </video>
     <p id="overview-caption" hidden></p>
     <details id="chapter-menu" open>
@@ -81,10 +81,10 @@
       <button type="button" data-time="14"><span>0:14</span> Anatomy and visibility</button>
       <button type="button" data-time="21"><span>0:21</span> Ultrasound refinement</button>
       <button type="button" data-time="33"><span>0:33</span> Probe motion and controls</button>
-      <button type="button" data-time="53"><span>0:53</span> SonoBridge</button>
+      <button type="button" data-time="51"><span>0:51</span> Results</button>
       </nav>
     </details>
-    <p id="video-error" hidden>The video could not be played. <a href="static/video/sonobridge-overview.mp4?v=c7f0f569aec8">Open the video directly</a>.</p>
+    <p id="video-error" hidden>The video could not be played. <a href="static/video/sonobridge-overview.mp4?v=7e0f0af1616b">Open the video directly</a>.</p>
   </dialog>
 </section>
 
@@ -131,7 +131,7 @@
     <div class="control-group"><div class="control-heading"><label for="rotation">Probe rotation</label><output id="rotation-value" for="rotation">0°</output></div><input type="range" id="rotation" min="0" max="12" step="1" value="6" disabled><div class="range-labels"><span id="rotation-min">−24°</span><span id="rotation-max">+24°</span></div></div>
     </div></fieldset>
     <fieldset class="control-pair"><legend>Image appearance</legend><div class="slider-pair">
-    <div class="control-group appearance-control"><div class="control-heading"><label for="shadow" title="Change the area of the modeled shadow">Visibility editing</label><output id="shadow-value" for="shadow">0%</output></div><input type="range" id="shadow" min="0" max="4" step="1" value="2" aria-valuetext="0%" disabled><div class="range-labels"><span id="shadow-min">−40%</span><span id="shadow-max">+40%</span></div></div>
+    <div class="control-group appearance-control"><div class="control-heading"><label for="shadow" title="Change the area of the modeled shadow">Shadow editing</label><output id="shadow-value" for="shadow">0%</output></div><input type="range" id="shadow" min="0" max="4" step="1" value="2" aria-valuetext="0%" disabled><div class="range-labels"><span id="shadow-min">−40%</span><span id="shadow-max">+40%</span></div></div>
     <div class="control-group appearance-control"><div class="control-heading"><label for="detail">Fine-structure weight&nbsp;λ</label><output id="detail-value" for="detail">1.00</output></div><input type="range" id="detail" min="0" max="4" step="1" value="4" disabled><div class="range-labels"><span>0.00</span><span>1.00</span></div></div>
     </div></fieldset>
    </div>
@@ -149,14 +149,19 @@
     <div class="method-copy">
       <h3>Virtual acquisition</h3>
       <p id="acquisition-caption">A virtual probe samples the abdomen from the front for liver views and from the back for left kidney views. Each orientation is checked for skin contact across the central part of the probe. At each accepted pose, ray-based simulation produces an ultrasound image on the same grid as the CT slice and anatomical labels.</p>
-      <a class="comparison-link" href="static/images/virtual-acquisition.webp" data-figure-title="Virtual acquisition" data-figure-alt="Anterior liver and posterior left kidney scans, skin contact across the probe footprint, and the aligned images, labels, visibility and pose for one liver view." aria-haspopup="dialog" aria-describedby="acquisition-caption">View probe placement and the acquisition record</a>
+      <a class="comparison-link" href="static/images/virtual-acquisition.webp?v=5ac6ca63193c" data-figure-title="Fig. 2 · Virtual acquisition" data-figure-alt="Anterior liver and posterior left kidney scans, skin contact across the probe footprint, and the aligned images, labels, visibility and pose for one liver view." aria-haspopup="dialog" aria-describedby="acquisition-caption">View probe placement and the acquisition record</a>
+      <dl class="data-stats" aria-label="Dataset size">
+        <div><dt>Labeled views</dt><dd>~140,000</dd></div>
+        <div><dt>CT cases</dt><dd>27 liver · 11 kidney</dd></div>
+        <div><dt>Clinical recordings</dt><dd>65 · 12 subjects</dd></div>
+      </dl>
       <h3>Anatomy-conditioned refinement</h3>
       <p>A five-step Schrödinger bridge starts from the simulated echoes and shadows. At every step, the organ-level semantic context, a mask of the whole target organ, provides the layout of the view. The fine-grained structural maps add hepatic vessels or the renal medulla, which the simulation renders weakly. Visibility derived from the simulated acquisition limits them to visible tissue.</p>
-      <p>During training, a frozen ultrasound model (UltraSAM3) segments the organ in each prediction. One loss compares its mask with the CT label in visible tissue. A second encourages visible fine structures to appear darker than their surroundings.</p>
+      <p>During training, a frozen ultrasound model (UltraSAM3) segments the organ in each prediction. One loss compares its mask with the CT label in visible tissue. A second constrains the relative echogenicity of visible fine structures: vessels and the renal medulla must appear darker than the surrounding parenchyma.</p>
     </div>
     <figure class="paper-figure method-figure">
-      <a class="figure-preview" href="static/images/method-overview-1600.webp?v=2" data-figure-title="Anatomy-conditioned refinement" aria-haspopup="dialog" aria-label="Enlarge the method figure" aria-describedby="method-caption">
-        <img src="static/images/method-overview-800.webp?v=2" srcset="static/images/method-overview-800.webp?v=2 800w, static/images/method-overview-1600.webp?v=2 1600w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 52vw, 640px" width="1600" height="1050" loading="lazy" decoding="async" alt="One simulated view starts the bridge. Anatomical guidance leads to an output aligned with the source. Two other paths show mismatched fine detail and a shadow error.">
+      <a class="figure-preview" href="static/images/method-overview-1600.webp?v=620ffad185f6" data-figure-title="Fig. 1 · Anatomy-conditioned refinement" aria-haspopup="dialog" aria-label="Enlarge the method figure" aria-describedby="method-caption">
+        <img src="static/images/method-overview-800.webp?v=cebb6e897b81" srcset="static/images/method-overview-800.webp?v=cebb6e897b81 800w, static/images/method-overview-1600.webp?v=620ffad185f6 1600w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 52vw, 640px" width="1600" height="1049" loading="lazy" decoding="async" alt="One simulated view starts the bridge. Anatomical guidance leads to an output aligned with the source. Two other paths show mismatched fine detail and a shadow error.">
         <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
       </a>
       <figcaption id="method-caption">Fig. 1. Simulated echoes and shadows set the starting point for one probe pose. The upper path follows the source anatomy through refinement.</figcaption>
@@ -164,8 +169,8 @@
   </div>
   <figure class="paper-figure architecture-figure">
     <h3>Bridge architecture and training</h3>
-    <a class="figure-preview" href="static/images/bridge-training-3200.webp" data-figure-title="Fig. 3 · Bridge architecture and training" aria-haspopup="dialog" aria-label="Enlarge Figure 3" aria-describedby="architecture-caption">
-      <img src="static/images/bridge-training-800.webp" srcset="static/images/bridge-training-800.webp 800w, static/images/bridge-training-1440.webp 1440w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 94vw, 1280px" width="1440" height="422" loading="lazy" decoding="async" alt="The bridge starts from simulated ultrasound and uses the organ mask and visible fine structures at every step. The training panel shows a frozen segmenter and an echo loss that compares fine structures with surrounding tissue.">
+    <a class="figure-preview" href="static/images/bridge-training-3200.webp?v=c127cf02c4d6" data-figure-title="Fig. 3 · Bridge architecture and training" aria-haspopup="dialog" aria-label="Enlarge Figure 3" aria-describedby="architecture-caption">
+      <img src="static/images/bridge-training-800.webp?v=ff2a61fb94e8" srcset="static/images/bridge-training-800.webp?v=ff2a61fb94e8 800w, static/images/bridge-training-1440.webp?v=3b51fe783d12 1440w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 94vw, 1280px" width="1440" height="422" loading="lazy" decoding="async" alt="The bridge starts from simulated ultrasound and uses the organ mask and visible fine structures at every step. The training panel shows a frozen segmenter and an echo loss that compares fine structures with surrounding tissue.">
       <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
     </a>
     <figcaption id="architecture-caption">Fig. 3. The organ-level semantic context (whole organ) and the fine-grained structural maps (visible part) stay fixed as the image changes. During training, the frozen segmenter checks the visible organ and the echo loss keeps fine structures darker than the surrounding tissue.</figcaption>
@@ -174,11 +179,41 @@
 <section id="results" class="project-section" aria-labelledby="results-heading">
   <h2 class="section-heading" id="results-heading">Results</h2>
   <p class="section-lead">Ten readers chose SonoBridge as the best anatomical match in <strong>68% of trials</strong>, against at most <strong>7%</strong> for any baseline (chance 12.5%), and rated its images the most realistic among the eight methods. SonoBridge had the lowest values for all four distribution distances on both liver and kidney. On liver, it reduced FID by <strong>19%</strong> and KID by <strong>36%</strong> relative to UNSB.</p>
-  <div class="results-layout">
-    <div class="scores">
-      <details class="metric-group" open>
-        <summary id="reader-heading">Blinded reader study</summary>
-        <p class="metric-context">Readers compared eight outputs with the CT slice and its labels for 16 liver and 10 kidney views. In a separate task, they scored individual images for realism from 1 to 5 using 9 liver and 8 kidney views.</p>
+
+  <div class="result-block reader-block">
+    <h3 id="reader-heading">Blinded reader study</h3>
+    <p class="metric-context">Readers compared eight outputs with the CT slice and its labels for 16 liver and 10 kidney views and chose the best anatomical match. In a separate task, they scored individual images for realism from 1 to 5 using 9 liver and 8 kidney views.</p>
+    <figure class="reader-figure" aria-describedby="reader-note">
+      <div class="reader-charts">
+        <div class="reader-chart match-chart" role="img" aria-label="Best anatomical match: SonoBridge 71.9% of liver and 61.0% of kidney trials; the best baseline 8.1% and 14.0%; chance 12.5%.">
+          <p class="chart-title">Best anatomical match <span>% of trials · line: chance 12.5%</span></p>
+          <div class="chart-head" aria-hidden="true"><span></span><span>Liver</span><span>Kidney</span></div>
+          <div class="chart-row ours"><span class="chart-label">SonoBridge</span><span class="chart-cell" title="SonoBridge · liver: 71.9%" style="--v:71.9"><i></i><b>71.9%</b></span><span class="chart-cell" title="SonoBridge · kidney: 61.0%" style="--v:61.0"><i></i><b>61.0%</b></span></div>
+          <div class="chart-row"><span class="chart-label">CycleGAN</span><span class="chart-cell" title="CycleGAN · liver: 3.1%" style="--v:3.1"><i></i></span><span class="chart-cell" title="CycleGAN · kidney: 14.0%" style="--v:14.0"><i></i><b>14.0%</b></span></div>
+          <div class="chart-row"><span class="chart-label">CUT</span><span class="chart-cell" title="CUT · liver: 1.3%" style="--v:1.3"><i></i></span><span class="chart-cell" title="CUT · kidney: 2.0%" style="--v:2.0"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">UNSB</span><span class="chart-cell" title="UNSB · liver: 2.5%" style="--v:2.5"><i></i></span><span class="chart-cell" title="UNSB · kidney: 9.0%" style="--v:9.0"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">SynDiff</span><span class="chart-cell" title="SynDiff · liver: 5.0%" style="--v:5.0"><i></i></span><span class="chart-cell" title="SynDiff · kidney: 0.0%" style="--v:0"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">StegoGAN</span><span class="chart-cell" title="StegoGAN · liver: 3.8%" style="--v:3.8"><i></i></span><span class="chart-cell" title="StegoGAN · kidney: 3.0%" style="--v:3.0"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">SANTA</span><span class="chart-cell" title="SANTA · liver: 0.6%" style="--v:0.6"><i></i></span><span class="chart-cell" title="SANTA · kidney: 5.0%" style="--v:5.0"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">SASAN</span><span class="chart-cell" title="SASAN · liver: 8.1%" style="--v:8.1"><i></i><b>8.1%</b></span><span class="chart-cell" title="SASAN · kidney: 5.0%" style="--v:5.0"><i></i></span></div>
+          <div class="chart-axis" aria-hidden="true"><span></span><span class="axis-ticks"><em style="--t:0">0</em><em style="--t:25">25</em><em style="--t:50">50</em><em style="--t:75">75%</em></span><span class="axis-ticks"><em style="--t:0">0</em><em style="--t:25">25</em><em style="--t:50">50</em><em style="--t:75">75%</em></span></div>
+        </div>
+        <div class="reader-chart realism-chart" role="img" aria-label="Realism rating from 1 to 5: SonoBridge 3.80 on liver and 4.11 on kidney, the highest among the eight methods; clinical frames 4.03 and 4.04.">
+          <p class="chart-title">Realism rating <span>1–5 · line: clinical frames</span></p>
+          <div class="chart-head" aria-hidden="true"><span></span><span>Liver <small>clinical 4.03</small></span><span>Kidney <small>clinical 4.04</small></span></div>
+          <div class="chart-row ours"><span class="chart-label">SonoBridge</span><span class="chart-cell" title="SonoBridge · liver: 3.80" style="--v:3.80"><i></i><b class="before">3.80</b></span><span class="chart-cell" title="SonoBridge · kidney: 4.11" style="--v:4.11"><i></i><b>4.11</b></span></div>
+          <div class="chart-row"><span class="chart-label">CycleGAN</span><span class="chart-cell" title="CycleGAN · liver: 3.17" style="--v:3.17"><i></i></span><span class="chart-cell" title="CycleGAN · kidney: 3.96" style="--v:3.96"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">CUT</span><span class="chart-cell" title="CUT · liver: 3.14" style="--v:3.14"><i></i></span><span class="chart-cell" title="CUT · kidney: 3.74" style="--v:3.74"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">UNSB</span><span class="chart-cell" title="UNSB · liver: 3.44" style="--v:3.44"><i></i></span><span class="chart-cell" title="UNSB · kidney: 3.84" style="--v:3.84"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">SynDiff</span><span class="chart-cell" title="SynDiff · liver: 2.07" style="--v:2.07"><i></i></span><span class="chart-cell" title="SynDiff · kidney: 1.91" style="--v:1.91"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">StegoGAN</span><span class="chart-cell" title="StegoGAN · liver: 3.20" style="--v:3.20"><i></i></span><span class="chart-cell" title="StegoGAN · kidney: 3.54" style="--v:3.54"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">SANTA</span><span class="chart-cell" title="SANTA · liver: 2.64" style="--v:2.64"><i></i></span><span class="chart-cell" title="SANTA · kidney: 3.41" style="--v:3.41"><i></i></span></div>
+          <div class="chart-row"><span class="chart-label">SASAN</span><span class="chart-cell" title="SASAN · liver: 2.78" style="--v:2.78"><i></i></span><span class="chart-cell" title="SASAN · kidney: 3.51" style="--v:3.51"><i></i></span></div>
+          <div class="chart-axis" aria-hidden="true"><span></span><span class="axis-ticks"><em style="--t:1">1</em><em style="--t:2">2</em><em style="--t:3">3</em><em style="--t:4">4</em><em style="--t:5">5</em></span><span class="axis-ticks"><em style="--t:1">1</em><em style="--t:2">2</em><em style="--t:3">3</em><em style="--t:4">4</em><em style="--t:5">5</em></span></div>
+        </div>
+      </div>
+      <details class="metric-group chart-table">
+        <summary>Show the reader-study table</summary>
         <table class="score-table" aria-labelledby="reader-heading" aria-describedby="reader-note score-key">
           <colgroup span="1"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup>
           <thead>
@@ -196,9 +231,24 @@
             <tr><th scope="row">SASAN</th><td><u>8.1%</u></td><td>2.78</td><td>5.0%</td><td>3.51</td></tr>
           </tbody>
         </table>
-        <p class="figure-note" id="reader-note">Values are means across ten readers with technical ultrasound experience after two post hoc exclusions. Match rates include abstentions. Clinical frames averaged 4.03 for liver and 4.04 for kidney on realism.</p>
       </details>
-      <details class="metric-group">
+      <figcaption class="figure-note" id="reader-note">Values are means over ten readers with at least three years of ultrasound experience. Abstentions count in the match denominator. Clinical frames averaged 4.03 for liver and 4.04 for kidney on realism.</figcaption>
+    </figure>
+  </div>
+
+  <figure class="paper-figure result-block wide-figure">
+    <h3>Comparison with seven unpaired methods</h3>
+    <a class="figure-preview" href="static/images/liver-kidney-comparison-2400.webp?v=5d65de31eafa" data-figure-title="Fig. 5 · Liver and kidney comparison" aria-haspopup="dialog" aria-label="Enlarge Figure 5" aria-describedby="comparison-caption">
+      <img src="static/images/liver-kidney-comparison-1200.webp?v=6db25b33346d" srcset="static/images/liver-kidney-comparison-1200.webp?v=6db25b33346d 1200w, static/images/liver-kidney-comparison-2400.webp?v=5d65de31eafa 2400w" sizes="(max-width: 1376px) 96vw, 1320px" width="2400" height="1325" loading="lazy" decoding="async" alt="Three liver and two kidney views refined by all eight methods. SonoBridge renders vessels where the labels mark them and keeps the modeled shadows dark.">
+      <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
+    </a>
+    <figcaption id="comparison-caption">Fig. 5. Liver (a–c) and kidney (d, e) test views: clear acoustic window (a, d), modeled shadow (b, e), and challenging structure (c). All methods receive the same simulated image; CT is for reference. Labels: target organ (light violet) and fine structure (dark violet). Boxes mark the same region in all images: visible vessels (a) and the rib shadow with its border (b). Real reference: the unpaired clinical frame most similar to the labels, not ground truth.</figcaption>
+  </figure>
+
+  <div class="results-layout result-block">
+    <div class="scores">
+      <h3 class="block-heading">Distribution distances to clinical ultrasound</h3>
+      <details class="metric-group" open>
         <summary id="inception-heading">Inception-v3 distances</summary>
         <table class="score-table" aria-labelledby="inception-heading" aria-describedby="inception-note score-key">
           <colgroup span="1"></colgroup><colgroup span="2"></colgroup><colgroup span="2"></colgroup>
@@ -243,26 +293,73 @@
       <p class="figure-note score-key" id="score-key"><strong>Bold</strong> marks the best value in each column. <u>Underlining</u> marks the runner-up.</p>
       <p class="figure-note runtime-note">Including preprocessing, liver refinement averaged <strong>23.3 ms per image</strong> across 80 test views on one NVIDIA RTX PRO 6000, fast enough for real-time synthesis.</p>
     </div>
-    <div class="results-visuals">
-      <figure class="paper-figure result-figure">
-        <h3>Anatomical correspondence</h3>
-        <a class="figure-preview" href="static/images/liver-correspondence-1600.webp?v=2" data-figure-title="Anatomical correspondence" aria-haspopup="dialog" aria-label="Enlarge the liver correspondence figure" aria-describedby="liver-caption">
-          <img src="static/images/liver-correspondence-800.webp?v=2" srcset="static/images/liver-correspondence-800.webp?v=2 800w, static/images/liver-correspondence-1600.webp?v=2 1600w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 51vw, 660px" width="1600" height="720" loading="lazy" decoding="async" alt="CT, simulated ultrasound, UNSB and SonoBridge on two liver views. The violet SonoBridge contour follows the dashed CT contour in the clear view and between rib shadows.">
-          <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
-        </a>
-        <figcaption id="liver-caption">Dashed gold marks the liver boundary from CT. Violet marks the boundary segmented from each output by LiverUSRecon. The lower view shows the liver between rib shadows.</figcaption>
-        <a class="comparison-link" href="static/images/liver-kidney-comparison.webp?v=2" data-figure-title="Liver and kidney comparisons" data-figure-alt="Five source views and the outputs of all eight methods. Boxes mark visible vessels in the first liver view and the rib shadow in the second." aria-haspopup="dialog" aria-describedby="comparison-caption">Compare all eight methods on liver and kidney views</a>
-        <p class="comparison-note" id="comparison-caption">All methods start from the same simulated image. The clinical reference frames were selected from unpaired scans by similarity.</p>
-      </figure>
-      <div class="secondary-findings">
-        <h3>Ablation results</h3>
-        <p>We measured FID, KID, and two BiomedCLIP distances. On both organs, refining simulated ultrasound gave lower values on all four measures than translating CT slices or label maps directly. This also held for the <em>No conditions</em> variant, which retained anatomical supervision during training.</p>
-        <p>Removing the fine-grained structural maps raised both BiomedCLIP distances on liver. Removing the semantic loss had a larger effect, increasing FD<sub>B</sub> by 71% and KD<sub>B</sub> by 152% relative to the full model.</p>
-        <h3>Control at a fixed pose</h3>
-        <p id="control-caption">Increasing the fine-structure weight from 0 to 1 raised mean vessel contrast from 0.015 to 0.154 across 1,200 liver views. The figure shows one view as vessel contrast and shadow extent are varied separately.</p>
-        <a class="comparison-link" href="static/images/liver-appearance-control.webp?v=de7015d4a39b" data-figure-title="Control at a fixed liver pose" data-figure-alt="At one liver pose, visible vessels darken as λ increases from 0 to 1. At λ = 1, enlarging the left bone shadow by 60% and 120% increases the shadowed fraction from 36% to 55% and 73%, respectively." aria-haspopup="dialog" aria-describedby="control-caption">View the liver control experiment</a>
-      </div>
+    <figure class="paper-figure result-figure">
+      <h3>Feature space</h3>
+      <a class="figure-preview" href="static/images/tsne-1600.webp?v=87703ceb0740" data-figure-title="Fig. 4 · Feature space" aria-haspopup="dialog" aria-label="Enlarge Figure 4" aria-describedby="tsne-caption">
+        <img src="static/images/tsne-800.webp?v=0af9028ecb2f" srcset="static/images/tsne-800.webp?v=0af9028ecb2f 800w, static/images/tsne-1600.webp?v=87703ceb0740 1600w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 51vw, 660px" width="1600" height="793" loading="lazy" decoding="async" alt="Two t-SNE maps of simulated, refined and clinical liver images. Simulated images form a separate cluster; SonoBridge outputs lie among the clinical frames.">
+        <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
+      </a>
+      <figcaption id="tsne-caption">Fig. 4. t-SNE of (a) the Inception-v3 and (b) the BiomedCLIP features for the 1,200 simulated liver test views, their refined outputs, and the clinical liver test frames; point colors follow the thumbnail frames. The simulated images form a separate cluster. UNSB outputs lie at the edge of the clinical frames, whereas SonoBridge outputs lie among them.</figcaption>
+    </figure>
+  </div>
+
+  <div class="results-layout result-block">
+    <figure class="paper-figure result-figure">
+      <h3>Anatomical correspondence</h3>
+      <a class="figure-preview" href="static/images/liver-correspondence-1600.webp?v=7e630222be68" data-figure-title="Fig. 6 · Anatomical correspondence" aria-haspopup="dialog" aria-label="Enlarge Figure 6" aria-describedby="liver-caption">
+        <img src="static/images/liver-correspondence-800.webp?v=53738912db62" srcset="static/images/liver-correspondence-800.webp?v=53738912db62 800w, static/images/liver-correspondence-1600.webp?v=7e630222be68 1600w" sizes="(max-width: 900px) 95vw, (max-width: 1376px) 51vw, 660px" width="1600" height="754" loading="lazy" decoding="async" alt="CT, simulated ultrasound, UNSB and SonoBridge on two liver views. The violet SonoBridge contour follows the dashed CT contour in the clear view and between rib shadows.">
+        <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
+      </a>
+      <figcaption id="liver-caption">Fig. 6. Dashed gold marks the liver boundary from CT. Violet marks the boundary segmented from each output by LiverUSRecon, a liver segmentation model not used in training. The lower view shows the liver between rib shadows.</figcaption>
+    </figure>
+    <div class="secondary-findings">
+      <h3>Ablation results</h3>
+      <p>Within each organ, all variants share the data, backbone, training schedule and bridge losses. Using the source anatomy as a condition of the generator, and not only as supervision during training, lowered both BiomedCLIP distances on liver and kidney.</p>
+      <p>Removing the fine-grained structural maps or the semantic loss lowered FID and KID on liver but raised both BiomedCLIP distances; without the semantic loss, FD<sub>B</sub> rose by 71% and KD<sub>B</sub> by 152%, and the outputs show structures inside the liver that are absent from the labels (Fig. 7, box).</p>
+      <p>Translating the CT slice or the label map directly, without the pose-dependent echoes and shadows of the simulated image, gave larger distances than the full model on all four measures and on both organs.</p>
     </div>
+  </div>
+
+  <figure class="paper-figure result-block wide-figure">
+    <a class="figure-preview" href="static/images/liver-ablation-2400.webp?v=80045939270a" data-figure-title="Fig. 7 · Liver ablations" aria-haspopup="dialog" aria-label="Enlarge Figure 7" aria-describedby="ablation-caption">
+      <img src="static/images/liver-ablation-1200.webp?v=f5b8a00c519f" srcset="static/images/liver-ablation-1200.webp?v=f5b8a00c519f 1200w, static/images/liver-ablation-2400.webp?v=80045939270a 2400w" sizes="(max-width: 1376px) 96vw, 1320px" width="2400" height="570" loading="lazy" decoding="async" alt="Two liver views refined by the full model and six ablation variants. Without the semantic loss, a structure absent from the labels appears in the boxed region.">
+      <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
+    </a>
+    <figcaption id="ablation-caption">Fig. 7. Liver ablations on a clear acoustic window (a) and a view with a modeled shadow (b). Box in (a): the same vessel-free liver region in all images. Blue: boundary of the modeled shadow.</figcaption>
+    <details class="metric-group ablation-table">
+      <summary id="ablation-heading">Ablation table</summary>
+      <div class="table-scroll"><table class="score-table" aria-labelledby="ablation-heading" aria-describedby="ablation-note score-key">
+        <colgroup span="1"></colgroup><colgroup span="4"></colgroup><colgroup span="4"></colgroup>
+        <thead>
+          <tr><th scope="col" rowspan="2">Configuration</th><th scope="colgroup" colspan="4">Liver</th><th scope="colgroup" colspan="4">Kidney</th></tr>
+          <tr><th scope="col">FID</th><th scope="col">KID</th><th scope="col">FD<sub>B</sub></th><th scope="col">KD<sub>B</sub></th><th scope="col">FID</th><th scope="col">KID</th><th scope="col">FD<sub>B</sub></th><th scope="col">KD<sub>B</sub></th></tr>
+        </thead>
+        <tbody>
+          <tr class="ours"><th scope="row">Full</th><td>59.81</td><td>4.63</td><td><strong>221</strong></td><td><strong>82.6</strong></td><td>33.27</td><td>1.77</td><td><strong>132</strong></td><td><strong>49.7</strong></td></tr>
+          <tr><th scope="row">No C<sub>fine</sub></th><td><strong>54.99</strong></td><td><strong>4.03</strong></td><td>284</td><td>153.7</td><td>34.53</td><td><u>1.61</u></td><td>171</td><td>70.8</td></tr>
+          <tr><th scope="row">No C<sub>org</sub></th><td>62.69</td><td>5.60</td><td><u>262</u></td><td>139.6</td><td><u>33.25</u></td><td>1.65</td><td>181</td><td>94.1</td></tr>
+          <tr><th scope="row">No conditions</th><td>62.12</td><td>5.65</td><td>270</td><td><u>125.0</u></td><td><strong>29.84</strong></td><td><strong>1.25</strong></td><td><u>136</u></td><td><u>58.9</u></td></tr>
+          <tr><th scope="row">No ℒ<sub>sem</sub></th><td><u>55.84</u></td><td><u>4.17</u></td><td>377</td><td>208.0</td><td>33.44</td><td>1.65</td><td>149</td><td>67.0</td></tr>
+          <tr class="group-start"><th scope="row">CT → US</th><td>63.98</td><td>6.20</td><td>272</td><td>152.4</td><td>49.58</td><td>4.43</td><td>425</td><td>255.0</td></tr>
+          <tr><th scope="row">Label map → US</th><td>72.31</td><td>7.37</td><td>368</td><td>227.5</td><td>35.88</td><td>1.99</td><td>335</td><td>174.8</td></tr>
+        </tbody>
+      </table></div>
+      <p class="figure-note" id="ablation-note">No C<sub>fine</sub>, No C<sub>org</sub> and No conditions remove the fine-grained structural maps, the organ-level semantic context, or both from the generator input; anatomical supervision is kept. No ℒ<sub>sem</sub> removes the semantic loss. CT → US and Label map → US replace the simulated image with the CT slice or a color-coded label map. The kidney full model is resampled with the variants. KID is scaled by 100.</p>
+    </details>
+  </figure>
+
+  <div class="results-layout result-block control-block">
+    <div class="secondary-findings">
+      <h3>Control at a fixed pose</h3>
+      <p id="control-caption">Increasing the fine-structure weight λ from 0 to 1 raised mean vessel contrast from 0.015 to 0.154 across 1,200 liver views. Shadows can also be edited without retraining: enlarging the left bone shadow extends it from 36% to 73% of the sector, and the output darkens there while the vessels inside it fade.</p>
+    </div>
+    <figure class="paper-figure result-figure">
+      <a class="figure-preview" href="static/images/liver-appearance-control.webp?v=de7015d4a39b" data-figure-title="Fig. 8 · Control at a fixed liver pose" aria-haspopup="dialog" aria-label="Enlarge Figure 8" aria-describedby="control-figcaption">
+        <img src="static/images/liver-appearance-control.webp?v=de7015d4a39b" width="2201" height="655" loading="lazy" decoding="async" alt="At one liver pose, visible vessels darken as λ increases from 0 to 1. At λ = 1, enlarging the left bone shadow by 60% and 120% increases the shadowed fraction from 36% to 55% and 73%, respectively.">
+        <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
+      </a>
+      <figcaption id="control-figcaption">Fig. 8. Control at inference: fine-structure weight λ = 0, 0.5 and 1 (full model), and the left bone shadow grown by 60% and 120% (dashed: before). Blue: shadow boundary; Δμ: vessel contrast; shadow: shadowed fraction of the sector.</figcaption>
+    </figure>
   </div>
 </section>
 <dialog id="figure-dialog" aria-labelledby="figure-title" aria-describedby="figure-caption">
@@ -283,7 +380,7 @@
         <img src="static/video/overview-thumb.webp?v=2aac4887c0e5" alt="" width="768" height="432" loading="lazy" decoding="async">
         <span aria-hidden="true"><svg width="16" height="16" viewBox="0 0 20 20"><path d="m6 3 10 7-10 7z" fill="currentColor"/></svg></span>
       </button>
-      <div><h3>System video</h3><p>1 min · 1080p</p><a class="download-link" href="static/video/sonobridge-overview.mp4?v=c7f0f569aec8" download="SonoBridge-system-video.mp4">Download MP4 <span aria-hidden="true">↓</span></a></div>
+      <div><h3>System video</h3><p>1 min · 1080p</p><a class="download-link" href="static/video/sonobridge-overview.mp4?v=7e0f0af1616b" download="SonoBridge-system-video.mp4">Download MP4 <span aria-hidden="true">↓</span></a></div>
     </div>
     <div class="release-resource"><h3>Research code and data</h3><p>We plan to release the acquisition and refinement code together with simulated ultrasound images, aligned anatomical labels and probe poses.</p></div>
   </div>
@@ -293,8 +390,8 @@
 <footer class="site-footer">
   <div class="footer-project"><span>SonoBridge</span><a href="mailto:xuesong.li@tum.de">Contact Xuesong Li</a></div>
   <nav aria-label="Research institutions"><a href="https://www.cs.cit.tum.de/en/camp/start/">CAMP</a><a href="https://mcml.ai/">MCML</a><a href="https://mech.hku.hk/">HKU Mechanical Engineering</a></nav>
-  <div class="footer-meta"><span>Updated <time datetime="2026-11-23">23 Nov 2026</time></span><a href="#top">Back to top ↑</a></div>
+  <div class="footer-meta"><span>Updated <time datetime="2026-11-28">28 Nov 2026</time></span><a href="#top">Back to top ↑</a></div>
 </footer>
-<noscript><p class="no-script">Enable JavaScript to use the interactive demo. <a href="static/video/sonobridge-overview.mp4?v=c7f0f569aec8">Watch the system video</a>.</p></noscript>
+<noscript><p class="no-script">Enable JavaScript to use the interactive demo. <a href="static/video/sonobridge-overview.mp4?v=7e0f0af1616b">Watch the system video</a>.</p></noscript>
 </body>
 </html>

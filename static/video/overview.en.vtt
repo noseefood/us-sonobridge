@@ -30,17 +30,17 @@ The image updates with the known probe pose.
 00:00:36.200 --> 00:00:40.000
 Axial rotation reveals a different liver plane.
 
-00:00:40.000 --> 00:00:45.220
-The lines trace the main rib shadow. Purple shows changes across the whole view.
-
-00:00:45.220 --> 00:00:46.650
-Hold the shadow at +40% in both outputs.
-
-00:00:46.650 --> 00:00:53.000
+00:00:40.000 --> 00:00:46.500
 The reference stays at λ = 1 as vessel contrast fades and returns in the adjusted view.
 
-00:00:53.000 --> 00:00:56.500
-Each refined ultrasound view retains the CT labels and probe pose.
+00:00:46.500 --> 00:00:51.000
+Same pose and λ = 1. Modeled shadow covers 36% of the sector before editing and 73% after.
 
-00:00:56.500 --> 00:01:00.000
+00:00:51.000 --> 00:00:56.000
+Lowest distribution distances to clinical US on liver and kidney. Best anatomical match in 68% of blinded reader trials.
+
+00:00:56.000 --> 00:00:58.500
+Realistic ultrasound with aligned CT labels and known probe poses.
+
+00:00:58.500 --> 00:01:00.000
 noseefood.github.io/us-sonobridge · Code coming soon.

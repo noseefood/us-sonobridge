@@ -227,3 +227,52 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
  .film-poster { width:min(100%,420px); }
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+/* Results layout (2026-11-28): reader-study charts, full-width paper figures, dataset figures, ablation table. */
+.data-stats{display:flex;flex-wrap:wrap;gap:12px 28px;margin:20px 0 4px}
+.data-stats div{padding-left:12px;border-left:2px solid var(--accent-line)}
+.data-stats dt{color:var(--text-muted);font-size:13px;line-height:1.4}
+.data-stats dd{margin:2px 0 0;color:var(--text);font-size:17px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.result-block{margin-top:clamp(34px,4vw,52px)}
+.section-lead + .result-block{margin-top:0}
+.reader-block > h3,.wide-figure > h3,.block-heading{margin-bottom:12px}
+.reader-figure{margin:0}
+.reader-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px clamp(28px,5vw,72px)}
+.reader-chart{display:grid;grid-template-columns:minmax(78px,auto) minmax(0,1fr) minmax(0,1fr);column-gap:18px;row-gap:3px;align-items:center}
+.chart-title{grid-column:1/-1;margin-bottom:8px;color:#453c53;font-size:15px;font-weight:600}
+.chart-title span{margin-left:6px;color:var(--text-muted);font-size:13px;font-weight:450}
+.chart-head,.chart-row,.chart-axis{display:contents}
+.chart-head span{padding-bottom:4px;color:#554b61;font-size:13px;font-weight:600}
+.chart-head small{margin-left:5px;color:var(--text-muted);font-size:12px;font-weight:450}
+.chart-label{color:#5f566a;font-size:14px;line-height:1.3;white-space:nowrap}
+.chart-row.ours .chart-label{color:#4c3a70;font-weight:650}
+.chart-cell{position:relative;height:24px}
+.chart-cell i{position:absolute;top:50%;left:0;transform:translateY(-50%)}
+.chart-cell b{position:absolute;top:50%;transform:translateY(-50%);color:var(--text);font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.match-chart .chart-cell i{height:14px;width:calc(var(--v) * .8%);min-width:1px;border-radius:0 4px 4px 0;background:#cbc4d6}
+.match-chart .ours .chart-cell i{background:var(--accent)}
+.match-chart .chart-cell b{left:calc(var(--v) * .8% + 6px)}
+.match-chart .chart-cell::before{content:"";position:absolute;top:-2px;bottom:-2px;left:10%;width:1px;background:#a79dba}
+.realism-chart .chart-cell:nth-child(2){--real:4.03}.realism-chart .chart-cell:nth-child(3){--real:4.04}
+.realism-chart .chart-cell::after{content:"";position:absolute;top:50%;left:0;width:82%;height:1px;background:#ece8f2}
+.realism-chart .chart-cell::before{content:"";position:absolute;top:-2px;bottom:-2px;left:calc((var(--real) - 1) / 4 * 82%);width:1px;background:#a79dba}
+.realism-chart .chart-cell i{z-index:1;left:calc((var(--v) - 1) / 4 * 82%);width:10px;height:10px;border-radius:50%;background:#b9b1c6;box-shadow:0 0 0 2px #fff;transform:translate(-50%,-50%)}
+.realism-chart .ours .chart-cell i{background:var(--accent)}
+.realism-chart .chart-cell b{z-index:2;left:calc((var(--v) - 1) / 4 * 82% + 8px);padding:0 3px;background:#fff}
+.realism-chart .chart-cell b.before{left:auto;right:calc(100% - (var(--v) - 1) / 4 * 82% + 8px)}
+.axis-ticks{position:relative;height:18px;margin-top:4px;border-top:1px solid #e3deea}
+.axis-ticks em{position:absolute;top:2px;color:var(--text-muted);font-size:11.5px;font-style:normal;font-variant-numeric:tabular-nums;transform:translateX(-50%)}
+.match-chart .axis-ticks em{left:calc(var(--t) * .8%)}
+.match-chart .axis-ticks em:first-child,.realism-chart .axis-ticks em:first-child{transform:none}
+.realism-chart .axis-ticks em{left:calc((var(--t) - 1) / 4 * 82%)}
+.chart-table{margin-top:18px}
+.reader-figure > .figure-note{margin-top:10px}
+.wide-figure .figure-preview{padding-top:26px}
+.wide-figure figcaption{max-width:120ch}
+.ablation-table{margin-top:14px}
+.table-scroll{overflow-x:auto}
+.ablation-table .score-table{min-width:640px}
+.score-table tr.group-start{border-top:2px solid #e3deea}
+.results-layout.result-block > .secondary-findings{margin-top:0;padding-top:0;border-top:0}
+.control-block{align-items:center}
+@media(max-width:900px){.reader-charts{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:720px){.reader-chart{column-gap:12px}.chart-label{font-size:13px}.data-stats{gap:10px 18px}.data-stats dd{font-size:16px}}
