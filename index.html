@@ -20,10 +20,11 @@
   <link rel="icon" type="image/x-icon" href="static/images/ultrasound_icon.ico">
   <link rel="preload" href="static/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="static/css/fonts.css">
-  <link rel="stylesheet" href="static/css/index.css?v=d7f4f3fe85f1">
+  <link rel="stylesheet" href="static/css/index.css?v=88ce5d0cfd6e">
   <link rel="stylesheet" href="static/css/demo.css?v=7a125b5583de">
   <script defer src="static/js/nav.js?v=29"></script>
   <script type="module" src="static/js/page.js?v=7ffb43f68ae1"></script>
+  <script type="module" src="static/js/figures.js?v=b44839fc152d"></script>
 </head>
 <body id="top">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -160,6 +161,43 @@
       <figcaption id="method-caption">Fig. 1. Ray tracing at pose P gives a simulated image with its shadows, which a Schrödinger bridge refines toward the appearance of unpaired in vivo frames. Guided at every step by anatomical maps (violet), SonoBridge achieves both realistic appearance and anatomical correspondence; methods without this guidance (gray) look realistic but do not ensure correct anatomy or acoustic shadows.</figcaption>
     </figure>
   </div>
+  <div class="bridge-viewer" id="bridge-viewer">
+    <div class="viewer-head">
+      <h3>Refinement step by step</h3>
+      <p>Drag the slider or press play to follow one view through the five bridge steps. Both models start from the same simulated image; SonoBridge is guided by the anatomical maps at every step, UNSB is not.</p>
+    </div>
+    <div class="bv-panels">
+      <figure class="bv-panel ours">
+        <figcaption><b>SonoBridge</b><span>anatomy-conditioned</span></figcaption>
+        <div class="bv-stack" style="aspect-ratio:679/512">
+          <img data-frame="0" src="static/interactive/bridge/sb-0.webp" alt="" width="679" height="512" decoding="async"><img data-frame="1" src="static/interactive/bridge/sb-1.webp" alt="" width="679" height="512" decoding="async"><img data-frame="2" src="static/interactive/bridge/sb-2.webp" alt="" width="679" height="512" decoding="async"><img data-frame="3" src="static/interactive/bridge/sb-3.webp" alt="" width="679" height="512" decoding="async"><img data-frame="4" src="static/interactive/bridge/sb-4.webp" alt="" width="679" height="512" decoding="async"><img data-frame="5" src="static/interactive/bridge/sb-5.webp" alt="SonoBridge refinement of the simulated liver view" width="679" height="512" decoding="async">
+          <img class="bv-layer bv-layer-labels" src="static/interactive/bridge/labels.png" alt="" width="679" height="512"><img class="bv-layer bv-layer-shadow" src="static/interactive/bridge/shadow.png" alt="" width="679" height="512" hidden>
+        </div>
+        <p class="bv-metric">Vessel contrast Δμ <strong data-readout="sb">0.20</strong></p>
+      </figure>
+      <figure class="bv-panel">
+        <figcaption><b>UNSB</b><span>no anatomical guidance</span></figcaption>
+        <div class="bv-stack" style="aspect-ratio:679/512">
+          <img data-frame="0" src="static/interactive/bridge/unsb-0.webp" alt="" width="679" height="512" decoding="async"><img data-frame="1" src="static/interactive/bridge/unsb-1.webp" alt="" width="679" height="512" decoding="async"><img data-frame="2" src="static/interactive/bridge/unsb-2.webp" alt="" width="679" height="512" decoding="async"><img data-frame="3" src="static/interactive/bridge/unsb-3.webp" alt="" width="679" height="512" decoding="async"><img data-frame="4" src="static/interactive/bridge/unsb-4.webp" alt="" width="679" height="512" decoding="async"><img data-frame="5" src="static/interactive/bridge/unsb-5.webp" alt="UNSB refinement of the same simulated liver view" width="679" height="512" decoding="async">
+          <img class="bv-layer bv-layer-labels" src="static/interactive/bridge/labels.png" alt="" width="679" height="512"><img class="bv-layer bv-layer-shadow" src="static/interactive/bridge/shadow.png" alt="" width="679" height="512" hidden>
+        </div>
+        <p class="bv-metric">Vessel contrast Δμ <strong data-readout="unsb">−0.09</strong></p>
+      </figure>
+    </div>
+    <div class="bv-controls">
+      <button type="button" class="bv-play" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 20 20" aria-hidden="true"><path d="m6 3 10 7-10 7z" fill="currentColor"/></svg><span>Play</span></button>
+      <div class="bv-slider">
+        <input type="range" class="bv-range" min="0" max="5" step="0.01" value="5" aria-label="Refinement step">
+        <div class="bv-ticks" aria-hidden="true"><span>X₀</span><span>1</span><span>2</span><span>3</span><span>4</span><span>Output</span></div>
+      </div>
+      <p class="bv-step"><span class="bv-step-name" aria-live="polite">Output</span></p>
+      <div class="bv-toggles">
+        <label class="bv-toggle"><input type="checkbox" data-layer="labels" checked><span><i class="key-labels"></i>Labels</span></label>
+        <label class="bv-toggle"><input type="checkbox" data-layer="shadow"><span><i class="key-shadow"></i>Shadow boundary</span></label>
+      </div>
+    </div>
+    <p class="figure-note">The record of Fig. 1 (validation view, liver). Labels: liver boundary (light violet) and visible vessels (violet) from the source CT. Vessel contrast Δμ: mean intensity of the visible liver minus that of the visible vessels; positive values mean darker vessels, as in clinical ultrasound. UNSB: the baseline of the comparison below.</p>
+  </div>
   <div class="method-layout method-row flip">
     <figure class="paper-figure method-figure">
       <a class="figure-preview" href="static/images/virtual-acquisition-1600.webp?v=5ac6ca63193c" data-figure-title="Fig. 2 · Virtual acquisition" aria-haspopup="dialog" aria-label="Enlarge Figure 2" aria-describedby="acquisition-figcaption">
@@ -256,11 +294,27 @@
 
   <figure class="paper-figure result-block wide-figure">
     <h3>Comparison with seven unpaired methods</h3>
-    <a class="figure-preview" href="static/images/liver-kidney-comparison-2400.webp?v=5d65de31eafa" data-figure-title="Fig. 5 · Liver and kidney comparison" aria-haspopup="dialog" aria-label="Enlarge Figure 5" aria-describedby="comparison-caption">
-      <img src="static/images/liver-kidney-comparison-1200.webp?v=6db25b33346d" srcset="static/images/liver-kidney-comparison-1200.webp?v=6db25b33346d 1200w, static/images/liver-kidney-comparison-2400.webp?v=5d65de31eafa 2400w" sizes="(max-width: 1376px) 96vw, 1320px" width="2400" height="1325" loading="lazy" decoding="async" alt="Three liver and two kidney views refined by all eight methods. SonoBridge renders vessels where the labels mark them and keeps the modeled shadows dark.">
-      <span class="enlarge-label" aria-hidden="true">Enlarge <span>⤢</span></span>
-    </a>
-    <figcaption id="comparison-caption">Fig. 5. Liver (a–c) and kidney (d, e) test views: clear acoustic window (a, d), modeled shadow (b, e), and challenging structure (c). All methods receive the same simulated image; CT is for reference. Labels: target organ (light violet) and fine structure (dark violet). Boxes mark the same region in all images: visible vessels (a) and the rib shadow with its border (b). Real reference: the unpaired clinical frame most similar to the labels, not ground truth.</figcaption>
+    <div class="compare-viewer" id="compare-viewer" tabindex="-1">
+      <div class="cv-views" role="group" aria-label="Test view"></div>
+      <div class="cv-body">
+        <div class="cv-main">
+          <div class="cv-stage"><img class="cv-main-img" alt="" decoding="async"><img class="cv-overlay" alt="" hidden></div>
+          <div class="cv-main-foot"><span class="cv-name">SonoBridge</span><label class="bv-toggle"><input type="checkbox" class="cv-overlay-toggle"><span><i class="key-labels"></i>Label contours</span></label></div>
+        </div>
+        <div class="cv-side">
+          <div class="cv-methods" role="group" aria-label="Method"></div>
+          <p class="cv-hint">Use ← and → to switch methods. All methods start from the same simulated image.</p>
+          <div class="cv-sources">
+            <figure><img class="cv-labels-img" alt="Labels" loading="lazy"><figcaption>Labels</figcaption></figure>
+            <figure><img class="cv-ct-img" alt="CT slice" loading="lazy"><figcaption>CT (reference)</figcaption></figure>
+            <figure><img class="cv-sim-img" alt="Simulated input" loading="lazy"><figcaption>Simulated input</figcaption></figure>
+            <figure><img class="cv-ref-img" alt="Unpaired clinical reference" loading="lazy"><figcaption>Clinical reference</figcaption></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="figure-note" id="comparison-caption">Fig. 5. Liver (three views) and kidney (two views) test views: clear acoustic window, modeled shadow, and challenging structure. All methods receive the same simulated image; CT is for reference. Labels: target organ (light violet) and fine structure (dark violet). Clinical reference: the unpaired clinical frame most similar to the labels, not ground truth. The paper figure also marks visible vessels and the rib shadow with boxes.</p>
+    <a class="paper-figure-link" href="static/images/liver-kidney-comparison-2400.webp?v=5d65de31eafa" data-figure-title="Fig. 5 · Liver and kidney comparison" data-figure-alt="Three liver and two kidney views refined by all eight methods. SonoBridge renders vessels where the labels mark them and keeps the modeled shadows dark." aria-haspopup="dialog" aria-describedby="comparison-caption"><img src="static/images/liver-kidney-comparison-1200.webp?v=6db25b33346d" alt="" width="1200" height="663" loading="lazy" decoding="async"><span>Paper figure: all methods side by side (Fig. 5)<b aria-hidden="true">⤢</b></span></a>
   </figure>
 
   <div class="results-layout result-block">

@@ -1,0 +1,138 @@
+{
+ "bridge": {
+  "record": {
+   "idx": 7110,
+   "split": "val",
+   "case": "00090",
+   "base": 999,
+   "variant": 0,
+   "seed": 1
+  },
+  "unsb_checkpoint": "Outputs/from 21.10.26/comparision_liver/unsb_liver_baseline_ver2/checkpoints/checkpoint_step_480000.pt",
+  "size": [
+   679,
+   512
+  ],
+  "frames": 6,
+  "vessel_contrast": {
+   "sb": [
+    0.0226,
+    0.101,
+    0.1409,
+    0.1661,
+    0.1853,
+    0.2023
+   ],
+   "unsb": [
+    0.0226,
+    -0.0183,
+    -0.0113,
+    -0.0781,
+    -0.1399,
+    -0.0884
+   ]
+  }
+ },
+ "compare": [
+  {
+   "key": "00039_clear_acoustic_window",
+   "organ": "liver",
+   "title": "Liver \u00b7 clear acoustic window",
+   "size": [
+    480,
+    400
+   ],
+   "methods": [
+    "SonoBridge",
+    "CycleGAN",
+    "CUT",
+    "UNSB",
+    "SynDiff",
+    "StegoGAN",
+    "SANTA",
+    "SASAN"
+   ],
+   "reference": true
+  },
+  {
+   "key": "00039_modeled_shadow",
+   "organ": "liver",
+   "title": "Liver \u00b7 modeled shadow",
+   "size": [
+    480,
+    400
+   ],
+   "methods": [
+    "SonoBridge",
+    "CycleGAN",
+    "CUT",
+    "UNSB",
+    "SynDiff",
+    "StegoGAN",
+    "SANTA",
+    "SASAN"
+   ],
+   "reference": true
+  },
+  {
+   "key": "00030_challenging_case",
+   "organ": "liver",
+   "title": "Liver \u00b7 challenging structure",
+   "size": [
+    480,
+    400
+   ],
+   "methods": [
+    "SonoBridge",
+    "CycleGAN",
+    "CUT",
+    "UNSB",
+    "SynDiff",
+    "StegoGAN",
+    "SANTA",
+    "SASAN"
+   ],
+   "reference": true
+  },
+  {
+   "key": "00098_clear_acoustic_window",
+   "organ": "kidney",
+   "title": "Kidney \u00b7 clear acoustic window",
+   "size": [
+    522,
+    393
+   ],
+   "methods": [
+    "SonoBridge",
+    "CycleGAN",
+    "CUT",
+    "UNSB",
+    "SynDiff",
+    "StegoGAN",
+    "SANTA",
+    "SASAN"
+   ],
+   "reference": true
+  },
+  {
+   "key": "00030_modeled_shadow",
+   "organ": "kidney",
+   "title": "Kidney \u00b7 modeled shadow",
+   "size": [
+    522,
+    393
+   ],
+   "methods": [
+    "SonoBridge",
+    "CycleGAN",
+    "CUT",
+    "UNSB",
+    "SynDiff",
+    "StegoGAN",
+    "SANTA",
+    "SASAN"
+   ],
+   "reference": true
+  }
+ ]
+}
